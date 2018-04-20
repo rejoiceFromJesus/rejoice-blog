@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:include="fragments/headTag :: headTag">
+  	<meta charset="utf-8" />
+<title>We're sorry, but something went wrong :(</title>
+  </head>
+<style>
+body{
+	margin:0px;
+	padding:0px;
+	background:#f7f9f9; 
+}
+.content{
+background:#fde3db;
+ width: 500px;  
+  position:absolute;  
+ top:200px;
+ left:50%;
+ margin-left:-250px;
+ padding:20px;
+ border-radius:10px;
+ color:#cc6425
+}
+</style>
+  <body>
+
+      <div th:include="fragments/bodyHeader" th:remove="tag">
+</div>
+		<div class="content">
+				<h2 style="color:#c71b11;">OPPS! AN ERROR OCCURS</h2>
+				<b>status_code:</b> <span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')}"></span><br/>
+				<b>exception:</b> <span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}"></span><br/>
+				<b>message: </b><span th:text="${#httpServletRequest.getAttribute('javax.servlet.error.message')}"></span>
+		</div>
+</body>
+</html>

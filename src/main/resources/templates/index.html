@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!-- <head th:substituteby="fragments/headTag :: headTag"> -->
+  <head th:include="fragments/headTag :: headTag">
+  </head>
+      <link rel="stylesheet" th:href="@{/css/blog.css}" id="theme-styles" />
+  <body>
+
+      <div th:include="fragments/bodyHeader" th:remove="tag">
+
+      </div>
+      
+       <div class="widewrapper main">
+        <div class="container content">
+            <div id="article-list" class="article-list">
+            </div>
+                <aside class="col-md-4 blog-aside" style="position: absolute;right:0px;">
+                    
+                    <div class="aside-widget">
+                        <header>
+                            <h3>Featured Post</h3>
+                        </header>
+                        <div class="body">
+                            <ul class="clean-list">
+                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
+                                <li><a href="">Responsive Pricing Table</a></li>
+                                <li><a href="">Yellow HTML5 Template</a></li>
+                                <li><a href="">Blackor Responsive Theme</a></li>
+                                <li><a href="">Portfolio Bootstrap Template</a></li>
+                                <li><a href="">Clean Slider Template</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                
+                    <div class="aside-widget">
+                        <header>
+                            <h3>Related Post</h3>
+                        </header>
+                        <div class="body">
+                            <ul class="clean-list">
+                                <li><a href="">Blackor Responsive Theme</a></li>
+                                <li><a href="">Portfolio Bootstrap Template</a></li>
+                                <li><a href="">Clean Slider Template</a></li>
+                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
+                                <li><a href="">Responsive Pricing Table</a></li>
+                                <li><a href="">Yellow HTML5 Template</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                 <!--    <div class="aside-widget">
+                        <header>
+                            <h3>Tags</h3>
+                        </header>
+                        <div class="body clearfix">
+                            <ul class="tags">
+                                <li><a href="#">HTML5</a></li>
+                                <li><a href="#">CSS3</a></li>
+                                <li><a href="#">COMPONENTS</a></li>
+                                <li><a href="#">TEMPLATE</a></li>
+                                <li><a href="#">PLUGIN</a></li>
+                                <li><a href="#">BOOTSTRAP</a></li>
+                                <li><a href="#">TUTORIAL</a></li>
+                                <li><a href="#">UI/UX</a></li>                            
+                            </ul>
+                        </div>
+                    </div> -->
+                </aside>
+        </div>
+    </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <table th:include="fragments/footer :: footer" class="footer">
+
+      </table>
+	<script th:src="@{/js/user/public/blog.js}"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="headTag">
+	<link rel="icon" type="image/x-icon" th:href="@{/img/logo.jpg}" />
+	
+	 <meta name="ctx" th:content="@{/}" />
+	<title>pdf免费图书、书籍、英文原版下载，IT技术博客分享-rejoice blog</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/plugin/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet" />
+     <!-- Font-Awesome -->
+    <link rel="stylesheet" th:href="@{/plugin/font-awesome-4.7.0/css/font-awesome.min.css}" />
+    <!-- Google Webfonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600|PT+Serif:400,400italic' rel='stylesheet' type='text/css' />
+    <!-- Styles -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" id="theme-styles" />
+    <script th:src="@{/plugin/jquery.min.js}"></script>
+    <script th:src="@{/plugin/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/plugin/modernizr.js}"></script>
+    <script th:src="@{/js/user/public/public.js}"></script>
+</div>
+</body>
+</html>

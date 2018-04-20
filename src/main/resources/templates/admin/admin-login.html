@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<head>
+<link rel="icon" type="image/x-icon" th:href="@{/img/logo.jpg}" />
+ <link rel="stylesheet" th:href="@{/css/admin/admin-login.css}" />
+<title>博客后台登录 -rejoice-blog</title>
+</head> 
+  
+<div class="form">
+<div style="
+    COLOR: white;
+    position: relative;
+    height: 68px;
+    top: -20px;
+    width: 348px;
+    left: -20px;
+    text-align: center;
+    line-height: 68px;
+    Z-INDEX: 100;
+    font-family: monospace;
+    font-weight:bold;
+    background:rgba(255, 255, 255, 0.5);
+    font-size: 24px;">rejoice博客后台</div>
+  <div class="forceColor"></div>
+  <div class="topbar">
+    <input type="username"  class="input" id="username" placeholder="Username"/>
+    <input type="password" class="input" id="password" placeholder="Password"/>
+  </div>
+  <button class="submit" id="submit" >Login</button>
+</div>
+</body>
+</html>
