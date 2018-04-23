@@ -3,6 +3,7 @@ package com.rejoice.blog.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 
 import org.apache.ibatis.annotations.Update;
 
@@ -19,11 +20,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  *
  */
 public class BaseEntity {
-	
-
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	//****************************************query conditions start ******************************************
+	@Transient
+	private String likes;//like query,comma-delimited format(split with ',') if multiple likes exist
+	@Transient
+	private String ins;//in query,comma-delimited format(split with ',') if multiple ins exist
 	private Date createTime;
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 	public Date getCreateTime() {
 		return createTime;
@@ -36,6 +38,18 @@ public class BaseEntity {
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	public String getLikes() {
+		return likes;
+	}
+	public void setLikes(String likes) {
+		this.likes = likes;
+	}
+	public String getIns() {
+		return ins;
+	}
+	public void setIns(String ins) {
+		this.ins = ins;
 	}
 	
 }

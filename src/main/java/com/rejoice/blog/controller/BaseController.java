@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.rejoice.blog.common.bean.EasyUIResult;
+import com.rejoice.blog.common.bean.LayuiResult;
+import com.rejoice.blog.common.bean.Result;
 import com.rejoice.blog.common.exception.ResourceNotFoundException;
 import com.rejoice.blog.service.BaseService;
 
@@ -76,11 +78,11 @@ public class BaseController<T,S> {
 		return ResponseEntity.ok(baseService.queryCount(t));
 	}
 	@GetMapping("/page") 
-	public ResponseEntity<EasyUIResult> findByPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
+	public LayuiResult findByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "limit", defaultValue = "30") Integer rows,String[] sort,String[] order, T t) throws Exception{
-		PageInfo<T> pageInfo = baseService.queryListByPageAndOrder(t, (offset/rows+1), rows,sort,order);
-		 EasyUIResult easyUIResult = new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
-		return ResponseEntity.ok(easyUIResult);
+		PageInfo<T> pageInfo = baseService.queryListByPageAndOrder(t, page, rows,sort,order);
+		LayuiResult layuiResult = new LayuiResult(pageInfo.getTotal(), pageInfo.getList());
+		return layuiResult;
 	}
 	@PutMapping
 	public void update(@RequestBody T t) throws Exception{
@@ -94,23 +96,7 @@ public class BaseController<T,S> {
 	@DeleteMapping("/{ids}")
 	public void delete(@PathVariable("ids") String ids) throws Exception{
 		List<String>  idsArray = Arrays.asList(ids.split(","));
-		T t = null;
-		for(String id: idsArray){
-			t = clazz.newInstance();
-	    	Field fieldId = ReflectionUtils.findField(t.getClass(), "id");
-	    	fieldId.setAccessible(true);
-	    	Class<?> type = fieldId.getType();
-	    	if(type.equals(Integer.class)||type.toString().equals("int")){
-	    		fieldId.set(t, Integer.parseInt(id));
-	    	}else if(type.equals(Long.class)||type.toString().equals("long")){
-	    		fieldId.set(t, Long.parseLong(id));
-	    	}else if(type.equals(String.class)){
-	    		fieldId.set(t, id);
-	    	}else{
-	    		throw new RuntimeException("unsupported id type:"+type);
-	    	}
-			baseService.updateByIdSelective(t);
-		}
+		baseService.deleteByIds(idsArray);
 	}
 	@GetMapping("/{id}")
 	public T getById(@PathVariable("id") Serializable id){

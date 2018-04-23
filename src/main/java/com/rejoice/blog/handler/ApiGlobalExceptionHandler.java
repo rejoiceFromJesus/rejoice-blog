@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.rejoice.blog.common.bean.ResponseVo;
+import com.rejoice.blog.common.bean.Result;
 /**
 * @ClassName: GlobalDefaultExceptionHandler 
 * @Description: 全局异常处理
@@ -25,9 +25,9 @@ class ApiGlobalExceptionHandler {
   @ExceptionHandler(value = Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
-  public ResponseVo defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+  public Result<Object> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 	  logger.error("api global exception handler, exception occurs:",e);
-	  return ResponseVo.systemError("system error");
+	  return Result.error("system error");
   }
   
 }

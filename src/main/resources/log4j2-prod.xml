@@ -2,7 +2,7 @@
 <!--设置log4j2的自身log级别为warn -->
 <configuration status="warn">
 	<properties>
-		 <Property name="log_path">/logs/regulators/receive</Property>
+		 <Property name="log_path">./logs</Property>
 	</properties>
 	<appenders>
 		<console name="Console" target="SYSTEM_OUT">

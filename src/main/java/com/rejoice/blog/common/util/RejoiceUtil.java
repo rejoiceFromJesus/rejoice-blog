@@ -1,5 +1,6 @@
 package com.rejoice.blog.common.util;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -11,6 +12,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.rejoice.blog.common.exception.InternalServerException;
 
 /**
  * 预订服务工具类
@@ -20,6 +25,23 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RejoiceUtil {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RejoiceUtil.class);
+	
+	public static void emptyToNull(Object obj){
+		try {
+		Field[] fields = obj.getClass().getDeclaredFields();
+	        for (Field field : fields) {
+	            // 设置为true，可以获取声明的私有字段的值
+	            field.setAccessible(true);
+	            if (isBlank(field.get(obj))) {
+					field.set(obj, null);
+	            }
+	        }
+		} catch (Exception e) {
+			LOGGER.error("set empty property to null failed:",e);
+			throw new InternalServerException("emptyToNull failed",e);
+		}
+	}
 
 	/**
 	 * 

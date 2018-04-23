@@ -1,14 +1,18 @@
 package com.rejoice.blog;
 
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 @MapperScan(basePackages="com.rejoice.blog.mapper")
 public class RejoiceBlogApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RejoiceBlogApplication.class, args);
+		new SpringApplicationBuilder(RejoiceBlogApplication.class)
+		.properties(
+				"spring.config.name:application,constant,task,enabled,boot-admin,jdbc",
+				"spring.config.location:classpath:/,classpath:/config/")
+		.build().run(args);
 	}
 }
