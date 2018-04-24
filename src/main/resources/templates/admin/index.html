@@ -5,6 +5,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>rejoice</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/css/admin/admin.css">
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -74,7 +75,7 @@
 
 		<div class="layui-body" style="height:96%;">
 			<!-- 内容主体区域 -->
-			<div class="layui-tab layui-tab-card"  lay-filter="tab" style="height:98%;margin:0px;"
+			<div class="layui-tab layui-tab-card" lay-allowclose="true"  lay-filter="tab" style="height:98%;margin:0px;"
 				lay-allowclose="true">
 				<ul class="layui-tab-title">
 					<li class="layui-this" lay-id="11">首页</li>
@@ -92,6 +93,7 @@
 	</div>
 	    <script th:src="@{/plugin/jquery.min.js}"></script>
 	<script src="/plugin/layui/layui.js"></script>
+	<script src="/js/rejoice.js"></script>
 	<script>
 //JavaScript代码区域
 layui.use('element', function(){
@@ -110,7 +112,7 @@ layui.use('element', function(){
     		    //新增一个Tab项
  		      element.tabAdd('tab', {
  		        title: title
- 		        ,content:data
+ 		        ,content:"<div id='"+id+"-content'>"+data+"</div>"
  		        //,content: '<iframe data-frameid='+id+'-frame'+' frameborder="0" name="content" scrolling="no" width="100%" src="/page/admin/category.html"></iframe>'
  		        ,id: id //实际使用一般是规定好的id，这里以时间戳模拟下
  		      })
@@ -141,8 +143,24 @@ layui.use('element', function(){
     active[type] ? active[type].call(this, othis) : '';
   });
   
+  element.on('tab(tab)', function(data){
+	  init(this)
+	});
   
 });
+function init(tabTitle){
+	var $content = $('#'+$(tabTitle).attr('lay-id')+'-content');
+	var $dialogList = $content.find('form[type=dialog],div[type=dialog]');
+	$dialogList.each(function(i){
+		if($("body").children("#"+$(this).attr('id')).size() == 0){
+			$(this).appendTo($("body"));
+		}else{
+			$(this).remove();
+		}
+	})
+	
+	
+}
 </script>
 </body>
 </html>

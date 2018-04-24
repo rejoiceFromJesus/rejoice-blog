@@ -9,9 +9,13 @@
  */
 package com.rejoice.blog.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rejoice.blog.entity.Category;
+import com.rejoice.blog.mapper.CategoryMapper;
 
 /**
  *
@@ -25,5 +29,12 @@ import com.rejoice.blog.entity.Category;
  */
 @Service
 public class CategoryService extends BaseService<Category> {
+	
+	@Autowired
+	CategoryMapper categoryMapper;
+	
+	public List<Category> tree(){
+		return categoryMapper.tree();
+	}
 
 }

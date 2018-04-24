@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rejoice.blog.mapper.CategoryMapper">
+
+	<select id="tree" resultMap="resultCategory">
+    	SELECT * from category where parent_id=-1 
+    </select>
+    
+	<resultMap id="resultCategory" type="Category">
+	    <id property="id" column="id"/>
+	    <result property="name" column="name"/>
+	    <result property="parentId" column="parent_id"/>
+	    <collection property="children" column="id" javaType="ArrayList" ofType="Category"
+	    	select="selectChildren"/>
+    </resultMap>
+    
+    
+    <select id="selectChildren" parameterType="int"  resultMap="resultCategory">
+   		select * from category where parent_id=#{parentId}
+   </select>
+    
+</mapper>

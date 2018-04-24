@@ -39,4 +39,9 @@ public class CategoryController extends BaseController<Category,CategoryService>
 		return this.getService().queryListByWhere(con);
 	}
 	
+	@GetMapping("/tree")
+	public List<Category> tree(){
+		return this.getService().tree();
+	}
+	
 }
