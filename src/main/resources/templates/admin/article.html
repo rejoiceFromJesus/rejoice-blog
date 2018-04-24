@@ -1,28 +1,28 @@
-<div class="search">
+<div class="search-article">
   <div class="layui-inline">
-    <input class="layui-input" id="name" name="name" placeholder="名称"  autocomplete="off">
+    <input class="layui-input"  name="title" placeholder="标题"  autocomplete="off">
   </div>
-  <button class="layui-btn" data-type="reload" onclick="reloadCategory(1)">搜索</button>
-    <button class="layui-btn layui-btn-normal"  onclick="showCategoryDialog()">新增</button>
+  <button class="layui-btn" data-type="reload" onclick="reloadArticle(1)">搜索</button>
+    <button class="layui-btn layui-btn-normal"  onclick="showArticleDialog()">新增</button>
 </div>
  
-<table id="category-table" lay-filter="category"></table>
+<table id="article-table" lay-filter="article"></table>
 <script type="text/html" id="toolbar">
   <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
 </script>
-<form id='category-dialog' type='dialog' lay-filter='save-form'  style="display: none;padding:20px;"  class="layui-form" action="">
+<form id='article-dialog' type='dialog' lay-filter='save-form'  style="display: none;padding:20px;"  class="layui-form" action="">
 	  <input type='hidden' name='parentId'  />
 	  <input type='hidden' name='id'  />
   <div class="layui-form-item">
     <label class="layui-form-label">父级分类</label>
     <div class="layui-input-block">
-      <input type="text" name="parentName" readonly="readonly" onclick="showCategoryTree()" autocomplete="off" placeholder="请输入父节点" class="layui-input">
+      <input type="text" name="parentName" readonly="readonly" onclick="showArticleTree()" autocomplete="off" placeholder="请输入父节点" class="layui-input">
 	  <i class="layui-icon" style="  font-size: 30px;
     color: red;
     position: absolute;
     top: 4px;
-    right: 0px;cursor: pointer;width:40px;height:40px;" title="清空" onclick="clearCategoryParent()">&#xe640;</i> 
+    right: 0px;cursor: pointer;width:40px;height:40px;" title="清空" onclick="clearArticleParent()">&#xe640;</i> 
     </div>
   </div>
 
@@ -46,19 +46,17 @@
     </div>
   </div>
 </form>
-<div id="category-tree" style="background: #93ccb4;display: none;" type=dialog>
+<div id="article-tree" style="background: #93ccb4;display: none;" type=dialog>
 </div>
 <script>
-var categoryTable;
+var articleTable;
 var categoryLoadCount = 0;
-
 layui.use('table', function(){
   var table = layui.table;
 //第一个实例
-  categoryTable = table.render({
-    elem: '#category-table'
-    ,height: 315
-    ,url: '/category/page' //数据接口
+  articleTable = table.render({
+    elem: '#article-table'
+    ,url: '/article/page' //数据接口
     ,page: true //开启分页
     ,loading:true
     ,height: 'full-200'
@@ -69,21 +67,26 @@ layui.use('table', function(){
 		if(categoryLoadCount == 0){
 			console.info("reload");
 			categoryLoadCount++;
-			categoryTable.reload();
+			articleTable.reload();
 			
 		}
     }
     ,cols: [[ //表头
        {type:'numbers',width:"5%"}
-      ,{field: 'name', title: '名称', width:"30%"}
-      ,{field: 'comment', title: '描述', width:"30%"}
-      ,{field: 'wealth', width: "35%" ,toolbar: '#toolbar'}
+      ,{field: 'title', title: '标题', width:"10%"}
+      ,{field: 'content', title: '内容', width:"15%"}
+      ,{field: 'summary', title: '摘要', width:"12%"}
+      ,{field: 'postTime', title: '发布时间', width:"13%"}
+      ,{field: 'readCount', title: '阅读', width:"10%"}
+      ,{field: 'commentCount', title: '评论', width:"10%"}
+      ,{field: 'author', title: '作者', width:"10%"}
+      ,{field: '', width: "15%" ,toolbar: '#toolbar'}
     ]]
   });
   
   
 //监听工具条
-  table.on('tool(category)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+  table.on('tool(article)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
     var data = obj.data; //获得当前行数据
     var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
     var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -91,46 +94,46 @@ layui.use('table', function(){
     if(layEvent === 'detail'){ //查看
       //do somehing
     } else if(layEvent === 'del'){ //删除
-      layer.confirm('您确定要删除 <span style="color:red;">'+data.name+'</span> 吗？', function(index){
+      layer.confirm('您确定要删除 <span style="color:red;">'+data.title+'</span> 吗？', function(index){
        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
        $.ajax({
     	   type:"delete",
-    	   url:"/category/"+data.id
+    	   url:"/article/"+data.id
        }).done(function(data){
     	   layer.close(index);
-    	   reloadCategory();
+    	   reloadArticle();
        });
      
       });
     } else if(layEvent === 'edit'){ //编辑
-    	showCategoryDialog(data)
+    	showArticleDialog(data)
     }
   });
   
 });
-function showCategoryTree(data){
-	$('#category-tree').empty();
+function showArticleTree(data){
+	$('#article-tree').empty();
 	 var layerIndex = layer.open({
 		  title:'选择父节点',
 		  type: 1,
 		  anim: 1,
 		  skin: 'layui-layer-molv', //加上边框
 		  area: ['500px', '700px'], //宽高
-		   content: $("#category-tree"),
+		   article: $("#article-tree"),
 				  btn: [ '取消'] 
 				 
 		}); 
 	layui.use('tree', function(){
-	$.get('/category/tree').done(function(data){
+	$.get('/article/tree').done(function(data){
 		if(!data){
 			return;
 		}
 		layui.tree({
-			  elem: '#category-tree'
+			  elem: '#article-tree'
 			  ,skin: 'shihuang'
 			  ,click: function(node){
-				  $('#category-dialog').find("input[name=parentName]").val(node.name)
-				  $('#category-dialog').find("input[name=parentId]").val(node.id);
+				  $('#article-dialog').find("input[name=parentName]").val(node.name)
+				  $('#article-dialog').find("input[name=parentId]").val(node.id);
 				  layer.close(layerIndex);
 			  } 
 			  ,nodes: data
@@ -139,29 +142,29 @@ function showCategoryTree(data){
 	
 	});
 }
-function clearCategoryParent(){
-	 $('#category-dialog').find("input[name=parentName]").val('')
-	  $('#category-dialog').find("input[name=parentId]").val(-1);
+function clearArticleParent(){
+	 $('#article-dialog').find("input[name=parentName]").val('')
+	  $('#article-dialog').find("input[name=parentId]").val(-1);
 }
-function showCategoryDialog(oldData){
+function showArticleDialog(oldData){
 	layer.open({
 	  title:oldData?'编辑分类':'添加分类',
 	  type: 1,
 	  anim: 1,
 	  skin: 'layui-layer-molv', //加上边框
 	  area: ['500px', '350px'], //宽高
-	  content: $("#category-dialog"),
+	  article: $("#article-dialog"),
 	  success:function(layero,index){
 		
-			$("#category-dialog")[0].reset();
-			$("#category-dialog").find("input[type='hidden']").val('');
+			$("#article-dialog")[0].reset();
+			$("#article-dialog").find("input[type='hidden']").val('');
 			if(oldData){
 			for (var name in oldData) {
-				  $("#category-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(oldData[name]);
+				  $("#article-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(oldData[name]);
 		        }
 			  //parentName
 			  if(oldData.parentId != -1){
-				  $.get("/category/"+oldData.parentId).done(function(data){
+				  $.get("/article/"+oldData.parentId).done(function(data){
 					  	$("input[name=parentName]").val(data.name)
 				  })
 			  }
@@ -170,10 +173,10 @@ function showCategoryDialog(oldData){
 		  layui.use('form', function(){
 			  var form = layui.form;
 			    form.on('submit(save)', function(data){
-				 $.ajax({type:oldData?'put':'post',url:'/category',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				 $.ajax({type:oldData?'put':'post',url:'/article',articleType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
 				  layer.msg("保存分类成功");
 			      layer.close(index);
-			      reloadCategory();
+			      reloadArticle();
 			 	 }); 
 			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 			  }); 
@@ -182,17 +185,17 @@ function showCategoryDialog(oldData){
 	});
 }
 
-function reloadCategory(pageNum){
+function reloadArticle(pageNum){
 	var options = {
 			
 	where: {
-  	  name: $("#name").val(),
-	  likes:"name"
+  	  title: $(".search-article").find("input[name='title']").val(),
+	  likes:"title"
  		   }
 	};
 	if(pageNum){
 		options.page={curr:pageNum};
 	}
-	categoryTable.reload(options);
+	articleTable.reload(options);
 }
 </script>

@@ -4,7 +4,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>rejoice</title>
-<link rel="stylesheet" href="/plugin/layui/css/layui.css">
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" media="all">
 <link rel="stylesheet" href="/css/admin/admin.css">
 </head>
 <body class="layui-layout-body">
@@ -63,7 +63,8 @@
 									data-type="tabAdd">博客分类</a>
 							</dd>
 							<dd>
-								<a href="javascript:;">博客列表</a>
+								<a url="/page/admin/article.html" href="javascript:;" id='article' class='open-tab'
+									data-type="tabAdd">博客列表</a>
 							</dd>
 							<dd>
 								<a href="javascript:;">评论列表</a>
@@ -107,7 +108,6 @@ layui.use('element', function(){
       var id = $(this).attr("id")+"-tab";
       var title = $(this).text();
       if (!$(".layui-tab-title li[lay-id='"+id+"']").length > 0 ) { 
-    	  
     	   $.get($($this).attr("url")).done(function(data){
     		    //新增一个Tab项
  		      element.tabAdd('tab', {
@@ -129,7 +129,6 @@ layui.use('element', function(){
       //删除指定Tab项
       element.tabDelete('demo', '44'); //删除：“商品管理”
       
-      
       othis.addClass('layui-btn-disabled');
     }
     ,tabChange: function(othis){
@@ -144,8 +143,7 @@ layui.use('element', function(){
   });
   
   element.on('tab(tab)', function(data){
-	  init(this)
-	});
+  });
   
 });
 function init(tabTitle){
@@ -158,8 +156,6 @@ function init(tabTitle){
 			$(this).remove();
 		}
 	})
-	
-	
 }
 </script>
 </body>
