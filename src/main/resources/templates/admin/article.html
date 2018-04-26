@@ -11,13 +11,13 @@
   <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
 </script>
-<form id='article-dialog' type='dialog' lay-filter='save-form'  style="display: none;padding:20px;"  class="layui-form" action="">
-	  <input type='hidden' name='parentId'  />
+<form id='article-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+	  <input type='hidden' name='categoryId'  />
 	  <input type='hidden' name='id'  />
   <div class="layui-form-item">
-    <label class="layui-form-label">父级分类</label>
+    <label class="layui-form-label">分类</label>
     <div class="layui-input-block">
-      <input type="text" name="parentName" readonly="readonly" onclick="showArticleTree()" autocomplete="off" placeholder="请输入父节点" class="layui-input">
+      <input type="text" name="categoryName" readonly="readonly" onclick="showContentCategoryTree()" autocomplete="off" placeholder="请选择博客分类" class="layui-input">
 	  <i class="layui-icon" style="  font-size: 30px;
     color: red;
     position: absolute;
@@ -27,30 +27,31 @@
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">分类名称</label>
-    <div class="layui-input-block">
-      <input type="text"  name="name" lay-verify="required" autocomplete="off" placeholder="请输入分类名称" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">描述</label>
+    <label class="layui-form-label">标题</label>
      <div class="layui-input-block">
-      <textarea placeholder="请输入描述" name="comment" class="layui-textarea"></textarea>
+       <input type="text"  name="title" lay-verify="required"  placeholder="请输入标题" class="layui-input">
     </div>
   </div>
-  
+   <div class="layui-form-item">
+    <label class="layui-form-label">内容</label>
+     <div class="layui-input-block">
+       <textarea placeholder="请输入内容" name="content" id="article-content" class="layui-textarea"></textarea>
+    </div>
+  </div>
   <div class="layui-form-item" style="bottom: 0px;position: absolute;right: 20px;">
     <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="save">提交</button>
+      <button class="layui-btn" lay-submit lay-filter="article-save">提交</button>
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
     </div>
   </div>
 </form>
-<div id="article-tree" style="background: #93ccb4;display: none;" type=dialog>
+<div id="article-category-tree" style="background: #93ccb4;display: none;" type=dialog>
 </div>
+ 
 <script>
 var articleTable;
-var categoryLoadCount = 0;
+var contentLoadCount = 0;
+var contentEditorIndex;
 layui.use('table', function(){
   var table = layui.table;
 //第一个实例
@@ -64,9 +65,8 @@ layui.use('table', function(){
     ,skin: 'line' //行边框风格
     ,even: true //开启隔行背景
     ,done: function(res, curr, count){
-		if(categoryLoadCount == 0){
-			console.info("reload");
-			categoryLoadCount++;
+		if(contentLoadCount == 0){
+			contentLoadCount++;
 			articleTable.reload();
 			
 		}
@@ -110,30 +110,32 @@ layui.use('table', function(){
     }
   });
   
+  
+  
 });
-function showArticleTree(data){
-	$('#article-tree').empty();
+function showContentCategoryTree(data){
+	$('#article-category-tree').empty();
 	 var layerIndex = layer.open({
-		  title:'选择父节点',
+		  title:'选择博客分类',
 		  type: 1,
 		  anim: 1,
 		  skin: 'layui-layer-molv', //加上边框
 		  area: ['500px', '700px'], //宽高
-		   article: $("#article-tree"),
+		  content: $("#article-category-tree"),
 				  btn: [ '取消'] 
 				 
 		}); 
 	layui.use('tree', function(){
-	$.get('/article/tree').done(function(data){
+	$.get('/category/tree').done(function(data){
 		if(!data){
 			return;
 		}
 		layui.tree({
-			  elem: '#article-tree'
+			  elem: '#article-category-tree'
 			  ,skin: 'shihuang'
 			  ,click: function(node){
-				  $('#article-dialog').find("input[name=parentName]").val(node.name)
-				  $('#article-dialog').find("input[name=parentId]").val(node.id);
+				  $('#article-dialog').find("input[name=categoryName]").val(node.name)
+				  $('#article-dialog').find("input[name=categoryId]").val(node.id);
 				  layer.close(layerIndex);
 			  } 
 			  ,nodes: data
@@ -142,44 +144,50 @@ function showArticleTree(data){
 	
 	});
 }
-function clearArticleParent(){
-	 $('#article-dialog').find("input[name=parentName]").val('')
-	  $('#article-dialog').find("input[name=parentId]").val(-1);
+function clearArticleCategory(){
+	 $('#article-dialog').find("input[name=categoryName]").val('')
+	 $('#article-dialog').find("input[name=categoryId]").val(-1);
 }
 function showArticleDialog(oldData){
 	layer.open({
-	  title:oldData?'编辑分类':'添加分类',
+	  title:oldData?'编辑博客':'添加博客',
 	  type: 1,
 	  anim: 1,
 	  skin: 'layui-layer-molv', //加上边框
-	  area: ['500px', '350px'], //宽高
-	  article: $("#article-dialog"),
+	  area: ["100%","100%"], //宽高
+	  content: $("#article-dialog"),
 	  success:function(layero,index){
-		
+		  layui.use(['form','layedit'], function(){
+			var form = layui.form;
+			var layedit = layui.layedit;
 			$("#article-dialog")[0].reset();
 			$("#article-dialog").find("input[type='hidden']").val('');
+			$("#article-dialog").find("textarea").val('');
 			if(oldData){
-			for (var name in oldData) {
-				  $("#article-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(oldData[name]);
-		        }
-			  //parentName
-			  if(oldData.parentId != -1){
-				  $.get("/article/"+oldData.parentId).done(function(data){
-					  	$("input[name=parentName]").val(data.name)
-				  })
-			  }
+				for (var name in oldData) {
+					$("#article-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(oldData[name]);
+			    }
+				  //parentName
+				  if(oldData.categoryId != -1){
+					  $.get("/category/"+oldData.categoryId).done(function(data){
+						  	$("input[name=categoryName]").val(data.name)
+					  })
+				  }
 			  
-		  }
-		  layui.use('form', function(){
-			  var form = layui.form;
-			    form.on('submit(save)', function(data){
-				 $.ajax({type:oldData?'put':'post',url:'/article',articleType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
-				  layer.msg("保存分类成功");
+		    }
+			 //构建一个默认的编辑器
+			 contentEditorIndex = layedit.build('article-content',{
+				  height:"500px"
+			  });
+			form.on('submit(article-save)', function(data){
+			      data.field.content = layedit.getContent(contentEditorIndex);
+			      $.ajax({type:oldData?'put':'post',url:'/article/save',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				  layer.msg("保存博客成功");
 			      layer.close(index);
 			      reloadArticle();
 			 	 }); 
 			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
-			  }); 
+			}); 
 		});
 	  }
 	});

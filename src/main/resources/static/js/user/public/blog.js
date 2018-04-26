@@ -8,7 +8,7 @@ $(function(){
 
 function loadArticle(url,root){
 	$.getJSON(url,function(data){
-		$.each(data.rows,function(index,item){
+		$.each(data.data,function(index,item){
 			/*<div class="col-md-8 blog-main">
         	
             <img src="img/1.jpg" alt="" />

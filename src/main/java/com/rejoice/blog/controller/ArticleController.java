@@ -9,13 +9,22 @@
  */
 package com.rejoice.blog.controller;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rejoice.blog.common.constant.Constant;
+import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.Article;
 import com.rejoice.blog.entity.Comment;
 import com.rejoice.blog.service.ArticleService;
@@ -47,6 +56,23 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		modelAndView.addObject("commentCount", commentService.queryCount(comment));
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
 		return modelAndView;
+	}
+
+	
+	@PostMapping("/save")
+	public void saveArticle(@RequestBody Article t,HttpSession session) throws Exception {
+		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
+		String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
+		t.setSummary(StringUtils.substring(noHTMLString,0,50));
+		this.getService().saveSelective(t);
+	}
+	
+	@PutMapping("/save")
+	public void updateArticle(@RequestBody Article t,HttpSession session) throws Exception {
+		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
+		String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
+		t.setSummary(StringUtils.substring(noHTMLString,0,50));
+		this.getService().updateByIdSelective(t);
 	}
 
 }

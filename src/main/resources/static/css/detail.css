@@ -12,5 +12,11 @@
 	    line-height:22px;
 	    margin-top:10px;
 }
-
+.blog-post a{
+	color:#2696da !important;
+}
+.blog-post a:HOVER{
+	color:#13d2ff !important;
+}
+ 
 
