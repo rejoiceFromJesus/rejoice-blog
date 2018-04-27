@@ -2,7 +2,6 @@ var articlePageUrl = "article/page"
 var $articleList = $("#article-list")
 $(function(){
 	//load article
-	loadArticle(articlePageUrl);
 	loadPage();
 })
 

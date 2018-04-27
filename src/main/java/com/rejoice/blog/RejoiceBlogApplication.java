@@ -12,7 +12,7 @@ public class RejoiceBlogApplication {
 		new SpringApplicationBuilder(RejoiceBlogApplication.class)
 		.properties(
 				"spring.config.name:application,constant,task,enabled,boot-admin,jdbc",
-				"spring.config.location:classpath:/,classpath:/config/")
+				"spring.config.location:classpath:/,classpath:/config/,file:./config/")
 		.build().run(args);
 	}
 }
