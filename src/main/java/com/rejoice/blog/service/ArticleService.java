@@ -47,7 +47,7 @@ public class ArticleService extends BaseService<Article>{
 				PageHelper.startPage(page, rows);
 				// 声明一个example
 				Example example = new Example(Article.class);
-				example.selectProperties("id","title","summary","readCount","commentCount","postTime","imgUrl","categoryId");
+				example.selectProperties("id","title","summary","readCount","commentCount","postTime","imgUrl","categoryId","author");
 				if (RejoiceUtil.isNotBlank(sorts) && RejoiceUtil.isNotBlank(orders)) {
 					StringBuilder sortSB = new StringBuilder();
 					for (int i = 0; i < sorts.length; i++) {
