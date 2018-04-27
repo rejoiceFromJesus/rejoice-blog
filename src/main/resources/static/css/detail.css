@@ -12,6 +12,9 @@
 	    line-height:22px;
 	    margin-top:10px;
 }
+.blog-post{
+	overflow: hidden;
+}
 .blog-post a{
 	color:#2696da !important;
 }

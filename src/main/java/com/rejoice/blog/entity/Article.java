@@ -33,12 +33,20 @@ public class Article extends BaseEntity {
 	private String title;
 	private String content;
 	private String postTime;
-	private String readCount;
-	private String commentCount;
+	private Integer readCount;
+	private Integer commentCount;
 	private Integer categoryId;
 	private String author;
 	private String summary;
+	private String imgUrl;
 	
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	public String getAuthor() {
 		return author;
 	}
@@ -75,16 +83,17 @@ public class Article extends BaseEntity {
 	public void setPostTime(String postTime) {
 		this.postTime = postTime;
 	}
-	public String getReadCount() {
+	
+	public Integer getReadCount() {
 		return readCount;
 	}
-	public void setReadCount(String readCount) {
+	public void setReadCount(Integer readCount) {
 		this.readCount = readCount;
 	}
-	public String getCommentCount() {
+	public Integer getCommentCount() {
 		return commentCount;
 	}
-	public void setCommentCount(String commentCount) {
+	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
 	}
 	public Integer getCategoryId() {

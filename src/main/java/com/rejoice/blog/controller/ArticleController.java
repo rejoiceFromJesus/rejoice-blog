@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,29 +51,37 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	
 	@GetMapping("/{id}.html")
 	public ModelAndView detail(@PathVariable("id") Long id){
+		Article article = this.getService().queryByID(id);
 		ModelAndView modelAndView = new ModelAndView("/article-detail");
-		modelAndView.addObject("article",this.getService().queryByID(id));
+		modelAndView.addObject("article",article);
 		Comment comment = new Comment();
 		comment.setArticleId(id);
 		modelAndView.addObject("commentCount", commentService.queryCount(comment));
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
+		//update readCount
+		article.setReadCount(article.getReadCount()+1);
+		this.getService().updateByIdSelective(article);
 		return modelAndView;
 	}
-
+	
 	
 	@PostMapping("/save")
 	public void saveArticle(@RequestBody Article t,HttpSession session) throws Exception {
+		Document doc = Jsoup.parse(t.getContent());
 		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
-		String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
-		t.setSummary(StringUtils.substring(noHTMLString,0,50));
+		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
+		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
+		t.setImgUrl(doc.select("img").first().attr("src"));
 		this.getService().saveSelective(t);
 	}
 	
 	@PutMapping("/save")
 	public void updateArticle(@RequestBody Article t,HttpSession session) throws Exception {
+		Document doc = Jsoup.parse(t.getContent());
 		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
-		String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
-		t.setSummary(StringUtils.substring(noHTMLString,0,50));
+		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
+		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
+		t.setImgUrl(doc.select("img").first().attr("src"));
 		this.getService().updateByIdSelective(t);
 	}
 

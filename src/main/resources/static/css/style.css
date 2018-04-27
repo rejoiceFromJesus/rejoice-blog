@@ -479,6 +479,7 @@ The list with special bullet points, used both on blog widgets as well as in the
 .clean-list li {
   line-height: 23px;
   margin-bottom: 14px;
+  margin-left:24px;
 }
 
 .clean-list li a:hover,

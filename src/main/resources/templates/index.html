@@ -5,15 +5,31 @@
   </head>
       <link rel="stylesheet" th:href="@{/css/blog.css}" id="theme-styles" />
   <body>
-
+<style>
+.layui-laypage-skip:HOVER {
+	color:black;
+}
+.layui-laypage-skip > button:HOVER {
+	border:1px solid #009688;
+}
+</style>
       <div th:include="fragments/bodyHeader" th:remove="tag">
 
       </div>
       
        <div class="widewrapper main">
         <div class="container content">
-            <div id="article-list" class="article-list">
+        	<div style="float: left;
+    width: 720px;
+    height: auto;">
+            <div id="article-list" >
             </div>
+		<fieldset id="article-page" class="layui-elem-field layui-field-title" style="float:left;border:none;">
+						  <legend>显示完整功能</legend>
+						</fieldset>
+        	</div>
+
+ 
                 <aside class="col-md-4 blog-aside" style="position: absolute;right:0px;">
                     
                     <div class="aside-widget">
