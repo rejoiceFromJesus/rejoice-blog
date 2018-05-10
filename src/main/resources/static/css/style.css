@@ -11,7 +11,11 @@ body {
 a {
   color: #5b6268;
 }
-
+.border-shadow{
+	padding:20px;
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
 a:hover,
 a:focus {
   text-decoration: none;

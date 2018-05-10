@@ -163,21 +163,30 @@ function showArticleDialog(oldData){
 			$("#article-dialog").find("input[type='hidden']").val('');
 			$("#article-dialog").find("textarea").val('');
 			if(oldData){
-				for (var name in oldData) {
-					$("#article-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(oldData[name]);
-			    }
 				  //parentName
 				  if(oldData.categoryId != -1){
 					  $.get("/category/"+oldData.categoryId).done(function(data){
 						  	$("input[name=categoryName]").val(data.name)
 					  })
+					   $.get("/article/"+oldData.id).done(function(data){
+						   for (var name in data) {
+								$("#article-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
+			   			   }
+						   //构建一个默认的编辑器
+							 contentEditorIndex = layedit.build('article-content',{
+								  height:"500px"
+							  });
+					  })
+					 
 				  }
 			  
+		    }else{
+		    	 //构建一个默认的编辑器
+				 contentEditorIndex = layedit.build('article-content',{
+					  height:"500px"
+				  });
 		    }
-			 //构建一个默认的编辑器
-			 contentEditorIndex = layedit.build('article-content',{
-				  height:"500px"
-			  });
+			
 			form.on('submit(article-save)', function(data){
 			      data.field.content = layedit.getContent(contentEditorIndex);
 			      $.ajax({type:oldData?'put':'post',url:'/article/save',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
