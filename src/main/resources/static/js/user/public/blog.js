@@ -48,7 +48,7 @@ function loadPage(){
 		    ,count: data
 		    ,layout: ['count', 'prev', 'page', 'next', 'skip']
 		    ,jump: function(obj){
-		    	loadArticle(articlePageUrl+"?page="+obj.curr+"&limit="+obj.limit)
+		    	loadArticle(articlePageUrl+"?page="+obj.curr+"&limit="+obj.limit+"&order=desc&sort=post_time")
 		    }
 		  });
 	});

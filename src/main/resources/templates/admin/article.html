@@ -57,7 +57,7 @@ layui.use('table', function(){
 //第一个实例
   articleTable = table.render({
     elem: '#article-table'
-    ,url: '/article/page' //数据接口
+    ,url: '/article/page?order=desc&sort=post_time' //数据接口
     ,page: true //开启分页
     ,loading:true
     ,height: 'full-200'
