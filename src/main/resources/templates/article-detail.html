@@ -26,18 +26,28 @@
 	<link rel="stylesheet" th:href="@{/css/detail.css}" id="theme-styles" />
 	<link th:href="@{/small-plugin/share/smohan.popshare.css}"
 		rel="stylesheet" />
-	<div class="widewrapper main">
-		<div class="container content">
+	<div class="left" style="float:left; margin:16px 20px;padding:4px;width:18%;">
+      	<div class="border-shadow" style="background:white;height:300px">我是rejoice</div>
+     	 <div class="border-shadow" style="background:white;margin-top:40px;">关注我</div>
+      </div>
+         <div class="widewrapper main" style="width:60%;float:left;">
+		<div class="container content" style="width:100%;" >
 			<div class="row">
-				<div class="col-md-8 blog-main">
+				<div  style="padding:20px;">
 					<article class="blog-post">
-							<span class="detail-title" th:text="${article.title}"></span>
+					<span class="original">原创</span> 
+							<a class="detail-title" th:text="${article.title}" th:attrappend="href=${#httpServletRequest.requestURL}"></a>
 							<span id="summary" style="display:none" th:text="${article.summary}"></span>
-							<div class="meta">
-								<span class="original">原创</span> <span class="author"
-									th:text="${article.author}" />&nbsp;&nbsp;发布于 <span
-									th:text="${article.postTime}+'&nbsp;&nbsp;阅读:'+${article.readCount}+'&nbsp;&nbsp;·评论:'+${article.commentCount}" /></div>
-							<div th:utext="${article.content}"></div>
+							<div style="margin-top:20px;">
+							<i class="fa fa-clock-o" ></i>
+							<span style="margin-left:4px;" th:text="${article.postTime}"></span> 
+							<i class="fa fa-user" style="margin-left:10px;"></i>
+							<span class="author" style="margin-left:4px;" th:text="${article.author} ? ${article.author}:'rejoice'" ></span> 
+							<i class="fa fa-eye"  style="margin-left:10px;"></i><span  style="margin-left:4px;" th:text="${article.readCount}"></span>
+							<i class="fa fa-comment"  style="margin-left:10px;"></i><span  style="margin-left:4px;" th:text="${article.commentCount}"></span>
+									
+									</div>
+							<div style="margin-top:20px;" th:utext="${article.content}"></div>
 					</article>
 			<!-- share start -->
 			<div style="position: relative;height:54px;">
@@ -177,58 +187,7 @@ conf: 'prod_5a63c4b821f3be65940b2622b60daf3f'
 						</form>
 					</aside> -->
 				</div>
-				<aside class="col-md-4 blog-aside">
-
-					<div class="aside-widget">
-						<header>
-							<h3>Featured Post</h3>
-						</header>
-						<div class="body">
-							<ul class="clean-list">
-								<li><a href="">Clean - Responsive HTML5 Template</a></li>
-								<li><a href="">Responsive Pricing Table</a></li>
-								<li><a href="">Yellow HTML5 Template</a></li>
-								<li><a href="">Blackor Responsive Theme</a></li>
-								<li><a href="">Portfolio Bootstrap Template</a></li>
-								<li><a href="">Clean Slider Template</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="aside-widget">
-						<header>
-							<h3>Related Post</h3>
-						</header>
-						<div class="body">
-							<ul class="clean-list">
-								<li><a href="">Blackor Responsive Theme</a></li>
-								<li><a href="">Portfolio Bootstrap Template</a></li>
-								<li><a href="">Clean Slider Template</a></li>
-								<li><a href="">Clean - Responsive HTML5 Template</a></li>
-								<li><a href="">Responsive Pricing Table</a></li>
-								<li><a href="">Yellow HTML5 Template</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="aside-widget">
-						<header>
-							<h3>Tags</h3>
-						</header>
-						<div class="body clearfix">
-							<ul class="tags">
-								<li><a href="#">HTML5</a></li>
-								<li><a href="#">CSS3</a></li>
-								<li><a href="#">COMPONENTS</a></li>
-								<li><a href="#">TEMPLATE</a></li>
-								<li><a href="#">PLUGIN</a></li>
-								<li><a href="#">BOOTSTRAP</a></li>
-								<li><a href="#">TUTORIAL</a></li>
-								<li><a href="#">UI/UX</a></li>
-							</ul>
-						</div>
-					</div>
-				</aside>
+				
 			</div>
 		</div>
 	</div>
@@ -240,7 +199,59 @@ conf: 'prod_5a63c4b821f3be65940b2622b60daf3f'
 
 
 
+ <aside class="col-md-4 blog-aside" style="width:16%;float:right;margin:20px;">
+                    
+                    <div class="aside-widget">
+                        <header>
+                            <h3>Featured Post</h3>
+                        </header>
+                        <div class="body">
+                            <ul class="clean-list">
+                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
+                                <li><a href="">Responsive Pricing Table</a></li>
+                                <li><a href="">Yellow HTML5 Template</a></li>
+                                <li><a href="">Blackor Responsive Theme</a></li>
+                                <li><a href="">Portfolio Bootstrap Template</a></li>
+                                <li><a href="">Clean Slider Template</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                
+                    <div class="aside-widget">
+                        <header>
+                            <h3>Related Post</h3>
+                        </header>
+                        <div class="body">
+                            <ul class="clean-list">
+                                <li><a href="">Blackor Responsive Theme</a></li>
+                                <li><a href="">Portfolio Bootstrap Template</a></li>
+                                <li><a href="">Clean Slider Template</a></li>
+                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
+                                <li><a href="">Responsive Pricing Table</a></li>
+                                <li><a href="">Yellow HTML5 Template</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
+                 <!--    <div class="aside-widget">
+                        <header>
+                            <h3>Tags</h3>
+                        </header>
+                        <div class="body clearfix">
+                            <ul class="tags">
+                                <li><a href="#">HTML5</a></li>
+                                <li><a href="#">CSS3</a></li>
+                                <li><a href="#">COMPONENTS</a></li>
+                                <li><a href="#">TEMPLATE</a></li>
+                                <li><a href="#">PLUGIN</a></li>
+                                <li><a href="#">BOOTSTRAP</a></li>
+                                <li><a href="#">TUTORIAL</a></li>
+                                <li><a href="#">UI/UX</a></li>                            
+                            </ul>
+                        </div>
+                    </div> -->
+                </aside>
+      
 
 	<table th:include="fragments/footer :: footer" class="footer">
 

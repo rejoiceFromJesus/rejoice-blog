@@ -25,7 +25,12 @@ function loadArticle(url){
 			var content = item.summary?item.summary:item.content.substring(0,150)+"...";
 			var $content = $('<p class="blog-content"></p>');
 			$content.text(content);
-			var $meta = $('<h4 class=" meta">阅读:&nbsp;&nbsp;'+item.readCount+'·评论:&nbsp;&nbsp;'+item.commentCount+'</h4><h4 class=" meta right">'+item.author+' 发布于 '+item.postTime+'</h4>');
+			//var $meta = $('<h4 class=" meta">阅读:&nbsp;&nbsp;'+item.readCount+'·评论:&nbsp;&nbsp;'+item.commentCount+'</h4><h4 class=" meta right">'+item.author+' 发布于 '+item.postTime+'</h4>');
+			var $meta = $("#meta").clone().show();
+			$meta.find(".fa-calendar").next().text(item.postTime);
+			$meta.find(".fa-user").next().text(item.author);
+			$meta.find(".fa-eye").next().text(item.readCount);
+			$meta.find(".fa-comment").next().text(item.commentCount);
 			$articleDiv.append($title);
 			$articleDiv.append($content);
 			$articleDiv.append($meta);

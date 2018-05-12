@@ -50,9 +50,6 @@ hr {
 /* =============== 
 Font Awesome Icons 
 ==================*/
-.fa {
-  font-size: 24px;
-}
 
 ::selection {
   background: #566572;
@@ -1377,6 +1374,9 @@ fieldset[disabled] .btn-clean-two.active {
 	font-weight: bold;
 	    padding: 3px 5px 3px 5px;
 	    border-radius: .25em;
+	    font-size:14px;
+	        position: relative;
+    top: -2px;
 }
 .author{
 	color:#2fa9bd;
