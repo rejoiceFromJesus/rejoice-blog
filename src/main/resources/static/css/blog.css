@@ -39,13 +39,13 @@
 	/* border: 1px solid #bad8f7; */
 }
 .blog-main .article{
-	width:80%;
+	width:85%;
 	float:left;
 	padding-left:20px;
 }
 .blog-main img{
 	float:left;
-	width:130px!important;
+	width: 15%;;
 	height:160px;
 }
 .blog-main .blog-content{
