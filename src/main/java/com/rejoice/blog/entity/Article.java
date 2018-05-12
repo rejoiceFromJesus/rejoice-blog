@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -26,6 +27,10 @@ import javax.persistence.Table;
  */
 @Table
 public class Article extends BaseEntity {
+	
+	@Transient
+	private String categoryName;
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,6 +103,12 @@ public class Article extends BaseEntity {
 	}
 	public Integer getCategoryId() {
 		return categoryId;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;

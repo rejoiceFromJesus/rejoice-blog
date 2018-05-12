@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <!-- <head th:substituteby="fragments/headTag :: headTag"> -->
-  <head th:include="fragments/headTag :: headTag">
-  </head>
-      <link rel="stylesheet" th:href="@{/css/blog.css}" id="theme-styles" />
+<head>
+  <div th:include="fragments/headTag :: headTag" th:remove="tag">
+  </div>
+  	<title>rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+<meta property="og:type" content="website">
+<meta property="og:title" content="rejoice博客">
+<meta property="og:url" content="http://www.rejoiceblog.com/">
+<meta property="og:site_name" content="rejoice博客">
+<meta property="og:description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rejoice博客">
+<meta name="twitter:description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+    <meta name="keywords" content="pdf电子书, 免费图书, 电子书籍, pdf, 技术博客, 博客, IT, spring, spring boot, spring cloud, java rejoice博客 " />
+        <link rel="stylesheet" th:href="@{/css/blog.css}" id="theme-styles" />
+        
+        </head>
   <body>
 <style>
 .layui-laypage-skip:HOVER {

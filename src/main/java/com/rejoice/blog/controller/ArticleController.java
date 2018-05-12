@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.rejoice.blog.common.bean.LayuiResult;
 import com.rejoice.blog.common.constant.Constant;
-import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.Article;
+import com.rejoice.blog.entity.Category;
 import com.rejoice.blog.entity.Comment;
 import com.rejoice.blog.service.ArticleService;
+import com.rejoice.blog.service.CategoryService;
 import com.rejoice.blog.service.CommentService;
 
 /**
@@ -51,6 +51,9 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	@Autowired
 	CommentService commentService;
 	
+	@Autowired
+	CategoryService categoryService;
+	
 	@GetMapping("/{id}.html")
 	public ModelAndView detail(@PathVariable("id") Long id){
 		Article article = this.getService().queryByID(id);
@@ -62,6 +65,8 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
 		//update readCount
 		article.setReadCount(article.getReadCount()+1);
+		Category category = categoryService.queryByID(article.getCategoryId());
+		article.setCategoryName(category == null ? "" : category.getName() );
 		this.getService().updateByIdSelective(article);
 		return modelAndView;
 	}

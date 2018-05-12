@@ -1,7 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/headTag :: headTag">
-</head>
+<html xmlns:th="http://www.thymeleaf.org" >
+  <head>
+  <div th:include="fragments/headTag :: headTag" th:remove="tag">
+  </div>
+  <title th:text="${article.title} +' - rejoice博客'"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" th:attrappend="content=${article.summary}" />
+    <meta name="keywords"  th:attrappend="content=${article.categoryName}" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" th:attrappend="content=${article.title}" />
+	<meta property="og:url"  th:attrappend="content=${#httpServletRequest.requestURL}" />
+	<meta property="og:site_name" content="rejoice博客" />
+	<meta property="og:description"  th:attrappend="content=${article.summary}" />
+	<meta property="og:locale" content="zh-CN" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" th:attrappend="content=${article.title}" />
+	<meta name="twitter:description" th:attrappend="content=${article.summary}" />
+    <meta name="keywords" content="pdf电子书, 免费图书, 电子书籍, pdf, 技术博客, 博客, IT, spring, spring boot, spring cloud, java rejoice博客 " />
+        </head>
 
 <body>
 
@@ -15,6 +32,7 @@
 				<div class="col-md-8 blog-main">
 					<article class="blog-post">
 							<span class="detail-title" th:text="${article.title}"></span>
+							<span id="summary" style="display:none" th:text="${article.summary}"></span>
 							<div class="meta">
 								<span class="original">原创</span> <span class="author"
 									th:text="${article.author}" />&nbsp;&nbsp;发布于 <span
@@ -227,7 +245,8 @@ conf: 'prod_5a63c4b821f3be65940b2622b60daf3f'
 	<table th:include="fragments/footer :: footer" class="footer">
 
 	</table>
-	<script th:src="@{/js/user/detail.js}" type="text/javascript"></script>
+
+	<script  th:src="@{/js/user/detail.js}" ></script>
 	<!-- share -->
 	<script type="text/javascript"
 		th:src="@{/small-plugin/share/smohan.popshare.js}" />
