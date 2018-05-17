@@ -2,11 +2,19 @@ package com.rejoice.blog.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.github.pagehelper.PageInfo;
+import com.rejoice.blog.common.bean.LayuiResult;
+import com.rejoice.blog.entity.Article;
+import com.rejoice.blog.service.ArticleService;
 
 /**
  *
@@ -22,6 +30,9 @@ import org.springframework.web.servlet.HandlerMapping;
 @Controller("/")
 public class PageController {
 
+	@Autowired
+	ArticleService articleService;
+	
 	@RequestMapping(value="/page/**/*.html")
 	public String toPage(HttpServletRequest request){
 		  // Don't repeat a pattern
@@ -33,10 +44,20 @@ public class PageController {
 		return searchTerm.substring(0,searchTerm.length()-5);
 	}
 	
+	@GetMapping("/page/{pageNum}")
+	public ModelAndView findPage(@PathVariable("pageNum")  Integer pageNum){
+		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(null, pageNum, null, "post_time desc");
+		ModelAndView mv = new ModelAndView("index");
+		mv.addObject("list",pageInfo.getList());
+		mv.addObject("curr",pageNum);
+		mv.addObject("count", pageInfo.getTotal());
+		return mv;
+	}
+	
 	
 	@GetMapping("/")
-	public String toHome(){
-		return "index";
+	public ModelAndView toHome(){
+		return this.findPage(1);
 	}
 	
 	@GetMapping("/admin")

@@ -366,6 +366,9 @@ public abstract class BaseService<T> {
 	@Transactional(readOnly = true)
 	public PageInfo<T> queryListByPageAndOrder(T t, Integer page, Integer rows,
 			String order){
+		if(rows == null) {
+			rows = 20;
+		}
 		// 加入分页
 		PageHelper.startPage(page, rows);
 

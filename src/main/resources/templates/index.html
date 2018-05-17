@@ -3,19 +3,19 @@
 <head>
   <div th:include="fragments/headTag :: headTag" th:remove="tag">
   </div>
-  	<title>rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享</title>
+  	<title>rejoice博客 - pdf电子书免费下载、图书、英文原版下载，IT技术博客分享</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+    <meta name="description" content="rejoice博客 - pdf电子书免费下载、图书、英文原版下载，IT技术博客分享">
 <meta property="og:type" content="website">
 <meta property="og:title" content="rejoice博客">
 <meta property="og:url" content="http://www.rejoiceblog.com/">
 <meta property="og:site_name" content="rejoice博客">
-<meta property="og:description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+<meta property="og:description" content="rejoice博客 - pdf电子书免费下载、图书、英文原版下载，IT技术博客分享">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rejoice博客">
-<meta name="twitter:description" content="rejoice博客 - pdf免费图书、书籍、英文原版下载，IT技术博客分享">
+<meta name="twitter:description" content="rejoice博客 - pdf电子书免费下载、图书、英文原版下载，IT技术博客分享">
     <meta name="keywords" content="pdf电子书, 免费图书, 电子书籍, pdf, 技术博客, 博客, IT, spring, spring boot, spring cloud, java rejoice博客 " />
         </head>
   <body>
@@ -38,6 +38,30 @@
         	<div style="float: left;
     height: auto;">
             <div id="article-list" >
+			<input type="hidden" id="count" th:value="${count}" />
+			<input type="hidden" id="curr"  th:value="${curr}"/>
+             <div th:each="article : ${list}">
+					<div class="col-md-8 blog-main">
+						<img th:src="${article.imgUrl}?${article.imgUrl}:'/img/1.jpg'"  />
+						<div class="article">
+							<a target="_blank" class="title" th:href="'/article/'+${article.id}+'.html'">
+								<h3 th:text="${article.title}"></h3>
+							</a>
+							<p class="blog-content" th:text="${article.summary}"></p>
+							<div id="meta" style="position: absolute;
+    						bottom: 16px;">
+							<i class="fa fa-calendar" ></i>
+							<span style="margin-left:4px;" th:text="${article.postTime}"></span> 
+							<i class="fa fa-user" style="margin-left:10px;"></i>
+							<span class="author" style="margin-left:4px;"  th:text="${article.author}?${article.author}:'rejoice'"></span> 
+							<i class="fa fa-eye"  style="margin-left:10px;"></i>
+							<span  style="margin-left:4px;" th:text="${article.readCount}"></span>
+							<i class="fa fa-comment"  style="margin-left:10px;"></i>
+								<span  style="margin-left:4px;" th:text="${article.commentCount}"></span>
+									</div>
+						</div>
+  					</div>
+		      </div>
             </div>
 		<fieldset id="article-page" class="layui-elem-field layui-field-title" style="float:left;border:none;">
 						  <legend>显示完整功能</legend>
@@ -103,16 +127,6 @@
       
       
       
-      
-      <div id="meta" style="    position: absolute;
-    bottom: 16px;display:none;">
-							<i class="fa fa-calendar" ></i>
-							<span style="margin-left:4px;"></span> 
-							<i class="fa fa-user" style="margin-left:10px;"></i>
-							<span class="author" style="margin-left:4px;"  ></span> 
-							<i class="fa fa-eye"  style="margin-left:10px;"></i><span  style="margin-left:4px;"></span>
-							<i class="fa fa-comment"  style="margin-left:10px;"></i><span  style="margin-left:4px;"></span>
-									</div>
       
       
       <table th:include="fragments/footer :: footer" class="footer">

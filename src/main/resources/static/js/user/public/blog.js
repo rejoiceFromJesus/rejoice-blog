@@ -49,11 +49,20 @@ function loadPage(){
 		
 		//完整功能
 		  laypage.render({
-		    elem: 'article-page'
-		    ,count: data
+		    elem: 'article-page',
+		    curr:  $("#curr").val()
+		    ,count: $("#count").val()
+		    ,limit:20
 		    ,layout: ['count', 'prev', 'page', 'next', 'skip']
-		    ,jump: function(obj){
-		    	loadArticle(articlePageUrl+"?page="+obj.curr+"&limit="+obj.limit+"&order=desc&sort=post_time")
+		    ,jump: function(obj,first){
+		    	console.info(obj.cuur)
+		    	console.info(obj.curr)
+		    	//loadArticle(articlePageUrl+"?page="+obj.curr+"&limit="+obj.limit+"&order=desc&sort=post_time")
+		        //首次不执行
+		        if(!first){
+		          //do something
+		        	window.location="/page/"+obj.curr+"/";
+		        }
 		    }
 		  });
 	});
