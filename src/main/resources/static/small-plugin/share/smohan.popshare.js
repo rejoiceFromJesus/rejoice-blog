@@ -54,7 +54,7 @@ $(document).ready(function(e) {
 });
 var share_url = encodeURIComponent(location.href);
 var share_title = encodeURIComponent(document.title);
-var share_pic = "http://www.jq22.com/img/cs/500x300b.png";  //默认的分享图片
+var share_pic = article.imgUrl?article.imgUrl:"/img/1.jpg";  //默认的分享图片
 var share_from = encodeURIComponent("jQuery插件库"); //分享自（仅用于QQ空间和朋友网，新浪的只需更改appkey 和 ralateUid就行）
 //Qzone
 $('#Share li a.share1').click(function(e) {
