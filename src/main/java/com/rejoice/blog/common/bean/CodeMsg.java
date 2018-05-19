@@ -6,6 +6,7 @@ public enum CodeMsg {
 	 * 通用模块
 	 */
 	SUCCESS("0","操作成功"),
+	
 
 	PARAM_ERROR("500101","参数不合法"),
 	SIGN_ERROR("500103","sign（签名）错误"),
@@ -15,6 +16,9 @@ public enum CodeMsg {
 	CONTRACT_NOT_EXIST("500107","合同编号不存在"),
 	APPROVING("500108","审核中"),
 	DISAPPROVED("500109","审核不通过"),
+	
+	UNAUTHENTICATED("400101","未认证"),
+	UNAUTHORIZED("400102","未授权"),
 	SYSTEM_ERROR("-1","服务器异常");
 	private final String code;
 	private String msg;
