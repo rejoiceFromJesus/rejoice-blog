@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class RejoiceBlogApplication {
 
 	public static void main(String[] args) {
-		System.err.println("2332");
+		System.err.println("2332232323");
 		new SpringApplicationBuilder(RejoiceBlogApplication.class)
 		.properties(
 				"spring.config.name:application,constant,task,enabled,boot-admin,jdbc",
