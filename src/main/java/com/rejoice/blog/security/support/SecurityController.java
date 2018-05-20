@@ -12,8 +12,10 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 /**
@@ -33,20 +35,21 @@ public class SecurityController {
 	
 	/**
 	 * how to process when needed to login
-     * <li>redirect when redirectUrl(before goto login) ends with .html</li>
+     * <li>redirect to login.html when redirectUrl(before goto login) ends with .html</li>
      * <li>json otherwise</li>
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException 
 	 */
-	@PostMapping("/login.html")
+	@RequestMapping(value = "/authenticate")
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	public Result<Void> tologin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
 		String redirectUrl = savedRequest.getRedirectUrl();
 		if(StringUtils.endsWith(redirectUrl, ".html")){
-			redirectStrategy.sendRedirect(request, response, redirectUrl);
+			//to login.html
+			redirectStrategy.sendRedirect(request, response, "/page/admin/admin-login.html");
 		}
 		return Result.error(CodeMsg.UNAUTHENTICATED);
 	}

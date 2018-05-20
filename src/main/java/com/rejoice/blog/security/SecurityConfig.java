@@ -1,6 +1,6 @@
 package com.rejoice.blog.security;
-import org.aspectj.weaver.ast.And;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,13 +10,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.rejoice.blog.security.support.MyAuthenticationFailureHandler;
+import com.rejoice.blog.security.support.MyAuthenticationSuccessHandler;
+import com.rejoice.blog.security.support.SecurityProperties;
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled=true)
+@EnableConfigurationProperties(value=SecurityProperties.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	MyAppUserDetailsService myAppUserDetailsService;
+	@Autowired
+	MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+	@Autowired
+	MyAuthenticationFailureHandler myAuthenticationFailureHandler;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -25,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .anyRequest().authenticated()
 		    .and().logout().permitAll()
 		    .and().formLogin()
-		    .loginPage("/page/admin/admin-login.html")
-		    .loginProcessingUrl("/login");
-		   // .and().httpBasic().realmName("MY APP REALM")
-		    //.authenticationEntryPoint(appAuthenticationEntryPoint);
+		    .loginPage("/authenticate")
+		    .loginProcessingUrl("/login")
+		    .successHandler(myAuthenticationSuccessHandler)
+		    .failureHandler(myAuthenticationFailureHandler);
 	} 
         @Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,8 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         @Override
         public void configure(WebSecurity web) throws Exception {
-        	web.ignoring().antMatchers("/","/page/*/","/page/admin/admin-login.html","/","/js/**","/css/**","/img/**","/plugin/**");
-        	//web.ignoring().antMatchers("/**/*.html","/","/js/**","/css/**","/img/**","/plugin/**");
+        	web.ignoring().antMatchers("/article/*.html","/page/*/","/authenticate","/page/admin/admin-login.html","/","/js/**","/css/**","/img/**","/plugin/**/*");
         }
         
        
