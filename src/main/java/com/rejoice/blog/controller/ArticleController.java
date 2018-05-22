@@ -17,6 +17,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,7 +75,7 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	
 	
 	@PostMapping("/save")
-	public void saveArticle(@RequestBody Article t,HttpSession session) throws Exception {
+	public void saveArticle(@RequestBody Article t, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
 		Document doc = Jsoup.parse(t.getContent());
 		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
 		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
@@ -82,16 +84,18 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		if(!img.isEmpty()){
 			t.setImgUrl(img.first().attr("src"));
 		}
-	
+		
+		t.setAuthor(userDetails.getUsername());
 		this.getService().saveSelective(t);
 	}
 	
 	@PutMapping("/save")
-	public void updateArticle(@RequestBody Article t,HttpSession session) throws Exception {
+	public void updateArticle(@RequestBody Article t, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
 		Document doc = Jsoup.parse(t.getContent());
 		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
 		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
 		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
+		t.setAuthor(userDetails.getUsername());
 		Elements img = doc.select("img");
 		if(!img.isEmpty()){
 			t.setImgUrl(img.first().attr("src"));

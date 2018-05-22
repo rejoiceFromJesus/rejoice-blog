@@ -46,11 +46,14 @@ public class SecurityController {
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	public Result<Void> tologin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
-		String redirectUrl = savedRequest.getRedirectUrl();
-		if(StringUtils.endsWith(redirectUrl, ".html")){
-			//to login.html
-			redirectStrategy.sendRedirect(request, response, "/page/admin/admin-login.html");
+		if(savedRequest != null) {
+			String redirectUrl = savedRequest.getRedirectUrl();
+			if(StringUtils.endsWith(redirectUrl, ".html")){
+				//to login.html
+				redirectStrategy.sendRedirect(request, response, "/page/admin/admin-login.html");
+			}
 		}
+	
 		return Result.error(CodeMsg.UNAUTHENTICATED);
 	}
 
