@@ -6,6 +6,7 @@
  <link rel="stylesheet" th:href="@{/css/admin/admin-login.css}" />
 <title>博客后台登录 -rejoice-blog</title>
 </head> 
+
   
 <form class="form" action="/login" method="post">
 <div style="
@@ -24,10 +25,31 @@
     font-size: 24px;">rejoice博客后台</div>
   <div class="forceColor"></div>
   <div class="topbar">
-    <input type="text"  class="input" name="username" placeholder="Username"/>
-    <input type="password" class="input" name="password" placeholder="Password"/>
+    <input type="text" required class="input" id="cusername" name="username" placeholder="Username"/>
+    <label for="cusername">用户名不能为空</label>
+    <input type="password" class="input" id="cpassword" name="password" placeholder="Password"/>
+    <input type="text" class="input" name="validateCode" style="    width: 68%;
+    display: inline;
+    float: left;" placeholder="验证码"/>
+   <img class="chaImage" alt="点击换一张" style="        width: 30%;
+    height: 40px;
+    float: left;
+    position: absolute;
+    right: 20px;" title="点击换一张" src="/checkCode/">
   </div>
   <button class="submit" id="submit" >Login</button>
 </form>
+ <script th:src="@{/plugin/jquery.min.js}"></script>
+ <script src="/plugin/jquery-validation-1.15.0/dist/jquery.validate.min.js"></script>
+ <script src="/js/form-validation.js"></script>
+<script type="text/javascript">
+	$(function(){
+		 $(".chaImage").each(function(){
+        	$(this).on("click",function(){
+        		$(this).attr("src","/checkCode/?ran="+new Date().getTime());
+        	})
+        });
+	})
+</script>
 </body>
 </html>

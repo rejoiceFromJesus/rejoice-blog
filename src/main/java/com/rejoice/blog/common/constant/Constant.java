@@ -45,6 +45,7 @@ public abstract class Constant {
 	public static final String PREFIX="cn.jrjzx.supervision.smallloan";
 	public static final String SUCCESS="success";
 	public static final String SESSION_KEY = "loginUser";
+	public static final String SESSION_VALIDATE_CODE = "validateCode";
 	//no auth paths
 	public static final String[] PASS_PATHS = new String[]{"/page/login.html","/page/error/*","/logout","/user/login","/company/active","/error","/checkCode/*","/checkCode"};
 
