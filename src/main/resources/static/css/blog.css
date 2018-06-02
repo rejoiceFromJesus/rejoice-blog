@@ -1,3 +1,67 @@
+#page{
+	width: 100%;
+	margin-top:20px;
+	float:left;
+	font-size:14px;
+	color:#333;
+	font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;
+}
+#page span{
+	float:left;
+		line-height: 32px;
+    height: 32px;
+    
+}
+#page > .check-page{
+	background: #009688;
+	color:white;
+	border-color:#009688!important;
+	z-index:1;
+}
+#page input, #page button{
+	border: 1px solid #e2e2e2;
+	line-height: 32px;
+    height: 32px;
+    display: inline-block;
+    text-align: center;
+    width:60px;
+        vertical-align: top;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-radius: 2px;
+      margin:0 6px;
+}
+ #page button{
+ background: none;
+     padding: 0 10px;
+     width:50px;
+     text-align: center;
+ }
+.pre{
+	margin-left:0px;
+}
+#page .item{
+	list-style: none;
+	padding:0px 16px;
+	border: 1px solid #e2e2e2;
+	display: inline-block;
+	float:left;
+	margin-left:-1px;
+	line-height: 32px;
+    height: 32px;
+    position: relative;
+}
+.item:hover{
+	    z-index: 1;
+    border-color: #009688!important;
+    color:#009688;
+}
+.toPage:hover{
+	color:black!important;
+}
+.toPage button:hover, .toPage input:hover{
+	border-color: #009688!important;
+}
 .content-main{
 	padding:20px;
 }

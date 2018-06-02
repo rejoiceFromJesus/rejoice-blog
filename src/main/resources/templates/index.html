@@ -26,6 +26,11 @@
 .layui-laypage-skip > button:HOVER {
 	border:1px solid #009688;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+}
 </style>
       <div th:include="fragments/bodyHeader" th:remove="tag">
       </div>
@@ -45,8 +50,7 @@
             <div id="article-list" >
 			<input type="hidden" id="count" th:value="${count}" />
 			<input type="hidden" id="curr"  th:value="${curr}"/>
-             <div th:each="article : ${list}">
-					<div class="col-md-8 blog-main">
+             <div th:each="article : ${list}" class="col-md-8 blog-main">
 						<img th:src="${article.imgUrl}?${article.imgUrl}:'/img/1.jpg'"  />
 						<div class="article">
 							<a target="_blank" class="title" th:href="'/article/'+${article.id}+'.html'">
@@ -65,11 +69,28 @@
 								<span  style="margin-left:4px;" th:text="${article.commentCount}"></span>
 									</div>
 						</div>
-  					</div>
 		      </div>
             </div>
-		<fieldset id="article-page" class="layui-elem-field layui-field-title" style="float:left;border:none;">
-						</fieldset>
+			<div id="page">
+			<span th:inline="text" style="margin-right:10px;">共  [[${count}]]  条</span>
+			
+			<a th:href="'/page/'+${(curr-1)==0?1:(curr-1)}+'/'" class="item pre">上一页</a>
+			
+			 <div th:remove="tag" th:each="pageNum:${#numbers.sequence(  
+			 
+			 curr-2<1?1:((curr+2)>totalPage?(totalPage-4):(curr-2))
+			 
+			 
+			 ,(curr-2<1?5:curr+2)>totalPage?totalPage:(curr-2<1?5:curr+2))}">
+			 	<a  th:href="'/page/'+${pageNum}+'/'" th:text="${pageNum}"  th:class="${pageNum==curr?'item check-page':'item'}"></a>
+			 </div>
+			<a th:href="'/page/'+${(curr+1)>totalPage?totalPage:(curr+1)}+'/'" class="item">下一页</a>
+			<span class="toPage" style="margin-left:10px;color:#999;">到第
+			<input id="to-page" type="number" min="1" value=""  />
+			页
+			<button type="button" onclick="toPage()" >确定</button>
+			</span>
+			</div>
         	</div>
 
         </div>
@@ -110,23 +131,6 @@
                         </div>
                     </div>
 
-                 <!--    <div class="aside-widget">
-                        <header>
-                            <h3>Tags</h3>
-                        </header>
-                        <div class="body clearfix">
-                            <ul class="tags">
-                                <li><a href="#">HTML5</a></li>
-                                <li><a href="#">CSS3</a></li>
-                                <li><a href="#">COMPONENTS</a></li>
-                                <li><a href="#">TEMPLATE</a></li>
-                                <li><a href="#">PLUGIN</a></li>
-                                <li><a href="#">BOOTSTRAP</a></li>
-                                <li><a href="#">TUTORIAL</a></li>
-                                <li><a href="#">UI/UX</a></li>                            
-                            </ul>
-                        </div>
-                    </div> -->
                 </aside>
       
       

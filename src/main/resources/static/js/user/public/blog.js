@@ -2,9 +2,12 @@ var articlePageUrl = "article/page"
 var $articleList = $("#article-list")
 $(function(){
 	//load article
-	loadPage();
+	//loadPage();
 })
 
+function toPage(){
+	window.location="/page/"+$("#to-page").val()+"/";
+}
 function loadArticle(url){
 	$.getJSON(url,function(data){
 		$articleList.empty();
@@ -55,8 +58,6 @@ function loadPage(){
 		    ,limit:20
 		    ,layout: ['count', 'prev', 'page', 'next', 'skip']
 		    ,jump: function(obj,first){
-		    	console.info(obj.cuur)
-		    	console.info(obj.curr)
 		    	//loadArticle(articlePageUrl+"?page="+obj.curr+"&limit="+obj.limit+"&order=desc&sort=post_time")
 		        //首次不执行
 		        if(!first){

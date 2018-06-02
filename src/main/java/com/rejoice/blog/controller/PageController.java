@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageInfo;
 import com.rejoice.blog.common.bean.LayuiResult;
+import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.entity.Article;
 import com.rejoice.blog.service.ArticleService;
 
@@ -51,6 +52,7 @@ public class PageController {
 		mv.addObject("list",pageInfo.getList());
 		mv.addObject("curr",pageNum);
 		mv.addObject("count", pageInfo.getTotal());
+		mv.addObject("totalPage", pageInfo.getPages());
 		return mv;
 	}
 	
