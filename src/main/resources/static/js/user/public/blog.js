@@ -6,6 +6,11 @@ $(function(){
 })
 
 function toPage(){
+	var pageNum = $("#to-page").val();
+	if(!pageNum){
+		alert("please enter a number")
+		return;
+	}
 	window.location="/page/"+$("#to-page").val()+"/";
 }
 function loadArticle(url){
