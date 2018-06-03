@@ -7,6 +7,8 @@ body {
   margin:0px;
   padding:0px;
   border:0px;
+      word-wrap: break-word;
+    word-break: break-all;
 }
 a {
   color: #5b6268;

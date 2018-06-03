@@ -53,8 +53,8 @@ input::-webkit-inner-spin-button {
              <div th:each="article : ${list}" class="col-md-8 blog-main">
 						<img th:src="${article.imgUrl}?${article.imgUrl}:'/img/1.jpg'"  />
 						<div class="article">
-							<a target="_blank" class="title" th:href="'/article/'+${article.id}+'.html'">
-								<h3 th:text="${article.title}"></h3>
+							<a target="_blank" th:inline="text" class="title" th:href="'/article/'+${article.id}+'.html'">
+								[[${article.title}]]
 							</a>
 							<p class="blog-content" th:text="${article.summary}"></p>
 							<div id="meta" style="position: absolute;
