@@ -67,10 +67,12 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
 		modelAndView.addObject("readRankList", this.getService().queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
 		//update readCount
-		article.setReadCount(article.getReadCount()+1);
-		Category category = categoryService.queryByID(article.getCategoryId());
-		article.setCategoryName(category == null ? "" : category.getName() );
-		this.getService().updateByIdSelective(article);
+		Article update = new Article();
+		update.setReadCount(article.getReadCount()+1);
+	/*	Category category = categoryService.queryByID(article.getCategoryId());
+		article.setCategoryName(category == null ? "" : category.getName() );*/
+		update.setId(id);
+		this.getService().updateByIdSelective(update);
 		return modelAndView;
 	}
 	
