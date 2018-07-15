@@ -26,8 +26,7 @@
 		<commons-lang3.version>3.5</commons-lang3.version>
 	</properties>
 	
-
-	<dependencies>
+<dependencies>
 	
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>

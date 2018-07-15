@@ -5,11 +5,10 @@ import javax.annotation.PostConstruct;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootApplication(exclude=SecurityAutoConfiguration.class)
+@SpringBootApplication
 @MapperScan(basePackages="com.rejoice.blog.mapper")
 public class RejoiceBlogApplication {
 
