@@ -5,7 +5,7 @@ $(function(){
 	ctx = $("meta[name='ctx']").attr("content");
 	initUrls();
 	//1、loadCategory
-	loadCategory($("#category-list"));
+	//loadCategory($("#category-list"));
 	
 })
 

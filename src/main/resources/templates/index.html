@@ -36,6 +36,12 @@ input::-webkit-inner-spin-button {
       </div>
     <div  th:include="fragments/me"></div>
        <div class="widewrapper main" style="width:60%;float:left;">
+        <div th:if="${keyword}" style="line-height: 0px;" style="padding:10px;">
+	        <div th:if="${#lists.size(list) > 0}">
+						搜索关键字：<span style="color:red;" th:text="${keyword}"></span>
+			</div>
+        
+        </div>
         <div class="container content" style="width:100%;" >
         	<div style="float: left;
     height: auto;">
@@ -63,10 +69,12 @@ input::-webkit-inner-spin-button {
 						</div>
 		      </div>
             </div>
-			<div id="page">
+            
+      <div th:if="${#lists.size(list) > 0}">
+		<div id="page">
 			<span th:inline="text" style="margin-right:10px;">共  [[${count}]]  条</span>
 			
-			<a th:href="'/page/'+${(curr-1)==0?1:(curr-1)}+'/'" class="item pre">上一页</a>
+			<a th:href="'/page/'+${(curr-1)==0?1:(curr-1)}+'/'+${p}" class="item pre">上一页</a>
 			
 			 <div th:remove="tag" th:each="pageNum:${#numbers.sequence(  
 			 
@@ -74,16 +82,22 @@ input::-webkit-inner-spin-button {
 			 
 			 
 			 ,(curr-2<1?5:curr+2)>totalPage?totalPage:(curr-2<1?5:curr+2))}">
-			 	<a  th:href="'/page/'+${pageNum}+'/'" th:text="${pageNum}"  th:class="${pageNum==curr?'item check-page':'item'}"></a>
+			 	<a  th:href="'/page/'+${pageNum}+'/'+${p}" th:text="${pageNum}"  th:class="${pageNum==curr?'item check-page':'item'}"></a>
 			 </div>
-			<a th:href="'/page/'+${(curr+1)>totalPage?totalPage:(curr+1)}+'/'" class="item">下一页</a>
+			<a th:href="'/page/'+${(curr+1)>totalPage?totalPage:(curr+1)}+'/'+${p}" class="item">下一页</a>
 			<span class="toPage" style="margin-left:10px;color:#999;">到第
 			<input id="to-page" type="number" min="1" value=""  />
 			页
 			<button type="button" onclick="toPage()" >确定</button>
 			</span>
 			</div>
-        	</div>
+	</div>
+<!-- ELSE -->
+		<div th:unless="${#lists.size(list) > 0}">
+				没有查询到<span style="color:red;" th:text="${keyword}"></span>的匹配记录！
+		</div>
+	
+        </div>
 
         </div>
     </div>

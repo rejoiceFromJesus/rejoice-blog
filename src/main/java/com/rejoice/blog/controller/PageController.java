@@ -2,6 +2,7 @@ package com.rejoice.blog.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
@@ -28,7 +29,7 @@ import com.rejoice.blog.service.ArticleService;
  *
  */
 @RequestMapping
-@Controller("/")
+@Controller
 public class PageController {
 
 	@Autowired
@@ -46,13 +47,21 @@ public class PageController {
 	}
 	
 	@GetMapping("/page/{pageNum}")
-	public ModelAndView findPage(@PathVariable("pageNum")  Integer pageNum){
-		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(null, pageNum, null, "post_time desc");
+	public ModelAndView findPage(@PathVariable("pageNum")  Integer pageNum,String keyword){
 		ModelAndView mv = new ModelAndView("index");
+		Article cons = new Article();
+		if(StringUtils.isNotBlank(keyword)) {
+			cons.setLikes("title");
+			cons.setTitle(keyword);
+			mv.addObject("keyword",keyword);
+		}
+		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(cons, pageNum, null, "post_time desc");
+	
 		mv.addObject("list",pageInfo.getList());
 		mv.addObject("curr",pageNum);
 		mv.addObject("count", pageInfo.getTotal());
 		mv.addObject("totalPage", pageInfo.getPages());
+		mv.addObject("p","?keyword="+keyword);
 		mv.addObject("readRankList", articleService.queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
 		return mv;
 	}
@@ -60,7 +69,7 @@ public class PageController {
 	
 	@GetMapping("/")
 	public ModelAndView toHome(){
-		return this.findPage(1);
+		return this.findPage(1,null);
 	}
 	
 	@GetMapping("/admin")

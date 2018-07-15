@@ -68,16 +68,27 @@
             <div class="navbar-inner">  
                 <ul class="nav nav-pills">  
                    <li><a th:href="@{/}">全部文章</a></li>  
-                   <li class="dropdown" id="category-list"  ><a  href="#">分类</a>  
+                   <!-- <li class="dropdown" id="category-list"  ><a  href="#">分类</a>   -->
                    </li>  
                 </ul>  
             </div>  
         </div>  
          <div class="clean-searchbox navbar" style="float:none; top:-36px;">
-                    <form action="#" method="get" accept-charset="utf-8">
-                        <input class="searchfield" id="searchbox" type="text" placeholder="Search" />
-                        <button class="searchbutton" type="submit">
-                            <i class="fa fa-search"></i>
+                    <form action="/page/1/" method="get" accept-charset="utf-8">
+                        <input style="    color: #167f28;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: none;
+    line-height: 35px;" name="keyword" type="text"  />
+                        <button style="line-height: 31px;
+    position: relative;
+    border: none;
+    right: 7px;
+    padding: 2px 12px;
+    font-size: 16px;
+    color: white;
+    background: #2d8a0f;"  type="submit">
+                        	搜索
                         </button>
                     </form>
                 </div>

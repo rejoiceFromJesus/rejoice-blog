@@ -65,6 +65,7 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		comment.setArticleId(id);
 		modelAndView.addObject("commentCount", commentService.queryCount(comment));
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
+		modelAndView.addObject("readRankList", this.getService().queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
 		//update readCount
 		article.setReadCount(article.getReadCount()+1);
 		Category category = categoryService.queryByID(article.getCategoryId());
