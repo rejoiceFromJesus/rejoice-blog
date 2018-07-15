@@ -53,6 +53,7 @@ public class PageController {
 		mv.addObject("curr",pageNum);
 		mv.addObject("count", pageInfo.getTotal());
 		mv.addObject("totalPage", pageInfo.getPages());
+		mv.addObject("readRankList", articleService.queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
 		return mv;
 	}
 	

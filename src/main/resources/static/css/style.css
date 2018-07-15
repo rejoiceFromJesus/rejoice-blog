@@ -492,7 +492,7 @@ The list with special bullet points, used both on blog widgets as well as in the
   color: #222;
 }
 
-.clean-list li:before {
+/* .clean-list li:before {
   content: "";
   background-color: #444;
   border-style: solid;
@@ -502,7 +502,7 @@ The list with special bullet points, used both on blog widgets as well as in the
   left: -20px;
   top: 15px;
   position: relative;
-}
+} */
 
 .footer .clean-list {
   margin-top: -6px;

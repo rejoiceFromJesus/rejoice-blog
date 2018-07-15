@@ -34,15 +34,7 @@ input::-webkit-inner-spin-button {
 </style>
       <div th:include="fragments/bodyHeader" th:remove="tag">
       </div>
-      <div class="left" style="float:left; margin:16px 20px;padding:4px;width:18%;">
-      	<div class="border-shadow" style="background:white;height:300px">我是rejoice
-      	<!-- 代码1：放在页面需要展示的位置  -->
-<!-- 如果您配置过sourceid，建议在div标签中配置sourceid、cid(分类id)，没有请忽略  -->
-<div id="cyReward" role="cylabs" data-use="reward"></div>
-      	
-      	</div>
-     	 <div class="border-shadow" style="background:white;margin-top:40px;">关注我</div>
-      </div>
+    <div  th:include="fragments/me"></div>
        <div class="widewrapper main" style="width:60%;float:left;">
         <div class="container content" style="width:100%;" >
         	<div style="float: left;
@@ -96,42 +88,9 @@ input::-webkit-inner-spin-button {
         </div>
     </div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"32"},"slide":{"type":"slide","bdImg":"5","bdPos":"left","bdTop":"250"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>      
-      
-         <aside class="col-md-4 blog-aside" style="width:16%;float:right;margin:20px;">
-                    
-                    <div class="aside-widget">
-                        <header>
-                            <h3>Featured Post</h3>
-                        </header>
-                        <div class="body">
-                            <ul class="clean-list">
-                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
-                                <li><a href="">Responsive Pricing Table</a></li>
-                                <li><a href="">Yellow HTML5 Template</a></li>
-                                <li><a href="">Blackor Responsive Theme</a></li>
-                                <li><a href="">Portfolio Bootstrap Template</a></li>
-                                <li><a href="">Clean Slider Template</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                
-                    <div class="aside-widget">
-                        <header>
-                            <h3>Related Post</h3>
-                        </header>
-                        <div class="body">
-                            <ul class="clean-list">
-                                <li><a href="">Blackor Responsive Theme</a></li>
-                                <li><a href="">Portfolio Bootstrap Template</a></li>
-                                <li><a href="">Clean Slider Template</a></li>
-                                <li><a href="">Clean - Responsive HTML5 Template</a></li>
-                                <li><a href="">Responsive Pricing Table</a></li>
-                                <li><a href="">Yellow HTML5 Template</a></li>
-                            </ul>
-                        </div>
-                    </div>
 
-                </aside>
+
+<div th:include="fragments/wall-card"></div>
       
       
       

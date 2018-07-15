@@ -77,16 +77,18 @@
 		padding-left:10px;
 }
 .blog-aside header{
-	    background: #d2e9f9;
+	    background:#40a4ea;
+	  
 }
 .blog-aside header h3{
-	color:518092;
+	  color:white;
 }
 .clean-list a{
-	color:#55849a;
+	color:#377eb1;
 }
 .clean-list a:hover{
-	color:#63b4da !important;
+	color:#14a5e8 !important;
+	text-decoration: underline;
 }
 .article-list  {
 	float:left;
