@@ -35,7 +35,7 @@ input::-webkit-inner-spin-button {
       <div th:include="fragments/bodyHeader" th:remove="tag">
       </div>
     <div  th:include="fragments/me"></div>
-       <div class="widewrapper main" style="width:60%;float:left;">
+       <div class="widewrapper main" style="width:62%;float:left;">
         <div th:if="${keyword}" style="line-height: 0px;" style="padding:10px;">
 	        <div th:if="${#lists.size(list) > 0}">
 						搜索关键字：<span style="color:red;" th:text="${keyword}"></span>
@@ -72,7 +72,7 @@ input::-webkit-inner-spin-button {
             
       <div th:if="${#lists.size(list) > 0}">
 		<div id="page">
-			<span th:inline="text" style="margin-right:10px;">共  [[${count}]]  条</span>
+			<span th:inline="text" style="margin-right:10px;">共  [[${totalPage}]]  页</span>
 			
 			<a th:href="'/page/'+${(curr-1)==0?1:(curr-1)}+'/'+${p}" class="item pre">上一页</a>
 			
@@ -113,7 +113,11 @@ input::-webkit-inner-spin-button {
       <table th:include="fragments/footer :: footer" class="footer">
 
       </table>
-	<script th:src="@{/js/user/public/blog.js}"></script>
+      
+      <script th:inline="javascript">
+    var p = [[${p}]];
+</script>
+	<script th:inline="javascript" th:src="@{/js/user/public/blog.js}"></script>
   </body>
 
 </html>

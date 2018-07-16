@@ -50,10 +50,13 @@ public class PageController {
 	public ModelAndView findPage(@PathVariable("pageNum")  Integer pageNum,String keyword){
 		ModelAndView mv = new ModelAndView("index");
 		Article cons = new Article();
+		StringBuilder p = new StringBuilder();
 		if(StringUtils.isNotBlank(keyword)) {
 			cons.setLikes("title");
 			cons.setTitle(keyword);
 			mv.addObject("keyword",keyword);
+			p.append("keyword="+keyword+"&");
+			
 		}
 		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(cons, pageNum, null, "post_time desc");
 	
@@ -61,7 +64,7 @@ public class PageController {
 		mv.addObject("curr",pageNum);
 		mv.addObject("count", pageInfo.getTotal());
 		mv.addObject("totalPage", pageInfo.getPages());
-		mv.addObject("p","?keyword="+keyword);
+		mv.addObject("p","?"+p.toString());
 		mv.addObject("readRankList", articleService.queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
 		return mv;
 	}

@@ -4,14 +4,15 @@ $(function(){
 	//load article
 	//loadPage();
 })
-
 function toPage(){
+	
+
 	var pageNum = $("#to-page").val();
 	if(!pageNum){
 		alert("please enter a number")
 		return;
 	}
-	window.location="/page/"+$("#to-page").val()+"/";
+	window.location="/page/"+$("#to-page").val()+"/"+p;
 }
 function loadArticle(url){
 	$.getJSON(url,function(data){
