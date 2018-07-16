@@ -11,6 +11,7 @@ package com.rejoice.blog.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -72,5 +73,35 @@ public class ArticleService extends BaseService<Article>{
 				return new PageInfo<Article>(list);
 	}
 	
+	
+	
+	@Override
+	public PageInfo<Article> queryListByPageAndOrder(Article t, Integer page, Integer rows, String order) {
+		// 加入分页
+		if(rows == null) {
+			rows = 30;
+		}
+		PageHelper.startPage(page, rows);
+		// 声明一个example
+		Example example = new Example(Article.class);
+		example.selectProperties("id","title","summary","readCount","commentCount","postTime","imgUrl","categoryId","author");
+		if (StringUtils.isNotBlank(order)) {
+			example.setOrderByClause(order);
+		}
+		// 如果条件为null，直接返回
+		if (t == null) {
+			List<Article> list = this.getMapper().selectByExample(example);
+			return new PageInfo<Article>(list);
+		}
+		
+		// 声明条件
+		Criteria createCriteria = example.createCriteria();
+		equalOrLikeOrIn(t, createCriteria);
+		
+		
+		List<Article> list = this.getMapper().selectByExample(example);
+		return new PageInfo<Article>(list);
+	
+	}
 
 }
