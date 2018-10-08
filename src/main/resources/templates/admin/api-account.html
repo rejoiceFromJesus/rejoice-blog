@@ -1,0 +1,200 @@
+<div class="search" name="search-api-account">
+  <div class="layui-inline">
+    <input class="layui-input"  name="username" placeholder="用户名"  autocomplete="off">
+  </div>
+  <button class="layui-btn" data-type="reload" onclick="reloadApiAccount(1)">搜索</button>
+    <button class="layui-btn layui-btn-normal"  onclick="showApiAccountDialog()">新增</button>
+</div>
+ 
+<table id="api-account-table" lay-filter="api-account"></table>
+<script type="text/html" id="api-account-toolbar">
+  <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<form id='api-account-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+	  <input type='hidden' name='id'  />
+
+ <div class="layui-form-item">
+    <label class="layui-form-label">平台</label>
+    <div class="layui-input-block">
+      <select required name="platform">
+        <option value="">请选择</option>
+        <option value="简书" selected="">简书</option>
+        <option value="开源中国">开源中国</option>
+      </select>
+    </div>
+    </div>
+    
+   <div class="layui-form-item">
+    <label class="layui-form-label">用户名</label>
+     <div class="layui-input-block">
+        <input type="text" name="username"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+     <div class="layui-input-block">
+        <textarea name="password" placeholder="请输入密码" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">token</label>
+     <div class="layui-input-block">
+        <textarea name="token" placeholder="请输入token" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">cookies</label>
+     <div class="layui-input-block">
+        <textarea name="cookies" placeholder="请输入cookies" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">描述</label>
+     <div class="layui-input-block">
+        <textarea name="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="api-account-save">提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+ 
+<script>
+var apiAccountTable;
+var contentLoadCount = 0;
+var contentEditorIndex;
+layui.use('table', function(){
+  var table = layui.table;
+//第一个实例
+  apiAccountTable = table.render({
+    elem: '#api-account-table'
+    ,url: '/api-account/page?order=desc&sort=update_time' //数据接口
+    ,page: true //开启分页
+    ,loading:true
+    ,height: 'full-200'
+    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,done: function(res, curr, count){
+		if(contentLoadCount == 0){
+			contentLoadCount++;
+			apiAccountTable.reload();
+			
+		}
+    }
+    ,cols: [[ //表头
+       {type:'numbers',width:"5%"}
+      ,{field: 'platform', title: '平台', width:"10%"}
+      ,{field: 'username', title: '用户名', width:"12%"}
+      ,{field: 'password', title: '密码', width:"13%"}
+      ,{field: 'token', title: 'token', width:"10%"}
+      ,{field: 'cookies', title: 'cookies', width:"10%"}
+      ,{field: 'description', title: '描述', width:"10%"}
+      ,{field: 'createTime', title: '更新时间', width:"10%"}
+      ,{field: 'updateTime', title: '创建时间', width:"10%"}
+      ,{field: '', width: "15%" ,toolbar: '#api-account-toolbar'}
+    ]]
+  });
+  
+  
+//监听工具条
+  table.on('tool(api-account)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    var data = obj.data; //获得当前行数据
+    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    var tr = obj.tr; //获得当前行 tr 的DOM对象
+   
+    if(layEvent === 'detail'){ //查看
+      //do somehing
+    } else if(layEvent === 'del'){ //删除
+      layer.confirm('您确定要删除 <span style="color:red;">'+data.platform+"："+data.username+'</span> 吗？', function(index){
+       // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+       $.ajax({
+    	   type:"delete",
+    	   url:"/api-account/"+data.id
+       }).done(function(data){
+    	   layer.close(index);
+    	   reloadApiAccount();
+       });
+     
+      });
+    } else if(layEvent === 'edit'){ //编辑
+    	showApiAccountDialog(data)
+    }
+  });
+  
+  
+  
+});
+
+function showApiAccountDialog(oldData){
+	layer.open({
+	  title:oldData?'编辑第三方账号':'添加第三方账号',
+	  type: 1,
+	  anim: 1,
+	  skin: 'layui-layer-molv', //加上边框
+	  area: ["30%","80%"], //宽高
+	  content: $("#api-account-dialog"),
+	  success:function(layero,index){
+		  layui.use(['form','layedit'], function(){
+			var form = layui.form;
+			var layedit = layui.layedit;
+			$("#api-account-dialog")[0].reset();
+			$("#api-account-dialog").find("input[type='hidden']").val('');
+			$("#api-account-dialog").find("textarea").val('');
+			if(oldData){
+				  
+					   $.get("/api-account/"+oldData.id).done(function(data){
+						   for (var name in data) {
+								$("#api-account-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
+			   			   }
+						   //构建一个默认的编辑器
+							 contentEditorIndex = layedit.build('api-account-content',{
+								  height:"500px"
+							  });
+						   
+					  })
+					 
+				
+			  
+		    }else{
+		    	 //构建一个默认的编辑器
+				 contentEditorIndex = layedit.build('api-account-content',{
+					  height:"500px"
+				  });
+		    }
+			
+			form.on('submit(api-account-save)', function(data){
+			      data.field.content = layedit.getContent(contentEditorIndex);
+			      $.ajax({type:oldData?'put':'post',url:'/api-account',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				  layer.msg("保存第三方账号成功");
+			      layer.close(index);
+			      reloadApiAccount();
+			 	 }); 
+			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			}); 
+		});
+	  }
+	});
+}
+
+function reloadApiAccount(pageNum){
+	var options = {
+			
+	where: {
+	  username: $("div[name=search-api-account]").find("input[name='username']").val(),
+	  likes:"username"
+ 		   }
+	};
+	if(pageNum){
+		options.page={curr:pageNum};
+	}
+	apiAccountTable.reload(options);
+}
+</script>
