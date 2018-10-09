@@ -1,0 +1,244 @@
+<div class="search" name="search-pdf-book">
+  <div class="layui-inline">
+    <input class="layui-input"  name="title" placeholder="标题"  autocomplete="off">
+  </div>
+  <button class="layui-btn" data-type="reload" onclick="reloadPdfBook(1)">搜索</button>
+    <button class="layui-btn layui-btn-normal"  onclick="showPdfBookDialog()">新增</button>
+    <button class="layui-btn layui-btn-normal"  onclick="showPdfBookBatchImportDialog()">批量导入</button>
+</div>
+ 
+<table id="pdf-book-table" lay-filter="pdf-book"></table>
+<script type="text/html" id="pdf-book-toolbar">
+  <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<form id='pdf-book-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+	  <input type='hidden' name='id'  />
+
+ <div class="layui-form-item">
+    <label class="layui-form-label">平台</label>
+    <div class="layui-input-block">
+      <select required name="platform">
+        <option value="">请选择</option>
+        <option value="简书" selected="">简书</option>
+        <option value="开源中国">开源中国</option>
+      </select>
+    </div>
+    </div>
+    
+   <div class="layui-form-item">
+    <label class="layui-form-label">用户名</label>
+     <div class="layui-input-block">
+        <input type="text" name="title"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+     <div class="layui-input-block">
+        <textarea name="password" placeholder="请输入密码" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">token</label>
+     <div class="layui-input-block">
+        <textarea name="token" placeholder="请输入token" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">cookies</label>
+     <div class="layui-input-block">
+        <textarea name="cookies" placeholder="请输入cookies" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">描述</label>
+     <div class="layui-input-block">
+        <textarea name="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="pdf-book-save">提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+ 
+ 
+ <form id='pdf-book-batch-import-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+   <div class="layui-form-item">
+    <label class="layui-form-label">批量标题和链接</label>
+     <div class="layui-input-block">
+        <textarea name="books" rows="10" placeholder="请输入内容" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="pdf-book-batch-import">提交</button>
+    </div>
+  </div>
+</form>
+<script>
+var pdfBookTable;
+var contentLoadCount = 0;
+var contentEditorIndex;
+layui.use('table', function(){
+  var table = layui.table;
+//第一个实例
+  pdfBookTable = table.render({
+    elem: '#pdf-book-table'
+    ,url: '/pdf-book/page?order=desc&sort=update_time' //数据接口
+    ,page: true //开启分页
+    ,loading:true
+    ,height: 'full-200'
+    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,done: function(res, curr, count){
+		if(contentLoadCount == 0){
+			contentLoadCount++;
+			pdfBookTable.reload();
+			
+		}
+    }
+    ,cols: [[ //表头
+       {type:'numbers',width:"5%",title:'序号'}
+      ,{field: 'title', title: '标题', width:"20%"}
+      ,{field: 'img', title: '图片', width:"15%"}
+      ,{field: 'url', title: '下载地址', width:"20%"}
+      ,{field: 'isPost', title: '是否发表', width:"10%"}
+      ,{field: 'createTime', title: '更新时间', width:"15%"}
+      ,{field: 'updateTime', title: '创建时间', width:"15%"}
+     /*  ,{field: '', width: "15%" ,toolbar: '#pdf-book-toolbar'} */
+    ]]
+  });
+  
+  
+//监听工具条
+  table.on('tool(pdf-book)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    var data = obj.data; //获得当前行数据
+    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    var tr = obj.tr; //获得当前行 tr 的DOM对象
+   
+    if(layEvent === 'detail'){ //查看
+      //do somehing
+    } else if(layEvent === 'del'){ //删除
+      layer.confirm('您确定要删除 <span style="color:red;">'+data.platform+"："+data.title+'</span> 吗？', function(index){
+       // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+       $.ajax({
+    	   type:"delete",
+    	   url:"/pdf-book/"+data.id
+       }).done(function(data){
+    	   layer.close(index);
+    	   reloadPdfBook();
+       });
+     
+      });
+    } else if(layEvent === 'edit'){ //编辑
+    	showPdfBookDialog(data)
+    }
+  });
+  
+  
+  
+});
+
+
+function showPdfBookBatchImportDialog(){
+	layer.open({
+		  title:'批量导入图书',
+		  type: 1,
+		  anim: 1,
+		  skin: 'layui-layer-molv', //加上边框
+		  area: ["30%","60%"], //宽高
+		  content: $("#pdf-book-batch-import-dialog"),
+		  success:function(layero,index){
+			  layui.use(['form','layedit'], function(){
+				var form = layui.form;
+				var layedit = layui.layedit;
+				$("#pdf-book-batch-import-dialog")[0].reset();
+				$("#pdf-book-batch-import-dialog").find("input[type='hidden']").val('');
+				$("#pdf-book-batch-import-dialog").find("textarea").val('');
+				form.on('submit(pdf-book-batch-import)', function(data){
+					  layer.load(2);
+				      $.ajax({type:'post',url:'/pdf-book/batch-import',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				      layer.closeAll();
+					  layer.msg("批量导入成功");
+				      reloadPdfBook();
+				 	 }); 
+				     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+				});
+				
+			});
+		  }
+		});
+}
+function showPdfBookDialog(oldData){
+	layer.open({
+	  title:oldData?'编辑第三方账号':'添加第三方账号',
+	  type: 1,
+	  anim: 1,
+	  skin: 'layui-layer-molv', //加上边框
+	  area: ["30%","80%"], //宽高
+	  content: $("#pdf-book-dialog"),
+	  success:function(layero,index){
+		  layui.use(['form','layedit'], function(){
+			var form = layui.form;
+			var layedit = layui.layedit;
+			$("#pdf-book-dialog")[0].reset();
+			$("#pdf-book-dialog").find("input[type='hidden']").val('');
+			$("#pdf-book-dialog").find("textarea").val('');
+			if(oldData){
+				  
+					   $.get("/pdf-book/"+oldData.id).done(function(data){
+						   for (var name in data) {
+								$("#pdf-book-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
+			   			   }
+						   //构建一个默认的编辑器
+							 contentEditorIndex = layedit.build('pdf-book-content',{
+								  height:"500px"
+							  });
+						   
+					  })
+					 
+				
+			  
+		    }else{
+		    	 //构建一个默认的编辑器
+				 contentEditorIndex = layedit.build('pdf-book-content',{
+					  height:"500px"
+				  });
+		    }
+			
+			form.on('submit(pdf-book-save)', function(data){
+			      data.field.content = layedit.getContent(contentEditorIndex);
+			      $.ajax({type:oldData?'put':'post',url:'/pdf-book',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				  layer.msg("保存第三方账号成功");
+			      layer.close(index);
+			      reloadPdfBook();
+			 	 }); 
+			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			}); 
+		});
+	  }
+	});
+}
+
+function reloadPdfBook(pageNum){
+	var options = {
+			
+	where: {
+	  title: $("div[name=search-pdf-book]").find("input[name='title']").val(),
+	  likes:"title"
+ 		   }
+	};
+	if(pageNum){
+		options.page={curr:pageNum};
+	}
+	pdfBookTable.reload(options);
+}
+</script>

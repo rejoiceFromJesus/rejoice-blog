@@ -9,6 +9,7 @@
  */
 package com.rejoice.blog.config;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -42,6 +43,7 @@ public class JsonConfig {
 		TimeZone timeZone = cal.getTimeZone();
 		mapper.setTimeZone(timeZone);
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		return mapper;
 	}
 }
