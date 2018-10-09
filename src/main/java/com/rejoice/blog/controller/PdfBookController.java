@@ -20,4 +20,10 @@ public class PdfBookController extends BaseController<PdfBook, PdfBookService> {
 		this.getService().batchImport(books.get("books"));
 		return Result.success(null);
 	}
+	
+	@PostMapping("/batch-post")
+	public Result<Void> batchPost(){
+		String msg = this.getService().batchPost();
+		return Result.success(null); 
+	}
 }

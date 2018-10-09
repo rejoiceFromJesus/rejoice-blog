@@ -1,12 +1,18 @@
 package com.rejoice.blog.common.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * 
@@ -27,6 +33,25 @@ public final class JsonUtil {
 	private static ObjectMapper mapperTemp = null;
 
 
+	
+	public static ObjectMapper buildObjectMapper(){
+		/*SimpleModule simpleModule = new SimpleModule();
+		simpleModule.addDeserializer(Date.class, new DateDeserializer());
+		simpleModule.addDeserializer(BigDecimal.class, new BigDecimalDeserializer());
+		simpleModule.addSerializer(Date.class, new DateSerializer());
+		simpleModule.addSerializer(BigDecimal.class, new BigDecimalSerializer());
+*/		ObjectMapper mapper = new ObjectMapper();
+		//mapper.registerModule(simpleModule);
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		//mapper.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+		Calendar cal = Calendar.getInstance();
+		TimeZone timeZone = cal.getTimeZone();
+		mapper.setTimeZone(timeZone);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		//mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+		return mapper;
+	}
 	/**
 	 * 获取jackson json lib的ObjectMapper对象
 	 * 

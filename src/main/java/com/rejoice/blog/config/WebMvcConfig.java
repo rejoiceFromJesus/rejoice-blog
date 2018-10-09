@@ -12,6 +12,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.rejoice.blog.common.constant.Constant;
@@ -28,6 +29,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	   registry.addInterceptor(sessionIntercepTor).excludePathPatterns(Constant.PASS_PATHS).addPathPatterns("/admin/*");
   }
   
+  
 @Override
 public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer
@@ -35,6 +37,12 @@ public void configureContentNegotiation(ContentNegotiationConfigurer configurer)
             .favorPathExtension(true);
 }
 
+
+@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		super.addResourceHandlers(registry);
+		registry.addResourceHandler("/upload-images/**").addResourceLocations("file:/app/rejoice-blog/upload-images/");
+	}
 
 /*
  * Configure View resolver to provide XLS output using Apache POI library to

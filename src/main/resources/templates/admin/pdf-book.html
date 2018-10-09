@@ -5,6 +5,7 @@
   <button class="layui-btn" data-type="reload" onclick="reloadPdfBook(1)">搜索</button>
     <button class="layui-btn layui-btn-normal"  onclick="showPdfBookDialog()">新增</button>
     <button class="layui-btn layui-btn-normal"  onclick="showPdfBookBatchImportDialog()">批量导入</button>
+    <button class="layui-btn layui-btn-normal"  onclick="batchPostBlog()">批量发表</button>
 </div>
  
 <table id="pdf-book-table" lay-filter="pdf-book"></table>
@@ -147,6 +148,15 @@ layui.use('table', function(){
   
 });
 
+
+function batchPostBlog(){
+	  layer.load(2);
+      $.ajax({type:'post',url:'/pdf-book/batch-post',contentType: 'application/json'}).done(function(data){
+	      layer.closeAll();
+		  layer.msg(data.msg);
+	      reloadPdfBook();
+ 	 }); 
+}
 
 function showPdfBookBatchImportDialog(){
 	layer.open({
