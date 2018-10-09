@@ -14,7 +14,28 @@ public class PdfBook extends BaseEntity{
 	private String title;
 	private String img;
 	private String url;
-	private Boolean isPost;
+	private Boolean isPostJianshu;
+	private Boolean isPostSystem;
+	private Boolean isPostOschina;
+	
+	public Boolean getIsPostJianshu() {
+		return isPostJianshu;
+	}
+	public void setIsPostJianshu(Boolean isPostJianshu) {
+		this.isPostJianshu = isPostJianshu;
+	}
+	public Boolean getIsPostSystem() {
+		return isPostSystem;
+	}
+	public void setIsPostSystem(Boolean isPostSystem) {
+		this.isPostSystem = isPostSystem;
+	}
+	public Boolean getIsPostOschina() {
+		return isPostOschina;
+	}
+	public void setIsPostOschina(Boolean isPostOschina) {
+		this.isPostOschina = isPostOschina;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -39,11 +60,6 @@ public class PdfBook extends BaseEntity{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public Boolean getIsPost() {
-		return isPost;
-	}
-	public void setIsPost(Boolean isPost) {
-		this.isPost = isPost;
-	}
+	
 	
 }

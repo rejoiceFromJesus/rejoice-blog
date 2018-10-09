@@ -1,0 +1,183 @@
+<div class="search" name="search-dictionary">
+  <div class="layui-inline">
+    <input class="layui-input"  name="code" placeholder="code"  autocomplete="off">
+  </div>
+  <button class="layui-btn" data-type="reload" onclick="reloadDictionary(1)">搜索</button>
+    <button class="layui-btn layui-btn-normal"  onclick="showDictionaryDialog()">新增</button>
+</div>
+ 
+<table id="dictionary-table" lay-filter="dictionary"></table>
+<script type="text/html" id="dictionary-toolbar">
+  <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<form id='dictionary-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+	  <input type='hidden' name='id'  />
+
+    
+   <div class="layui-form-item">
+    <label class="layui-form-label">code</label>
+     <div class="layui-input-block">
+        <input type="text" name="code"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+    <div class="layui-form-item">
+    <label class="layui-form-label">key</label>
+     <div class="layui-input-block">
+        <input type="text" name="key"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+    <div class="layui-form-item">
+    <label class="layui-form-label">value</label>
+     <div class="layui-input-block">
+        <input type="text" name="value"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">描述</label>
+     <div class="layui-input-block">
+        <textarea name="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="dictionary-save">提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+ 
+<script>
+var dictionaryTable;
+var contentLoadCount = 0;
+var contentEditorIndex;
+layui.use('table', function(){
+  var table = layui.table;
+//第一个实例
+  dictionaryTable = table.render({
+    elem: '#dictionary-table'
+    ,url: '/dictionary/page?order=desc&sort=update_time' //数据接口
+    ,page: true //开启分页
+    ,loading:true
+    ,height: 'full-200'
+    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,done: function(res, curr, count){
+		if(contentLoadCount == 0){
+			contentLoadCount++;
+			dictionaryTable.reload();
+			
+		}
+    }
+    ,cols: [[ //表头
+       {type:'numbers',width:"5%",title:'序号'}
+      ,{field: 'code', title: 'code', width:"10%"}
+      ,{field: 'key', title: 'key', width:"15%"}
+      ,{field: 'value', title: 'value', width:"15%"}
+      ,{field: 'description', title: '描述', width:"10%"}
+      ,{field: 'createTime', title: '更新时间', width:"15%"}
+      ,{field: 'updateTime', title: '创建时间', width:"15%"}
+     ,{field: '', width: "15%" ,toolbar: '#dictionary-toolbar'} 
+    ]]
+  });
+  
+  
+//监听工具条
+  table.on('tool(dictionary)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    var data = obj.data; //获得当前行数据
+    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    var tr = obj.tr; //获得当前行 tr 的DOM对象
+   
+    if(layEvent === 'detail'){ //查看
+      //do somehing
+    } else if(layEvent === 'del'){ //删除
+      layer.confirm('您确定要删除 <span style="color:red;">code:'+data.code+",key："+data.key+',value:"'+data.value+'"</span> 吗？', function(index){
+       // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+       $.ajax({
+    	   type:"delete",
+    	   url:"/dictionary/"+data.id
+       }).done(function(data){
+    	   layer.close(index);
+    	   reloadDictionary();
+       });
+     
+      });
+    } else if(layEvent === 'edit'){ //编辑
+    	showDictionaryDialog(data)
+    }
+  });
+  
+  
+  
+});
+
+
+
+function showDictionaryDialog(oldData){
+	layer.open({
+	  title:oldData?'编辑字典':'添加字典',
+	  type: 1,
+	  anim: 1,
+	  skin: 'layui-layer-molv', //加上边框
+	  area: ["30%","60%"], //宽高
+	  content: $("#dictionary-dialog"),
+	  success:function(layero,index){
+		  layui.use(['form','layedit'], function(){
+			var form = layui.form;
+			var layedit = layui.layedit;
+			$("#dictionary-dialog")[0].reset();
+			$("#dictionary-dialog").find("input[type='hidden']").val('');
+			$("#dictionary-dialog").find("textarea").val('');
+			if(oldData){
+				  
+					   $.get("/dictionary/"+oldData.id).done(function(data){
+						   for (var name in data) {
+								$("#dictionary-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
+			   			   }
+						   //构建一个默认的编辑器
+							 contentEditorIndex = layedit.build('dictionary-content',{
+								  height:"500px"
+							  });
+						   
+					  })
+					 
+				
+			  
+		    }else{
+		    	 //构建一个默认的编辑器
+				 contentEditorIndex = layedit.build('dictionary-content',{
+					  height:"500px"
+				  });
+		    }
+			
+			form.on('submit(dictionary-save)', function(data){
+			      data.field.content = layedit.getContent(contentEditorIndex);
+			      $.ajax({type:oldData?'put':'post',url:'/dictionary',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
+				  layer.msg(data.msg);
+			      layer.close(index);
+			      reloadDictionary();
+			 	 }); 
+			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			}); 
+		});
+	  }
+	});
+}
+
+function reloadDictionary(pageNum){
+	var options = {
+			
+	where: {
+	  code: $("div[name=search-dictionary]").find("input[name='code']").val(),
+	  likes:"code"
+ 		   }
+	};
+	if(pageNum){
+		options.page={curr:pageNum};
+	}
+	dictionaryTable.reload(options);
+}
+</script>

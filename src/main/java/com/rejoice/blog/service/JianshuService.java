@@ -24,10 +24,10 @@ public class JianshuService {
 	@Autowired
 	RestTemplate restTemplate;
 	
-	private static String NOTES_URL = "https://www.jianshu.com/notes/";
-	private static String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
-	private static String NOTEBOOK_ID_PDFBOOK = "19669528";
-	private static Long COLLECTION_ID = 576368L;
+	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
+	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
+	private static final String NOTEBOOK_ID_PDFBOOK = "19669528";
+	private static final Long COLLECTION_ID = 576368L;
 	
 	
 	public Object post(PdfBook pdfBook,String cookies) {
@@ -88,17 +88,4 @@ public class JianshuService {
 		HttpEntity<Object> httpEnitty = new HttpEntity<Object>(content, headers);
 		return httpEnitty;
 	}
-	
-	private void add(PdfBook pdfBook) {
-		
-	}
-	
-	
-	/**
-	 * 收录到知道
-	 * @param id
-	 */
-	private void submit(String id) {
-		
-	} 
 }

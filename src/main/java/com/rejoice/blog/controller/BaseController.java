@@ -90,8 +90,9 @@ public class BaseController<T,S> {
 	}     
 	
 	@PostMapping 
-	public void save(@RequestBody T t) throws Exception{
+	public Result<Void> save(@RequestBody T t) throws Exception{
 		baseService.saveSelective(t);
+		return Result.success(null);
 	}
 	@DeleteMapping("/{ids}")
 	public void delete(@PathVariable("ids") String ids) throws Exception{

@@ -49,4 +49,18 @@ public abstract class Constant {
 	//no auth paths
 	public static final String[] PASS_PATHS = new String[]{"/page/login.html","/page/error/*","/logout","/user/login","/company/active","/error","/checkCode/*","/checkCode"};
 
+	/**
+	 * distionary key code
+	 */
+	public static final String CODE_BATCH_POST_LOCK = "BATCH_POST_LOCK";
+	public static final String DICT_KEY_JIANSHU = "JIANSHU";
+	public static final String DICT_KEY_OSCHINA = "OSCHINA";
+	public static final String DICT_KEY_SYSTEM = "SYSTEM";
+	
+	/**
+	 * flag
+	 */
+	public static final String TRUE="true";
+	public static final String FALSE="false";
+	
 }
