@@ -24,6 +24,9 @@ public class JianshuService {
 	@Autowired
 	RestTemplate restTemplate;
 	
+	@Autowired
+	PdfBookService pdfBookService;
+	
 	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
 	private static final String NOTEBOOK_ID_PDFBOOK = "19669528";
@@ -43,7 +46,7 @@ public class JianshuService {
 		System.err.println(JsonUtil.toJson(notesAddOutput));
 		//2、更新文章
 		NotesUpdateInput notesUpdateInput = new NotesUpdateInput();
-		notesUpdateInput.setContent(this.getContent(pdfBook));
+		notesUpdateInput.setContent(pdfBookService.getContent(pdfBook));
 		notesUpdateInput.setTitle(pdfBook.getTitle());
 		notesUpdateInput.setId(notesAddOutput.getId());
 		NotesUpdateOutput notesUpdateOutput = restTemplate.exchange(
@@ -64,16 +67,6 @@ public class JianshuService {
 				, getHttpEntity(cookies, data)
 				, Object.class);
 		return notesUpdateInput;
-	}
-	
-	private String getContent(PdfBook pdfBook) {
-		String content = "<p>下载地址：&nbsp;"
-				+ "<a href=\""+pdfBook.getUrl()+"\" target=\"_blank\">"
-				+ pdfBook.getTitle()+" 免费下载</a></p><div class=\"image-package\">"
-				+ "<img class=\"uploaded-img\" "
-				+ "src=\"http://www.rejoiceblog.com/upload-images"+pdfBook.getImg()+"\" width=\"auto\" height=\"auto\">"
-				+ "<br><div class=\"image-caption\"></div></div>";
-		return content;
 	}
 	
 	private HttpEntity<Object> getHttpEntity(String cookies,Object body) {

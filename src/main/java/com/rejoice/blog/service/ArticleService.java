@@ -9,20 +9,24 @@
  */
 package com.rejoice.blog.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.Article;
 
-import tk.mybatis.mapper.entity.EntityTable;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 import tk.mybatis.mapper.util.StringUtil;
@@ -102,6 +106,21 @@ public class ArticleService extends BaseService<Article>{
 		List<Article> list = this.getMapper().selectByExample(example);
 		return new PageInfo<Article>(list);
 	
+	}
+
+
+
+	public void fillFields(Article t, Object principal) {
+		User user = (User) principal;
+		Document doc = Jsoup.parse(t.getContent());
+		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
+		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
+		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
+		Elements img = doc.select("img");
+		if(!img.isEmpty()){
+			t.setImgUrl(img.first().attr("src"));
+		}
+		t.setAuthor(user.getUsername());
 	}
 
 }

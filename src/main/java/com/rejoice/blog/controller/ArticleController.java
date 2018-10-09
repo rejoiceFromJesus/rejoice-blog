@@ -9,8 +9,6 @@
  */
 package com.rejoice.blog.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
@@ -18,6 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.entity.Article;
-import com.rejoice.blog.entity.Category;
 import com.rejoice.blog.entity.Comment;
 import com.rejoice.blog.service.ArticleService;
 import com.rejoice.blog.service.CategoryService;
@@ -78,17 +76,9 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	
 	
 	@PostMapping("/save")
-	public void saveArticle(@RequestBody Article t, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
-		Document doc = Jsoup.parse(t.getContent());
-		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
-		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
-		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
-		Elements img = doc.select("img");
-		if(!img.isEmpty()){
-			t.setImgUrl(img.first().attr("src"));
-		}
-		
-		t.setAuthor(userDetails.getUsername());
+	public void saveArticle(@RequestBody Article t) throws Exception {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		this.getService().fillFields(t,principal);
 		this.getService().saveSelective(t);
 	}
 	
