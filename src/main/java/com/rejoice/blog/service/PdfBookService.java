@@ -18,6 +18,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 	
 	@Autowired
 	JianshuService jianshuService;
+	
+	@Autowired
+	PdfBookService pdfBookService;
 
 	public void batchImport(String books) {
 		String[] bookStrArray = books.split("\n");
@@ -34,14 +37,22 @@ public class PdfBookService extends BaseService<PdfBook> {
 	}
 
 	public String batchPost() {
-		PdfBook cons = new PdfBook();
-		cons.setIsPost(false);
-		List<PdfBook> list = this.queryListByWhere(cons);
-		ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
-		for (PdfBook pdfBook : list) {
-			jianshuService.post(pdfBook, jianshuAccount.getCookies());
-			break;
-		}
+		new Thread(()->{
+			PdfBook cons = new PdfBook();
+			cons.setIsPost(false);
+			List<PdfBook> list = this.queryListByWhere(cons);
+			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
+			for (PdfBook pdfBook : list) {
+				try {
+					jianshuService.post(pdfBook, jianshuAccount.getCookies());
+					pdfBook.setIsPost(true);
+					pdfBookService.updateByIdSelective(pdfBook);
+					Thread.sleep(2000);
+				} catch (Exception e) {
+					LOGGER.warn("POST article failed:",e);
+				}
+			}
+		}).start();
 		return null;
 	}
 
