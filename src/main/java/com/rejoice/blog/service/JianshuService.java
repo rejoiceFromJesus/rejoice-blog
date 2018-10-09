@@ -69,7 +69,7 @@ public class JianshuService {
 	private String getContent(PdfBook pdfBook) {
 		String content = "<p>下载地址：&nbsp;"
 				+ "<a href=\""+pdfBook.getUrl()+"\" target=\"_blank\">"
-				+ pdfBook.getTitle()+"</a></p><div class=\"image-package\">"
+				+ pdfBook.getTitle()+" 免费下载</a></p><div class=\"image-package\">"
 				+ "<img class=\"uploaded-img\" "
 				+ "src=\"http://www.rejoiceblog.com/upload-images"+pdfBook.getImg()+"\" width=\"auto\" height=\"auto\">"
 				+ "<br><div class=\"image-caption\"></div></div>";
