@@ -3,9 +3,6 @@ package com.rejoice.blog.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.FileSystemResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,14 +28,12 @@ public class TestController {
 	public void testUpload() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		headers.set("Cookie", " oscid=inZ7aH3QlhfhJlDeONY6h%2BHU7kKPY8Yco88jsmyMEhbbGZpW70RZS6tutkpi3HHv2jryiHsiK12xd%2BXTi9HBN%2FFmzsJ1MTrL%2Bs%2BhFJgUAaV%2BGm3mlNur936Py5cwadKEgyVnyLGl3TWcW4m%2B9R8WLw%3D%3D");
 	    MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-	    String ckCsrfToken = "";
-        map.add("ckCsrfToken", "0T7J2qmkhb71408GRfZbOJHtgTD2IEgPa0i7S9rz");
-      Resource resource2 = resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-10/Hacking Exposed 7.pdf.jpg");
-       map.add("upload",resource2);
+        map.add("token", "_OrITNvuapwhPQ29D4AtyiTmAJT9BScZhQZUnk4o:vGvlcrOV7uOjVVaJuBo2YZC-LAc=:eyJzY29wZSI6ImppYW5zaHUtdXBsb2FkLWltYWdlczp1cGxvYWRfaW1hZ2VzLzcxNzYyNjgtMTM4ZGE3NDE5MzkwYzNkZi5qcGciLCJlbmRVc2VyIjoiNzE3NjI2OCIsImNhbGxiYWNrVXJsIjoiaHR0cHM6Ly93d3cuamlhbnNodS5jb20vdXBsb2FkX2ltYWdlcy9jYWxsYmFjay9kbyIsImNhbGxiYWNrQm9keSI6ImtleT0kKGtleSlcdTAwMjZmaWxlc2l6ZT0kKGZzaXplKVx1MDAyNmZpbGVmb3JtYXQ9JChpbWFnZUluZm8uZm9ybWF0KVx1MDAyNm1pbWVfdHlwZT0kKG1pbWVUeXBlKVx1MDAyNmV4aWY9JChleGlmKVx1MDAyNnVpZD0kKGVuZFVzZXIpXHUwMDI2aGVpZ2h0PSQoaW1hZ2VJbmZvLmhlaWdodClcdTAwMjZ3aWR0aD0kKGltYWdlSW5mby53aWR0aClcdTAwMjZwcm90b2NvbD0kKHg6cHJvdG9jb2wpIiwiZGVhZGxpbmUiOjE1MzkxNTg2NTYsImZzaXplTGltaXQiOjEwNDg1NzYwLCJtaW1lTGltaXQiOiJpbWFnZS9qcGc7aW1hZ2UvanBlZztpbWFnZS9naWY7aW1hZ2UvcG5nIiwidXBob3N0cyI6WyJodHRwOi8vdXAucWluaXUuY29tIiwiaHR0cDovL3VwbG9hZC5xaW5pdS5jb20iLCItSCB1cC5xaW5pdS5jb20gaHR0cDovLzE4My4xMzEuNy4xOCJdLCJnbG9iYWwiOmZhbHNlfQ==");
+        map.add("key","upload_images/7176268-138da7419390c3df.jpg");
+        map.add("file",resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-10/Hacking Exposed 7.pdf.jpg"));
 		HttpEntity entity = new HttpEntity<>(map,headers);
-		Object data = restTemplate.postForObject("https://my.oschina.net/u/3415536/space/ckeditor_dialog_img_upload", entity, Object.class);
+		Object data = restTemplate.postForObject("https://upload.qiniup.com/", entity, Object.class);
 		System.err.println(data);
 	}
 }
