@@ -13,6 +13,7 @@ public class PdfBook extends BaseEntity{
 	private Long id;
 	private String title;
 	private String img;
+	private String fileName;
 	private String imgUrl;
 	private String url;
 	private Boolean isPostJianshu;
@@ -21,6 +22,12 @@ public class PdfBook extends BaseEntity{
 	
 	
 	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	public String getImgUrl() {
 		return imgUrl;
 	}

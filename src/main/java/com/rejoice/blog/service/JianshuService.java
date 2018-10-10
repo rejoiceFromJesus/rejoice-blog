@@ -3,8 +3,9 @@ package com.rejoice.blog.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +16,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.JsonUtil;
+import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.PdfBook;
 import com.rejoice.blog.vo.http.jianshu.NotesAddInput;
 import com.rejoice.blog.vo.http.jianshu.NotesAddOutput;
@@ -26,6 +29,8 @@ import com.rejoice.blog.vo.http.jianshu.UploadTokenOutput;
 
 @Service
 public class JianshuService {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(JianshuService.class);
 
 	@Autowired
 	RestTemplate restTemplate;
@@ -64,14 +69,20 @@ public class JianshuService {
 		return tokenOutput;
 	}
 	
-	public Object post(PdfBook pdfBook,String cookies) {
+	public Object post(PdfBook pdfBook,String cookies) throws Exception {
 		
-		//1、上传图片
-		UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg(), cookies);
-		HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken, resourceLoader.getResource(pdfBook.getImgUrl()));
-		UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
-		pdfBook.setImgUrl(uploadFile.getUrl());
-		
+		try {
+			//1、上传图片
+			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg(), cookies);
+			HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
+					resourceLoader.getResource(pdfBook.getImgUrl()));
+			UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
+			pdfBook.setImgUrl(uploadFile.getUrl());
+		} catch (Exception e) {
+			LOGGER.warn("upload file to jianshu failed,release lock to exit");
+			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
+			throw e;
+		}
 		//2、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
 		notesAddInput.setNotebook_id(NOTEBOOK_ID_PDFBOOK);

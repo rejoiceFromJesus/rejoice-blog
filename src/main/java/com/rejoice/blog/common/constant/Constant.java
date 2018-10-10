@@ -53,6 +53,7 @@ public abstract class Constant {
 	 * distionary key code
 	 */
 	public static final String CODE_BATCH_POST_LOCK = "BATCH_POST_LOCK";
+	public static final String DICT_KEY_DEFAULT = "DEFAULT";
 	public static final String DICT_KEY_JIANSHU = "JIANSHU";
 	public static final String DICT_KEY_OSCHINA = "OSCHINA";
 	public static final String DICT_KEY_SYSTEM = "SYSTEM";

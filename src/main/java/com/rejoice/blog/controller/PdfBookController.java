@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rejoice.blog.common.bean.Result;
+import com.rejoice.blog.common.constant.Constant;
+import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.PdfBook;
 import com.rejoice.blog.service.PdfBookService;
 
@@ -23,7 +25,11 @@ public class PdfBookController extends BaseController<PdfBook, PdfBookService> {
 	
 	@PostMapping("/batch-post")
 	public Result<Void> batchPost(){
-		String msg = this.getService().batchPost();
-		return Result.success(null); 
+		if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+			this.getService().batchPost();
+			return Result.success(null); 
+		}
+		return Result.paramError("上次批量发表还在进行中，请稍候重试！");
+		
 	}
 }

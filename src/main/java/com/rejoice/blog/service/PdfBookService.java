@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rejoice.blog.common.constant.Constant;
+import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.Article;
-import com.rejoice.blog.entity.Dictionary;
 import com.rejoice.blog.entity.PdfBook;
 
 @Service
@@ -26,6 +26,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	@Autowired
 	JianshuService jianshuService;
+	
+	public static volatile String POST_BATCH_LOCK = "false";
 
 	@Autowired
 	DictionaryService dictionaryService;
@@ -38,7 +40,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	public String getContent(PdfBook pdfBook) {
 		String content = "<p>下载地址：&nbsp;" + "<a href=\"" + pdfBook.getUrl() + "\" target=\"_blank\">"
-				+ pdfBook.getTitle() + " 免费下载</a></p><div class=\"image-package\">" + "<img class=\"uploaded-img\" "
+				+ pdfBook.getFileName() + "</a></p><div class=\"image-package\">" + "<img class=\"uploaded-img\" "
 				+ "src=\""+pdfBook.getImgUrl()
 				+ "\" width=\"auto\" height=\"auto\">" + "<br><div class=\"image-caption\"></div></div>";
 		return content;
@@ -50,7 +52,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 		for (String bookStr : bookStrArray) {
 			String[] book = bookStr.split(": https://");
 			PdfBook pdfBook = new PdfBook();
-			pdfBook.setTitle(book[0]);
+			pdfBook.setFileName(book[0]);
+			pdfBook.setTitle(book[0]+" 免费下载");
 			pdfBook.setImg(book[0] + ".jpg");
 			pdfBook.setImgUrl(uploadImagesDir+"/" + today + "/" + pdfBook.getImg());
 			pdfBook.setUrl("https://" + book[1]);
@@ -62,52 +65,42 @@ public class PdfBookService extends BaseService<PdfBook> {
 	}
 
 	public String batchPost() {
+		// 1、locking
+		VolitateVars.POST_BATCH_LOCK = Constant.TRUE;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		new Thread(() -> {
+			// 2、post articles
 			postBatchToJIanshu();
 			postBatchToSystem(principal);
+			// 3、release lock
+			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
 		}).start();
 		return null;
 	}
 
 	@Transactional(readOnly = true)
 	private void postBatchToSystem(Object principal) {
-		// 1、check lock
-		Dictionary dictionaryCons = new Dictionary();
-		dictionaryCons.setCode(Constant.CODE_BATCH_POST_LOCK);
-		dictionaryCons.setKey(Constant.DICT_KEY_SYSTEM);
-		Dictionary dictionary = dictionaryService.queryOne(dictionaryCons);
-		if (Constant.FALSE.equalsIgnoreCase(dictionary.getValue())) {
-			// false, post articles
-			// 2、set locking
-			Dictionary updateDictionary = new Dictionary();
-			updateDictionary.setId(dictionary.getId());
-			updateDictionary.setValue(Constant.TRUE);
-			dictionaryService.updateByIdSelective(updateDictionary);
-			// 3、query not posted books
-			PdfBook cons = new PdfBook();
-			cons.setIsPostSystem(false);
-			List<PdfBook> list = this.queryListByWhere(cons);
-			for (PdfBook pdfBook : list) {
-				try {
-					// 4、post article
-					this.post(pdfBook,principal);
-					// 5、update book posted
-					PdfBook newBook = new PdfBook();
-					newBook.setId(pdfBook.getId());
-					newBook.setIsPostSystem(true);
-					pdfBookService.updateByIdSelective(newBook);
-					Thread.sleep(50);
-				} catch (Exception e) {
-					LOGGER.warn("POST articles to system failed:", e);
-				}
+		// 1、query not posted books
+		PdfBook cons = new PdfBook();
+		cons.setIsPostSystem(false);
+		List<PdfBook> list = this.queryListByWhere(cons);
+		for (PdfBook pdfBook : list) {
+			//2、check lock always
+			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+				throw new RuntimeException("exit batch post articles cause lock release");
 			}
-			// 5、release lock
-			updateDictionary.setValue(Constant.FALSE);
-			dictionaryService.updateByIdSelective(updateDictionary);
-		} else {
-			// 2、locking, return
-			LOGGER.warn("already posting articles to system, return immediately");
+			try {
+				// 3、post article
+				this.post(pdfBook,principal);
+				// 4、update book posted
+				PdfBook newBook = new PdfBook();
+				newBook.setId(pdfBook.getId());
+				newBook.setIsPostSystem(true);
+				pdfBookService.updateByIdSelective(newBook);
+				Thread.sleep(50);
+			} catch (Exception e) {
+				LOGGER.warn("POST articles to system failed:", e);
+			}
 		}
 
 	}
@@ -123,29 +116,20 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	@Transactional(readOnly = true)
 	private void postBatchToJIanshu() {
-
-		// 1、check lock
-		Dictionary dictionaryCons = new Dictionary();
-		dictionaryCons.setCode(Constant.CODE_BATCH_POST_LOCK);
-		dictionaryCons.setKey(Constant.DICT_KEY_JIANSHU);
-		Dictionary dictionary = dictionaryService.queryOne(dictionaryCons);
-		if (Constant.FALSE.equalsIgnoreCase(dictionary.getValue())) {
-			// false, post articles
-			// 2、set locking
-			Dictionary updateDictionary = new Dictionary();
-			updateDictionary.setId(dictionary.getId());
-			updateDictionary.setValue(Constant.TRUE);
-			dictionaryService.updateByIdSelective(updateDictionary);
-			// 3、query not posted books
+			// 1、query not posted books
 			PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
 			List<PdfBook> list = this.queryListByWhere(cons);
 			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
 			for (PdfBook pdfBook : list) {
+				//2、check lock always
+				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+					throw new RuntimeException("exit batch post articles cause lock release");
+				}
 				try {
-					// 4、post article
+					// 3、post article
 					jianshuService.post(pdfBook, jianshuAccount.getCookies());
-					// 5、update book posted
+					// 4、update book posted
 					PdfBook newBook = new PdfBook();
 					newBook.setId(pdfBook.getId());
 					newBook.setImgUrl(pdfBook.getImgUrl());
@@ -156,13 +140,6 @@ public class PdfBookService extends BaseService<PdfBook> {
 					LOGGER.warn("POST articles to jianshu failed:", e);
 				}
 			}
-			// 5、release lock
-			updateDictionary.setValue(Constant.FALSE);
-			dictionaryService.updateByIdSelective(updateDictionary);
-		} else {
-			// 2、locking, return
-			LOGGER.warn("already posting articles to jianshu, return immediately");
-		}
 
 	}
 
