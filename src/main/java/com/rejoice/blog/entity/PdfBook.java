@@ -13,11 +13,20 @@ public class PdfBook extends BaseEntity{
 	private Long id;
 	private String title;
 	private String img;
+	private String imgUrl;
 	private String url;
 	private Boolean isPostJianshu;
 	private Boolean isPostSystem;
 	private Boolean isPostOschina;
 	
+	
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	public Boolean getIsPostJianshu() {
 		return isPostJianshu;
 	}

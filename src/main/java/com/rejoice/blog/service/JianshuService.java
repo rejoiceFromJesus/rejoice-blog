@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.rejoice.blog.common.util.JsonUtil;
@@ -17,6 +21,8 @@ import com.rejoice.blog.vo.http.jianshu.NotesAddInput;
 import com.rejoice.blog.vo.http.jianshu.NotesAddOutput;
 import com.rejoice.blog.vo.http.jianshu.NotesUpdateInput;
 import com.rejoice.blog.vo.http.jianshu.NotesUpdateOutput;
+import com.rejoice.blog.vo.http.jianshu.UploadOutput;
+import com.rejoice.blog.vo.http.jianshu.UploadTokenOutput;
 
 @Service
 public class JianshuService {
@@ -24,17 +30,49 @@ public class JianshuService {
 	@Autowired
 	RestTemplate restTemplate;
 	
+	
 	@Autowired
 	PdfBookService pdfBookService;
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 	
 	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
 	private static final String NOTEBOOK_ID_PDFBOOK = "19669528";
+	private static final String UPLOAD_TOKEN_URL = "https://www.jianshu.com/upload_images/token.json?filename=";
 	private static final Long COLLECTION_ID = 576368L;
+	private static final String UPLOAD_URL = "https://upload.qiniup.com/";
 	
+	
+	private HttpEntity<MultiValueMap<String, Object>> getUploadEntity(UploadTokenOutput token, Object file) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        map.add("token", token.getToken());
+        map.add("key", token.getKey());
+        map.add("file",file);
+        return new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+	}
+	
+	private UploadTokenOutput getUploadToken(String fileName,String cookies) {
+		String url = UPLOAD_TOKEN_URL+fileName;
+		UploadTokenOutput tokenOutput = restTemplate.exchange(url
+				, HttpMethod.GET
+				, this.getHttpEntity(cookies, null)
+				,  UploadTokenOutput.class).getBody();
+		return tokenOutput;
+	}
 	
 	public Object post(PdfBook pdfBook,String cookies) {
-		//1、新建文章
+		
+		//1、上传图片
+		UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg(), cookies);
+		HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken, resourceLoader.getResource(pdfBook.getImgUrl()));
+		UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
+		pdfBook.setImgUrl(uploadFile.getUrl());
+		
+		//2、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
 		notesAddInput.setNotebook_id(NOTEBOOK_ID_PDFBOOK);
 		notesAddInput.setAt_bottom(false);
@@ -43,8 +81,8 @@ public class JianshuService {
 				AUTHOR_NOTES_URL
 				, getHttpEntity(cookies, notesAddInput)
 				, NotesAddOutput.class);
-		System.err.println(JsonUtil.toJson(notesAddOutput));
-		//2、更新文章
+		
+		//3、更新文章
 		NotesUpdateInput notesUpdateInput = new NotesUpdateInput();
 		notesUpdateInput.setContent(pdfBookService.getContent(pdfBook));
 		notesUpdateInput.setTitle(pdfBook.getTitle());
@@ -55,11 +93,11 @@ public class JianshuService {
 				, getHttpEntity(cookies, notesUpdateInput)
 				, NotesUpdateOutput.class).getBody();
 		JsonUtil.toJson(notesUpdateOutput);
-		//3、发布文章
+		//4、发布文章
 		restTemplate.postForObject(
 				AUTHOR_NOTES_URL+notesAddOutput.getId()+"/publicize"
 				, getHttpEntity(cookies, null), Object.class);
-		//4、收录到专题
+		//5、收录到专题
 		Map<String,Long> data = new HashMap<>();
 		data.put("collection_id", COLLECTION_ID);
 		restTemplate.postForObject(

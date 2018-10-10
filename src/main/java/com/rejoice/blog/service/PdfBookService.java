@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	@Autowired
 	public ApiAccountService apiAccountService;
+	
+	@Value("${blog.upload.images.dir}")
+	public String uploadImagesDir;
 
 	@Autowired
 	JianshuService jianshuService;
@@ -35,7 +39,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 	public String getContent(PdfBook pdfBook) {
 		String content = "<p>下载地址：&nbsp;" + "<a href=\"" + pdfBook.getUrl() + "\" target=\"_blank\">"
 				+ pdfBook.getTitle() + " 免费下载</a></p><div class=\"image-package\">" + "<img class=\"uploaded-img\" "
-				+ "src=\"http://www.rejoiceblog.com/upload-images" + pdfBook.getImg()
+				+ "src=\""+pdfBook.getImgUrl()
 				+ "\" width=\"auto\" height=\"auto\">" + "<br><div class=\"image-caption\"></div></div>";
 		return content;
 	}
@@ -47,7 +51,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 			String[] book = bookStr.split(": https://");
 			PdfBook pdfBook = new PdfBook();
 			pdfBook.setTitle(book[0]);
-			pdfBook.setImg("/" + today + "/" + book[0] + ".jpg");
+			pdfBook.setImg(book[0] + ".jpg");
+			pdfBook.setImgUrl(uploadImagesDir+"/" + today + "/" + pdfBook.getImg());
 			pdfBook.setUrl("https://" + book[1]);
 			pdfBook.setIsPostJianshu(false);
 			pdfBook.setIsPostOschina(false);
@@ -143,6 +148,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 					// 5、update book posted
 					PdfBook newBook = new PdfBook();
 					newBook.setId(pdfBook.getId());
+					newBook.setImgUrl(pdfBook.getImgUrl());
 					newBook.setIsPostJianshu(true);
 					pdfBookService.updateByIdSelective(newBook);
 					Thread.sleep(2000);
