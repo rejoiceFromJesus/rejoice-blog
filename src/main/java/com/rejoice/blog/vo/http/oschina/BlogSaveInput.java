@@ -11,7 +11,7 @@ public class BlogSaveInput {
 	private String as_top = "0";
 	private String isRecommend = "0";
 	private String type ="1";
-	private String user_code = "GZ4uAs3yTj6IxHJRelpvCfMa5QuL3JeTaQbKzFTr";
+	private String user_code;
 	
 	public String getType() {
 		return type;
