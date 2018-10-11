@@ -17,6 +17,14 @@ public class ApiAccount extends BaseEntity {
 	private String cookies;
 	private String token;
 	private String description;
+	private String metadata;
+	
+	public String getMetadata() {
+		return metadata;
+	}
+	public void setMetadata(String metadata) {
+		this.metadata = metadata;
+	}
 	public Long getId() {
 		return id;
 	}

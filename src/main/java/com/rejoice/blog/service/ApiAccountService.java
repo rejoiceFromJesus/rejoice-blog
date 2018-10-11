@@ -15,4 +15,13 @@ public class ApiAccountService extends BaseService<ApiAccount> {
 		ApiAccount jianshuAccount = this.queryOne(jianshuCons);
 		return jianshuAccount;
 	}
+	
+	public ApiAccount getOschinaAccount() {
+		//get oschina account
+		ApiAccount oschinaCons = new ApiAccount();
+		oschinaCons.setUsername("18719353314");
+		oschinaCons.setPlatform("开源中国");
+		ApiAccount oschinaAccount = this.queryOne(oschinaCons);
+		return oschinaAccount;
+	}
 }

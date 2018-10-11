@@ -2,6 +2,8 @@ package com.rejoice.blog.config;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
@@ -33,6 +35,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
@@ -86,6 +89,10 @@ public class RestTemplateConfig {
 		for (HttpMessageConverter<?> converter : converters) {
 			if (converter instanceof MappingJackson2HttpMessageConverter) {
 				MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;
+				List<MediaType> mediaTypes = new ArrayList<>();
+				mediaTypes.add(MediaType.TEXT_HTML);
+				mediaTypes.addAll(jsonConverter.getSupportedMediaTypes());
+				jsonConverter.setSupportedMediaTypes(mediaTypes);
 				jsonConverter.setObjectMapper(JsonUtil.buildObjectMapper());
 			}
 		}

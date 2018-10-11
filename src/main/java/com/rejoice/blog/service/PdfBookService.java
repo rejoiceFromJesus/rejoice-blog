@@ -27,6 +27,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 	@Autowired
 	JianshuService jianshuService;
 	
+	@Autowired
+	OschinaService oschinaService;
+	
 	public static volatile String POST_BATCH_LOCK = "false";
 
 	@Autowired
@@ -71,11 +74,39 @@ public class PdfBookService extends BaseService<PdfBook> {
 		new Thread(() -> {
 			// 2、post articles
 			postBatchToJIanshu();
+			postBatchToOschina();
 			postBatchToSystem(principal);
 			// 3、release lock
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
 		}).start();
 		return null;
+	}
+	
+	@Transactional(readOnly = true)
+	public void postBatchToOschina() {
+		// 1、query not posted books
+		PdfBook cons = new PdfBook();
+		cons.setIsPostOschina(false);
+		List<PdfBook> list = this.queryListByWhere(cons);
+		ApiAccount oschinaAccount = apiAccountService.getOschinaAccount();
+		for (PdfBook pdfBook : list) {
+			//2、check lock always
+			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+				throw new RuntimeException("exit batch post articles cause lock release");
+			}
+			try {
+				// 3、post article
+				oschinaService.post(pdfBook,oschinaAccount);
+				// 4、update book posted
+				PdfBook newBook = new PdfBook();
+				newBook.setId(pdfBook.getId());
+				newBook.setIsPostOschina(true);
+				pdfBookService.updateByIdSelective(newBook);
+				Thread.sleep(50);
+			} catch (Exception e) {
+				LOGGER.warn("POST articles to system failed:", e);
+			}
+		}
 	}
 
 	@Transactional(readOnly = true)
@@ -97,7 +128,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 				newBook.setId(pdfBook.getId());
 				newBook.setIsPostSystem(true);
 				pdfBookService.updateByIdSelective(newBook);
-				Thread.sleep(50);
+				Thread.sleep(2000);
 			} catch (Exception e) {
 				LOGGER.warn("POST articles to system failed:", e);
 			}

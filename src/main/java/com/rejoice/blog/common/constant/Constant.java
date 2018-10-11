@@ -59,6 +59,13 @@ public abstract class Constant {
 	public static final String DICT_KEY_SYSTEM = "SYSTEM";
 	
 	/**
+	 * api metadata
+	 */
+	public static final String OSCHINA_RESPONSE_TYPE = "code";
+	public static final String OSCHINA_SCOPE = "blog_api,user_api,";
+	public static final String OSCHINA_USER_OAUTH_APPROVAL = "true";
+	
+	/**
 	 * flag
 	 */
 	public static final String TRUE="true";

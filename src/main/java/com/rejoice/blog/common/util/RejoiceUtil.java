@@ -9,9 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.ibatis.reflection.ReflectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +30,29 @@ import com.rejoice.blog.common.exception.InternalServerException;
 public class RejoiceUtil {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RejoiceUtil.class);
+	
+	public static Map<String,Object> objectFieldsToMap(Object object) {
+		try {
+			Map<String,Object> map = new HashMap<>();
+			if(object == null) {
+				return null;
+			}
+			Field[] fields = FieldUtils.getAllFields(object.getClass());
+			for (Field field : fields) {
+				field.setAccessible(true);
+				Object value = field.get(object);
+				if(value != null) {
+					map.put(field.getName(), value);
+					
+				}
+			}
+			return map;
+		}
+		catch (Exception e) {
+			throw new RuntimeException("获取字段值异常："+e.getMessage(),e);
+		}
+	}
+
 	
 	public static void emptyToNull(Object obj){
 		try {

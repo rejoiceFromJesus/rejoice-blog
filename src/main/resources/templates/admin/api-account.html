@@ -52,6 +52,12 @@
         <textarea name="cookies" placeholder="请输入cookies" class="layui-textarea"></textarea>
     </div>
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">元数据</label>
+     <div class="layui-input-block">
+        <textarea name="metadata" placeholder="请输入" class="layui-textarea"></textarea>
+    </div>
+  </div>
   
    <div class="layui-form-item">
     <label class="layui-form-label">描述</label>
@@ -96,6 +102,7 @@ layui.use('table', function(){
       ,{field: 'password', title: '密码', width:"13%"}
       ,{field: 'token', title: 'token', width:"10%"}
       ,{field: 'cookies', title: 'cookies', width:"10%"}
+      ,{field: 'metadata', title: '元数据', width:"10%"}
       ,{field: 'description', title: '描述', width:"10%"}
       ,{field: 'createTime', title: '更新时间', width:"10%"}
       ,{field: 'updateTime', title: '创建时间', width:"10%"}

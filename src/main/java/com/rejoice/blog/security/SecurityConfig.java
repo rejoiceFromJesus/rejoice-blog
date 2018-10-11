@@ -88,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         			"/page/admin/admin-login.html",
         			"/","/js/**",
         			"/test/**",
+        			"/api/**",
         			"/css/**","/img/**",
         			"/upload-images/**",
         			"/plugin/**/*");
