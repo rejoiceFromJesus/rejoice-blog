@@ -1,9 +1,11 @@
 package com.rejoice.blog.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,12 +48,21 @@ public class OschinaService {
 		restTemplate.postForObject(POST_BLOG_URL, getHttpEntity(input, apiAccount.getCookies()), Object.class);
 	}
 	
-	private String getAuthroizedCode() {
+	public String getAuthroizedCode() {
 		ApiAccount oschinaAccount = apiAccountService.getOschinaAccount();
 		AuthorizedCodeInput input = JsonUtil.toBean(oschinaAccount.getMetadata(), AuthorizedCodeInput.class);
 		ResponseEntity<String> data = restTemplate.postForEntity(AUTHORIZE_URL, getHttpEntity(input,oschinaAccount.getCookies()), String.class);
-		return data.getHeaders().get("Location").get(0);
+		List<String> locations = data.getHeaders().get("Location");
+		if(locations != null && !locations.isEmpty()) {
+			String location = locations.get(0);
+			if(StringUtils.startsWith(location, "http://www.rejoiceblog.com/api/oschina/oauth/callback")) {
+				return location.split("\\?")[1].split("=")[1];
+			}
+		}
+		return data.getBody();
 	}
+	
+	
 	
 	private HttpEntity<Object> getHttpEntity(Object body,String cookies) {
 		HttpHeaders headers = new HttpHeaders();

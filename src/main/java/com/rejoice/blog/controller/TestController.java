@@ -83,8 +83,8 @@ public class TestController {
 		System.err.println(data);
 	}
 	
-	//@GetMapping("/oschina/code")
-	/*public String oschinaCode() {
+	@GetMapping("/oschina/code")
+	public String oschinaCode() {
 		return oschinaService.getAuthroizedCode();
-	}*/
+	}
 }
