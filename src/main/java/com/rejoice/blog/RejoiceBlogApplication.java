@@ -1,17 +1,16 @@
 package com.rejoice.blog;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.annotation.PostConstruct;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
+@EnableScheduling
 @MapperScan(basePackages="com.rejoice.blog.mapper")
 public class RejoiceBlogApplication {
 
