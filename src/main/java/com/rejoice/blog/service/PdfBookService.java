@@ -113,7 +113,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 				newBook.setId(pdfBook.getId());
 				newBook.setIsPostOschina(true);
 				pdfBookService.updateByIdSelective(newBook);
-				Thread.sleep(50);
+				Thread.sleep(2000);
 			} catch (Exception e) {
 				LOGGER.warn("POST articles to system failed:", e);
 			}
