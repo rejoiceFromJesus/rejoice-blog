@@ -2,6 +2,7 @@ package com.rejoice.blog.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,6 +90,16 @@ public class PdfBookService extends BaseService<PdfBook> {
 		cons.setIsPostOschina(false);
 		List<PdfBook> list = this.queryListByWhere(cons);
 		ApiAccount oschinaAccount = apiAccountService.getOschinaAccount();
+		String accessToken = null;
+		try {
+			String authroizedCode = oschinaService.getAuthroizedCode();
+			accessToken = oschinaService.getAccessToken(authroizedCode, oschinaAccount);
+		} catch (Exception e) {
+			LOGGER.warn("get oschina code or token failed:",e);
+		}
+		if(StringUtils.isBlank(accessToken)) {
+			return;
+		}
 		for (PdfBook pdfBook : list) {
 			//2、check lock always
 			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
@@ -96,7 +107,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			}
 			try {
 				// 3、post article
-				oschinaService.post(pdfBook,oschinaAccount);
+				oschinaService.oauthPost(accessToken, pdfBook, oschinaAccount);
 				// 4、update book posted
 				PdfBook newBook = new PdfBook();
 				newBook.setId(pdfBook.getId());

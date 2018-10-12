@@ -20,13 +20,18 @@ import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
+import com.rejoice.blog.vo.http.oschina.AccessTokenInput;
+import com.rejoice.blog.vo.http.oschina.AccessTokenOutput;
 import com.rejoice.blog.vo.http.oschina.AuthorizedCodeInput;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
+import com.rejoice.blog.vo.http.oschina.OauthPostInput;
 
 @Service
 public class OschinaService {
 	
 	private static final String AUTHORIZE_URL = "https://www.oschina.net/action/oauth2/authorize";
+	private static final String TOKEN_URL = "https://www.oschina.net/action/openapi/token";
+	private static final String POST_URL = "https://www.oschina.net/action/openapi/blog_pub";
 
 	@Autowired
 	private ApiAccountService apiAccountService;
@@ -62,6 +67,22 @@ public class OschinaService {
 		return data.getBody();
 	}
 	
+	
+	public String getAccessToken(String code,ApiAccount oschinaAccount) {
+		AccessTokenInput input = JsonUtil.toBean(oschinaAccount.getMetadata(), AccessTokenInput.class);
+		input.setCode(code);
+		AccessTokenOutput data = restTemplate.postForObject(TOKEN_URL, getHttpEntity(input,oschinaAccount.getCookies()), AccessTokenOutput.class);
+		return data.getAccess_token();
+	}
+	
+	
+	public void oauthPost(String accessToken,PdfBook pdfBook,ApiAccount oschinaAccount) {
+		OauthPostInput input = new OauthPostInput();
+		input.setAccess_token(accessToken);
+		input.setTitle(pdfBook.getTitle());
+		input.setContent(pdfBookService.getContent(pdfBook));
+		restTemplate.postForObject(POST_URL, getHttpEntity(input,oschinaAccount.getCookies()), AccessTokenOutput.class);
+	}
 	
 	
 	private HttpEntity<Object> getHttpEntity(Object body,String cookies) {
