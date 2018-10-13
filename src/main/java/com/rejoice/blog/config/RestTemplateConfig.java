@@ -1,9 +1,9 @@
 package com.rejoice.blog.config;
 
+import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
@@ -40,7 +40,9 @@ import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -68,9 +70,11 @@ public class RestTemplateConfig {
 	private static final int DEFAULT_SOCKET_TIMEOUT_MILLISECONDS = (30 * 1000);
 
 	private static final int DEFAULT_CONNECTION_REQUEST_MILLISECONDS = (8 * 1000);
-	
-	/*@Autowired
-	AsyncClientHttpRequestInterceptor loggingClientHttpRequestInterceptor;*/
+
+	/*
+	 * @Autowired AsyncClientHttpRequestInterceptor
+	 * loggingClientHttpRequestInterceptor;
+	 */
 
 	// ################################################### SYNC
 	@Bean
@@ -84,7 +88,7 @@ public class RestTemplateConfig {
 	@Bean(name = "restTemplate")
 	public RestTemplate restTemplate() throws Exception {
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory());
-		//restTemplate.setInterceptors(Arrays.asList(new RestTemplateInterceptor()));
+		// restTemplate.setInterceptors(Arrays.asList(new RestTemplateInterceptor()));
 		List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
 		for (HttpMessageConverter<?> converter : converters) {
 			if (converter instanceof MappingJackson2HttpMessageConverter) {
@@ -94,6 +98,12 @@ public class RestTemplateConfig {
 				mediaTypes.addAll(jsonConverter.getSupportedMediaTypes());
 				jsonConverter.setSupportedMediaTypes(mediaTypes);
 				jsonConverter.setObjectMapper(JsonUtil.buildObjectMapper());
+			} else if (converter instanceof StringHttpMessageConverter) {
+				((StringHttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8);
+			} else if (converter instanceof FormHttpMessageConverter) {
+				((FormHttpMessageConverter) converter).setCharset(StandardCharsets.UTF_8);
+				((FormHttpMessageConverter) converter).setMultipartCharset(StandardCharsets.UTF_8);
+
 			}
 		}
 		return restTemplate;
@@ -103,22 +113,19 @@ public class RestTemplateConfig {
 	public CloseableHttpClient httpClient() throws Exception {
 		TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
 			@Override
-			public boolean isTrusted(X509Certificate[] arg0, String arg1)
-					throws CertificateException {
+			public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
 				return true;
 			}
 		};
-		/*SSLContext sslContext = SSLContexts.custom()
-		        .loadTrustMaterial(null, acceptingTrustStrategy)
-		        .build();*/
+		/*
+		 * SSLContext sslContext = SSLContexts.custom() .loadTrustMaterial(null,
+		 * acceptingTrustStrategy) .build();
+		 */
 		SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
-				SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
-		
-				
+		SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+
 		Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-        .register("http", PlainConnectionSocketFactory.getSocketFactory())
-        .register("https", sf)
-        .build();
+				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", sf).build();
 		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
 		connectionManager.setMaxTotal(DEFAULT_MAX_TOTAL_CONNECTIONS);
 		connectionManager.setDefaultMaxPerRoute(DEFAULT_MAX_CONNECTIONS_PER_ROUTE);
@@ -129,12 +136,12 @@ public class RestTemplateConfig {
 		RequestConfig config = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_MILLISECONDS)
 				.setSocketTimeout(DEFAULT_SOCKET_TIMEOUT_MILLISECONDS)
 				.setConnectionRequestTimeout(DEFAULT_CONNECTION_REQUEST_MILLISECONDS).build();
-		
-		
+
 		CloseableHttpClient defaultHttpClient = HttpClientBuilder.create().setConnectionManager(connectionManager)
 				.setRetryHandler(new DefaultHttpRequestRetryHandler(2, true))
 				.setKeepAliveStrategy(DefaultConnectionKeepAliveStrategy.INSTANCE).setDefaultRequestConfig(config)
-				.setUserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36")
+				.setUserAgent(
+						"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36")
 				.build();
 		return defaultHttpClient;
 	}
@@ -151,32 +158,28 @@ public class RestTemplateConfig {
 	@Bean(name = "asyncRestTemplate")
 	public AsyncRestTemplate asyncRestTemplate() throws Exception {
 		AsyncRestTemplate restTemplate = new AsyncRestTemplate(asyncHttpRequestFactory(), restTemplate());
-		//restTemplate.setInterceptors(Arrays.asList(loggingClientHttpRequestInterceptor));
+		// restTemplate.setInterceptors(Arrays.asList(loggingClientHttpRequestInterceptor));
 		return restTemplate;
 	}
 
 	@Bean
 	public CloseableHttpAsyncClient asyncHttpClient() {
 		try {
-			
-			//ssl support start
+
+			// ssl support start
 			TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
 				@Override
-				public boolean isTrusted(X509Certificate[] arg0, String arg1)
-						throws CertificateException {
+				public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
 					return true;
 				}
 			};
-			SSLContext sslcontext = SSLContextBuilder.create()
-	        .loadTrustMaterial(null, acceptingTrustStrategy )
-	        .build();
-			Registry<SchemeIOSessionStrategy> sessionStrategyRegistry = RegistryBuilder.<SchemeIOSessionStrategy>create()
-			            .register("http", NoopIOSessionStrategy.INSTANCE)
-			            .register("https", new SSLIOSessionStrategy(sslcontext, NoopHostnameVerifier.INSTANCE))
-			            .build();
+			SSLContext sslcontext = SSLContextBuilder.create().loadTrustMaterial(null, acceptingTrustStrategy).build();
+			Registry<SchemeIOSessionStrategy> sessionStrategyRegistry = RegistryBuilder
+					.<SchemeIOSessionStrategy>create().register("http", NoopIOSessionStrategy.INSTANCE)
+					.register("https", new SSLIOSessionStrategy(sslcontext, NoopHostnameVerifier.INSTANCE)).build();
 			PoolingNHttpClientConnectionManager connectionManager = new PoolingNHttpClientConnectionManager(
-					new DefaultConnectingIOReactor(IOReactorConfig.DEFAULT),sessionStrategyRegistry);
-			connectionManager.setMaxTotal(DEFAULT_MAX_TOTAL_CONNECTIONS); 
+					new DefaultConnectingIOReactor(IOReactorConfig.DEFAULT), sessionStrategyRegistry);
+			connectionManager.setMaxTotal(DEFAULT_MAX_TOTAL_CONNECTIONS);
 			connectionManager.setDefaultMaxPerRoute(DEFAULT_MAX_CONNECTIONS_PER_ROUTE);
 			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("facebook.com")), 20);
 			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("twitter.com")), 20);
@@ -185,10 +188,9 @@ public class RestTemplateConfig {
 			RequestConfig config = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_MILLISECONDS)
 					.setSocketTimeout(DEFAULT_SOCKET_TIMEOUT_MILLISECONDS)
 					.setConnectionRequestTimeout(DEFAULT_CONNECTION_REQUEST_MILLISECONDS).build();
-			
+
 			CloseableHttpAsyncClient httpclient = HttpAsyncClientBuilder.create()
-					.setConnectionManager(connectionManager)
-					.setDefaultRequestConfig(config).build();
+					.setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
 			return httpclient;
 		} catch (Exception e) {
 			throw Throwables.propagate(e);

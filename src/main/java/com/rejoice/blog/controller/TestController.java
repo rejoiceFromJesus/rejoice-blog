@@ -2,8 +2,8 @@ package com.rejoice.blog.controller;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
@@ -87,4 +86,18 @@ public class TestController {
 	public String oschinaCode() {
 		return oschinaService.getAuthroizedCode();
 	}*/
+	
+	@GetMapping("/upload-to-ct")
+	public String uploadToCt() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		Resource resource = resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-11/新建文本文档.txt");
+		map.add("filesize", resource.contentLength());
+        map.add("file",resource);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+		return restTemplate.postForObject("https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=791789f167077a3a69415824766470e3", httpEntity, String.class);
+
+	}
+	
 }
