@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.rejoice.blog.common.util.RejoiceUtil;
+import com.rejoice.blog.crawer.AllitebooksCrawer;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
 
@@ -33,7 +34,8 @@ public class TestController {
 	
 	@Autowired
 	OschinaService oschinaService;
-	
+	@Autowired
+	AllitebooksCrawer allitebooksCrawer;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -98,6 +100,11 @@ public class TestController {
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
 		return restTemplate.postForObject("https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=791789f167077a3a69415824766470e3", httpEntity, String.class);
 
+	}
+	
+	@GetMapping
+	public void testDownloadAllitebboks() {
+		allitebooksCrawer.getPdfBooks();
 	}
 	
 }

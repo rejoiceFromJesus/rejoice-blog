@@ -13,6 +13,22 @@ public class CrawerBook extends BaseEntity {
 	private Long id;
 	private String url;
 	private String name;
+	private String localPath;
+	private Boolean isUpload;
+	
+	
+	public Boolean getIsUpload() {
+		return isUpload;
+	}
+	public void setIsUpload(Boolean isUpload) {
+		this.isUpload = isUpload;
+	}
+	public String getLocalPath() {
+		return localPath;
+	}
+	public void setLocalPath(String localPath) {
+		this.localPath = localPath;
+	}
 	public Long getId() {
 		return id;
 	}
