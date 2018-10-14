@@ -100,8 +100,7 @@ public class AllitebooksCrawer {
 					crawerBook.setIsUpload(false);
 					crawerBook.setName(fileName);
 					//download book
-					String relativePath = pdfDir+"/"+DateTime.now().toString(Constant.DATE_FORMAT_PATTERN1);
-					Resource resource = resourceLoader.getResource(relativePath);
+					Resource resource = resourceLoader.getResource(pdfDir);
 					if(!resource.exists()) {
 						resource.getFile().mkdirs();
 					}
@@ -110,11 +109,11 @@ public class AllitebooksCrawer {
 						file.mkdirs();
 					}
 					*/
-					relativePath = resource.getFile().getAbsolutePath();
-					relativePath += fileName;
-					crawerBookService.download(pdfBookUrl,relativePath);
+					pdfDir = resource.getFile().getAbsolutePath();
+					pdfDir += fileName;
+					crawerBookService.download(pdfBookUrl,pdfDir);
 					//save book
-					crawerBook.setLocalPath(relativePath);
+					crawerBook.setLocalPath(pdfDir);
 					crawerBookService.saveSelective(crawerBook);
 				}
 				
