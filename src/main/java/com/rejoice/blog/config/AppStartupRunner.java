@@ -19,6 +19,7 @@ public class AppStartupRunner implements ApplicationRunner {
  
     @Autowired
     DictionaryService dictionaryService;
+    
  
     @Override
     public void run(ApplicationArguments args) throws Exception {

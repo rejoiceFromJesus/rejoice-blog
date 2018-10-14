@@ -87,12 +87,12 @@ public class TestController {
 		return oschinaService.getAuthroizedCode();
 	}*/
 	
-	@GetMapping("/upload-to-ct")
+	//@GetMapping("/upload-to-ct")
 	public String uploadToCt() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		Resource resource = resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-11/新建文本文档.txt");
+		Resource resource = resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-11/1.pdf");
 		map.add("filesize", resource.contentLength());
         map.add("file",resource);
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
