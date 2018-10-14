@@ -109,11 +109,12 @@ public class AllitebooksCrawer {
 						file.mkdirs();
 					}
 					*/
-					pdfDir = resource.getFile().getAbsolutePath();
-					pdfDir += fileName;
-					crawerBookService.download(pdfBookUrl,pdfDir);
+					
+					String abslutePdfDir = resource.getFile().getAbsolutePath();
+					abslutePdfDir += fileName;
+					crawerBookService.download(pdfBookUrl,abslutePdfDir);
 					//save book
-					crawerBook.setLocalPath(pdfDir);
+					crawerBook.setLocalPath(pdfDir+fileName);
 					crawerBookService.saveSelective(crawerBook);
 				}
 				

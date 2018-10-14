@@ -1,5 +1,6 @@
 package com.rejoice.blog.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.crawer.AllitebooksCrawer;
 import com.rejoice.blog.service.OschinaService;
+import com.rejoice.blog.service.pdf.PdfService;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
 
 @RestController
@@ -36,6 +38,9 @@ public class TestController {
 	OschinaService oschinaService;
 	@Autowired
 	AllitebooksCrawer allitebooksCrawer;
+	
+	@Autowired
+	PdfService pdfService;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -102,9 +107,14 @@ public class TestController {
 
 	}
 	
-	@GetMapping
+	/*@GetMapping
 	public void testDownloadAllitebboks() {
 		allitebooksCrawer.getPdfBooks();
-	}
+	}*/
 	
+	@GetMapping
+	public void testAddLink() throws Exception {
+		pdfService.addLink("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
+		pdfService.screenShot("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
+	}
 }

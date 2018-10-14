@@ -1,13 +1,9 @@
 package com.rejoice.blog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -17,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.viewresolver.ExcelViewResolver;
-import com.rejoice.blog.viewresolver.PdfViewResolver;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
@@ -51,10 +46,6 @@ public void configureContentNegotiation(ContentNegotiationConfigurer configurer)
 @Bean
 public ViewResolver excelViewResolver() {
     return new ExcelViewResolver();
-}
-@Bean
-public ViewResolver pdfViewResolver() {
-    return new PdfViewResolver();
 }
 
 
