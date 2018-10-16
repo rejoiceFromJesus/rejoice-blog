@@ -11,12 +11,20 @@ public class CrawerBook extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String url;
+	private String img;
 	private String name;
 	private String localPath;
 	private Boolean isUpload;
+	private String url;
 	
 	
+	
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	public Boolean getIsUpload() {
 		return isUpload;
 	}
@@ -35,11 +43,12 @@ public class CrawerBook extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getUrl() {
-		return url;
+	
+	public String getImg() {
+		return img;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setImg(String img) {
+		this.img = img;
 	}
 	public String getName() {
 		return name;

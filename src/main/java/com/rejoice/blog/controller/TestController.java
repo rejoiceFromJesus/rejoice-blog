@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.crawer.AllitebooksCrawer;
 import com.rejoice.blog.service.OschinaService;
+import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
 
@@ -41,6 +42,9 @@ public class TestController {
 	
 	@Autowired
 	PdfService pdfService;
+	
+	@Autowired
+	PdfBookService pdfBookService;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -94,27 +98,30 @@ public class TestController {
 		return oschinaService.getAuthroizedCode();
 	}*/
 	
-	//@GetMapping("/upload-to-ct")
+	@GetMapping
 	public String uploadToCt() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		Resource resource = resourceLoader.getResource("file:/app/rejoice-blog/upload-images/2018-10-11/1.pdf");
+		Resource resource = resourceLoader.getResource("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce - 副本.pdf");
 		map.add("filesize", resource.contentLength());
         map.add("file",resource);
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
-		return restTemplate.postForObject("https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=791789f167077a3a69415824766470e3", httpEntity, String.class);
+        String id = restTemplate.postForObject("https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539826695&limit=2&spd=23000000&key=dbbf7f7d6056164d8801b1aedaf9e180", httpEntity, String.class);
+		return id;
 
 	}
 	
-	/*@GetMapping
+	//@GetMapping
 	public void testDownloadAllitebboks() {
-		allitebooksCrawer.getPdfBooks();
-	}*/
+		allitebooksCrawer.uploadBooks();
+		pdfBookService.batchPost();
+		
+	}
 	
-	@GetMapping
+	/*@GetMapping
 	public void testAddLink() throws Exception {
 		pdfService.addLink("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
 		pdfService.screenShot("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
-	}
+	}*/
 }

@@ -1,12 +1,16 @@
 package com.rejoice.blog.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,12 +75,13 @@ public class PdfBookService extends BaseService<PdfBook> {
 	public String batchPost() {
 		// 1、locking
 		VolitateVars.POST_BATCH_LOCK = Constant.TRUE;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		//Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object principal2 = new User("user", "23232323", Arrays.asList(new SimpleGrantedAuthority("rool_admin")));
 		new Thread(() -> {
 			// 2、post articles
 			postBatchToJIanshu();
 			postBatchToOschina();
-			postBatchToSystem(principal);
+			postBatchToSystem(principal2);
 			// 3、release lock
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
 		}).start();

@@ -3,7 +3,9 @@ package com.rejoice.blog.service.pdf;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
@@ -103,6 +105,7 @@ public class PdfService {
 			tag.getGraphics().drawImage(img, 0, 0, rect.width, rect.height, null);
 			/* FileOutputStream out = new FileOutputStream(target+file.getName()+".jpg"); */
 			ImageIO.write(tag, "jpg", new File(absoluteImgDir + "/" + file.getName() + ".jpg"));
+			buf.clear();
 			channel.close();
 			raf.close();
 		} catch (Exception e) {
