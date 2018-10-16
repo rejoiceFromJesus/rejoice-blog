@@ -22,8 +22,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.entity.PdfBook;
+import com.rejoice.blog.service.ApiAccountService;
 import com.rejoice.blog.service.CrawerBookService;
 import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
@@ -40,8 +42,13 @@ public class AllitebooksCrawer {
 	@Autowired
 	private PdfService pdfService;
 	
+	@Autowired
+	private ApiAccountService apiAccountService;
+	
 	@Value("${blog.resource.down-load.dir}")
 	public String pdfDir;
+	
+	private ApiAccount chengTongAccount;
 	
 	@Autowired
 	PdfBookService pdfBookService;
@@ -57,7 +64,7 @@ public class AllitebooksCrawer {
 
 	private static final String PAGE_URL = "http://www.allitebooks.com/page/";
 	
-	private static final String CT_UPLOAD_URL = "https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=791789f167077a3a69415824766470e3";
+	private static final String CT_UPLOAD_URL = "https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=";
 	
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -102,11 +109,12 @@ public class AllitebooksCrawer {
 		map.add("filesize", resource.contentLength());
         map.add("file",resource);
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
-        String uploadId = restTemplate.postForObject(CT_UPLOAD_URL, httpEntity, String.class);
+        String uploadId = restTemplate.postForObject(CT_UPLOAD_URL+chengTongAccount.getToken(), httpEntity, String.class);
         return uploadId;
 	}
 	
 	public void getPdfBooks(){
+		this.chengTongAccount = apiAccountService.getChengTongAccount();
 		for (int i = 1; i < 2; i++) {
 			String url = PAGE_URL + i;
 			boolean hasBooks = getSinglePage(url);

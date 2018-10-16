@@ -5,13 +5,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.rejoice.blog.common.constant.PlatformEnum;
+
 @Table
 public class ApiAccount extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String platform;
+	private PlatformEnum platform;
 	private String username;
 	private String password;
 	private String cookies;
@@ -31,10 +33,13 @@ public class ApiAccount extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getPlatform() {
+	public String getPlatformLabel() {
+		return this.platform.label();
+	}
+	public PlatformEnum getPlatform() {
 		return platform;
 	}
-	public void setPlatform(String platform) {
+	public void setPlatform(PlatformEnum platform) {
 		this.platform = platform;
 	}
 	public String getUsername() {
