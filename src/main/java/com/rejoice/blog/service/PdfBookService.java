@@ -168,6 +168,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			cons.setIsPostJianshu(false);
 			List<PdfBook> list = this.queryListByWhere(cons);
 			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
+			jianshuService.setJianshuAccount(jianshuAccount);
 			for (PdfBook pdfBook : list) {
 				//2、check lock always
 				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
@@ -175,7 +176,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 				}
 				try {
 					// 3、post article
-					jianshuService.post(pdfBook, jianshuAccount.getCookies());
+					jianshuService.post(pdfBook);
 					// 4、update book posted
 					PdfBook newBook = new PdfBook();
 					newBook.setId(pdfBook.getId());

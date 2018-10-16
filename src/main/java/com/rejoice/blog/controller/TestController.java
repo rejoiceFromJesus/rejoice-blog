@@ -1,6 +1,5 @@
 package com.rejoice.blog.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -98,7 +98,7 @@ public class TestController {
 		return oschinaService.getAuthroizedCode();
 	}*/
 	
-	@GetMapping
+	//@GetMapping
 	public String uploadToCt() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -114,7 +114,8 @@ public class TestController {
 	
 	//@GetMapping
 	public void testDownloadAllitebboks() {
-		allitebooksCrawer.uploadBooks();
+		//allitebooksCrawer.getPdfBooks();
+			allitebooksCrawer.uploadBooks();
 		pdfBookService.batchPost();
 		
 	}
@@ -124,4 +125,29 @@ public class TestController {
 		pdfService.addLink("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
 		pdfService.screenShot("file:/app/rejoice-blog/download-pdf/Building Your Online Store With WordPress and WooCommerce.pdf");
 	}*/
+	
+	//@GetMapping
+	public String loginCT() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("item", "account");
+		map.add("action", "login");
+		map.add("task", "login");
+		map.add("ref", "https://www.ctfile.com/");
+		map.add("username", "948870341@qq.com");
+		map.add("password", "123456oo");
+		HttpEntity httpEntity = new HttpEntity<>(map,headers);
+		return restTemplate.postForObject("https://www.ctfile.com/index.php", httpEntity, String.class);
+	}
+	
+	//@GetMapping
+	public String getCttAndKeyFromCT() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("cookie", "pubcookie=VjFTZldsVTVUYlc3UDdTAVI5UFkAbF0-Vj5ROlVoVGRWM1VgATxTRlAkV3JTKlFpBThcMQZaUzUEZlQ0AjwBNFY2Uz1XNFUJVGhXN1A_UzBSN1BgAGZdPlY3UUJVLlQlVi5VNwFiU2tQXFcyUzFROQVuXGoGalMxBGNUPgI-AQhWOFNnV2NVM1QzV2FQPlNrUjlQNAAxXWxWP1EzVWpUMFY2VWMBbFNnUGdXYVM8UW4FZlw4BmtTMQQ3VD4CagE2");
+		HttpEntity entity = new HttpEntity<>(headers);
+		String content = restTemplate.exchange("https://home.ctfile.com/iajax.php?item=files&action=index",HttpMethod.GET,entity, String.class).getBody();
+		String substring = content.substring(content.lastIndexOf("ctt="), content.lastIndexOf("', '1024mb')"));
+		return substring;
+	}
 }

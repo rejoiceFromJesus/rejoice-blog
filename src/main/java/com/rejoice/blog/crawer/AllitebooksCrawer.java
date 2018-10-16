@@ -2,6 +2,7 @@ package com.rejoice.blog.crawer;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -16,12 +17,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.entity.PdfBook;
@@ -50,6 +53,8 @@ public class AllitebooksCrawer {
 	
 	private ApiAccount chengTongAccount;
 	
+	private String chengTongParams;
+	
 	@Autowired
 	PdfBookService pdfBookService;
 	
@@ -64,7 +69,9 @@ public class AllitebooksCrawer {
 
 	private static final String PAGE_URL = "http://www.allitebooks.com/page/";
 	
-	private static final String CT_UPLOAD_URL = "https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&ctt=1539623690&limit=2&spd=23000000&key=";
+	private static final String CT_UPLOAD_PARAMS_URL = "https://home.ctfile.com/iajax.php?item=files&action=index";
+	
+	private static final String CT_UPLOAD_URL = "https://upload.ctfile.com/web/upload.do?userid=1475340&maxsize=2147483648&folderid=0&limit=2&spd=23000000&";
 	
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -74,6 +81,8 @@ public class AllitebooksCrawer {
 	
 	
 	public void uploadBooks() {
+		this.chengTongAccount = apiAccountService.getChengTongAccount();
+		this.chengTongParams = this.getChengTongParams(this.chengTongAccount.getCookies());
 		CrawerBook cons = new CrawerBook();
 		cons.setIsUpload(false);
 		List<CrawerBook> bookList = crawerBookService.queryListByWhere(cons);
@@ -101,6 +110,16 @@ public class AllitebooksCrawer {
 		}
 	}
 	
+	private String getChengTongParams(String cookies) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("cookie", cookies);
+		HttpEntity entity = new HttpEntity<>(headers);
+		String content = restTemplate.exchange(CT_UPLOAD_PARAMS_URL,HttpMethod.GET,entity, String.class).getBody();
+		content = content.substring(content.lastIndexOf("ctt="), content.lastIndexOf("', '1024mb')"));
+		//Map<String, String> paramsToMap = RejoiceUtil.getParamsToMap(content);
+		return content;
+	}
+
 	private String uploadToCtCloud(CrawerBook crawerBook) throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -109,12 +128,11 @@ public class AllitebooksCrawer {
 		map.add("filesize", resource.contentLength());
         map.add("file",resource);
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
-        String uploadId = restTemplate.postForObject(CT_UPLOAD_URL+chengTongAccount.getToken(), httpEntity, String.class);
+        String uploadId = restTemplate.postForObject(CT_UPLOAD_URL+this.chengTongParams, httpEntity, String.class);
         return uploadId;
 	}
 	
 	public void getPdfBooks(){
-		this.chengTongAccount = apiAccountService.getChengTongAccount();
 		for (int i = 1; i < 2; i++) {
 			String url = PAGE_URL + i;
 			boolean hasBooks = getSinglePage(url);

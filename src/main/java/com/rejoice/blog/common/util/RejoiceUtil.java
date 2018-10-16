@@ -1,5 +1,7 @@
 package com.rejoice.blog.common.util;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -29,8 +31,23 @@ import com.rejoice.blog.common.exception.InternalServerException;
  */
 public class RejoiceUtil {
 	
+	
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RejoiceUtil.class);
 	
+	
+	public static Map<String,String> getParamsToMap(String params){
+		if(StringUtils.isBlank(params)) {
+			return null;
+		}
+		String[] paramStrs = params.split("&");
+		Map<String,String> map = new HashMap<>();
+		for (String paramStr : paramStrs) {
+			String[] split = paramStr.split("="); 
+			map.put(split[0], split[1]);
+		}
+		return map;
+	}
 	public static Map<String,Object> objectFieldsToMap(Object object) {
 		try {
 			Map<String,Object> map = new HashMap<>();

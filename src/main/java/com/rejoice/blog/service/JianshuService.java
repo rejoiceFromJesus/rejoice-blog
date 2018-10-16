@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.concurrent.VolitateVars;
+import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
 import com.rejoice.blog.vo.http.jianshu.NotesAddInput;
 import com.rejoice.blog.vo.http.jianshu.NotesAddOutput;
@@ -35,6 +36,9 @@ public class JianshuService {
 	@Autowired
 	RestTemplate restTemplate;
 	
+	private ApiAccount jianshuAccount;
+	
+	
 	
 	@Autowired
 	PdfBookService pdfBookService;
@@ -44,7 +48,6 @@ public class JianshuService {
 	
 	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
-	private static final String NOTEBOOK_ID_PDFBOOK = "19669528";
 	private static final String UPLOAD_TOKEN_URL = "https://www.jianshu.com/upload_images/token.json?filename=";
 	private static final Long COLLECTION_ID = 576368L;
 	private static final String UPLOAD_URL = "https://upload.qiniup.com/";
@@ -60,20 +63,20 @@ public class JianshuService {
         return new HttpEntity<MultiValueMap<String, Object>>(map, headers);
 	}
 	
-	private UploadTokenOutput getUploadToken(String fileName,String cookies) {
+	private UploadTokenOutput getUploadToken(String fileName) {
 		String url = UPLOAD_TOKEN_URL+fileName;
 		UploadTokenOutput tokenOutput = restTemplate.exchange(url
 				, HttpMethod.GET
-				, this.getHttpEntity(cookies, null)
+				, this.getHttpEntity(this.jianshuAccount.getCookies(), null)
 				,  UploadTokenOutput.class).getBody();
 		return tokenOutput;
 	}
 	
-	public Object post(PdfBook pdfBook,String cookies) throws Exception {
+	public Object post(PdfBook pdfBook) throws Exception {
 		
 		try {
 			//1、上传图片
-			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg(), cookies);
+			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg());
 			HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
 					resourceLoader.getResource(pdfBook.getImgUrl()));
 			UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
@@ -85,12 +88,12 @@ public class JianshuService {
 		}
 		//2、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
-		notesAddInput.setNotebook_id(NOTEBOOK_ID_PDFBOOK);
+		notesAddInput.setNotebook_id(JsonUtil.toBean(this.jianshuAccount.getMetadata(),Map.class).get("noteBookId").toString());
 		notesAddInput.setAt_bottom(false);
 		notesAddInput.setTitle("新文章："+System.currentTimeMillis());
 		NotesAddOutput notesAddOutput = restTemplate.postForObject(
 				AUTHOR_NOTES_URL
-				, getHttpEntity(cookies, notesAddInput)
+				, getHttpEntity(this.jianshuAccount.getCookies(), notesAddInput)
 				, NotesAddOutput.class);
 		
 		//3、更新文章
@@ -101,19 +104,19 @@ public class JianshuService {
 		NotesUpdateOutput notesUpdateOutput = restTemplate.exchange(
 				AUTHOR_NOTES_URL+notesAddOutput.getId()
 				, HttpMethod.PUT
-				, getHttpEntity(cookies, notesUpdateInput)
+				, getHttpEntity(this.jianshuAccount.getCookies(), notesUpdateInput)
 				, NotesUpdateOutput.class).getBody();
 		JsonUtil.toJson(notesUpdateOutput);
 		//4、发布文章
 		restTemplate.postForObject(
 				AUTHOR_NOTES_URL+notesAddOutput.getId()+"/publicize"
-				, getHttpEntity(cookies, null), Object.class);
+				, getHttpEntity(this.jianshuAccount.getCookies(), null), Object.class);
 		//5、收录到专题
 		Map<String,Long> data = new HashMap<>();
 		data.put("collection_id", COLLECTION_ID);
 		restTemplate.postForObject(
 				NOTES_URL+notesAddOutput.getId()+"/submit"
-				, getHttpEntity(cookies, data)
+				, getHttpEntity(this.getJianshuAccount().getCookies(), data)
 				, Object.class);
 		return notesUpdateInput;
 	}
@@ -129,5 +132,13 @@ public class JianshuService {
 		}
 		HttpEntity<Object> httpEnitty = new HttpEntity<Object>(content, headers);
 		return httpEnitty;
+	}
+
+	public ApiAccount getJianshuAccount() {
+		return jianshuAccount;
+	}
+
+	public void setJianshuAccount(ApiAccount jianshuAccount) {
+		this.jianshuAccount = jianshuAccount;
 	}
 }
