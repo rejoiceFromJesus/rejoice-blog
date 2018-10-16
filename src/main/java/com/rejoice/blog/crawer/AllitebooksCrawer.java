@@ -24,12 +24,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.CrawerBook;
+import com.rejoice.blog.entity.Dictionary;
 import com.rejoice.blog.entity.PdfBook;
 import com.rejoice.blog.service.ApiAccountService;
 import com.rejoice.blog.service.CrawerBookService;
+import com.rejoice.blog.service.DictionaryService;
 import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
 
@@ -65,6 +68,7 @@ public class AllitebooksCrawer {
 	
 	public static int singlePageRetryCount = RETRY_COUNT;
 	public static int singleBookRetryCount = RETRY_COUNT;
+	public static int CRAWER_MAX_PAGE = 30;
 	
 
 	private static final String PAGE_URL = "http://www.allitebooks.com/page/";
@@ -77,6 +81,9 @@ public class AllitebooksCrawer {
 	ResourceLoader resourceLoader;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AllitebooksCrawer.class);
+	
+	@Autowired
+	DictionaryService dictionaryService;
 
 	
 	
@@ -133,7 +140,12 @@ public class AllitebooksCrawer {
 	}
 	
 	public void getPdfBooks(){
-		for (int i = 1; i < 2; i++) {
+		Dictionary maxPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_MAX_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
+		int maxPage = CRAWER_MAX_PAGE;
+		if(maxPageDict != null && StringUtils.isNotBlank(maxPageDict.getValue())) {
+			maxPage = Integer.parseInt(maxPageDict.getValue());
+		}
+		for (int i = 1; i < maxPage; i++) {
 			String url = PAGE_URL + i;
 			boolean hasBooks = getSinglePage(url);
 			if(!hasBooks) {

@@ -13,10 +13,17 @@ public class DictionaryService extends BaseService<Dictionary> {
 	public void updateByIdSelective(Dictionary t) {
 		super.updateByIdSelective(t);
 		//fresh batch_post_lock
-		if(Constant.CODE_BATCH_POST_LOCK.equals(t.getCode())
+		if(Constant.DICT_CODE_BATCH_POST_LOCK.equals(t.getCode())
 				&& Constant.DICT_KEY_DEFAULT.equals(t.getKey())
 				) {
 			VolitateVars.POST_BATCH_LOCK = t.getValue();
 		}
+	}
+
+	public Dictionary queryOneByCodeAndKey(String code, String key) {
+		Dictionary cons = new Dictionary();
+		cons.setCode(code);
+		cons.setKey(key);
+		return this.queryOne(cons);
 	}
 }

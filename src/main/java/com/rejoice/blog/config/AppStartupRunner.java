@@ -24,7 +24,7 @@ public class AppStartupRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
     	Dictionary cons = new Dictionary();
-    	cons.setCode(Constant.CODE_BATCH_POST_LOCK);
+    	cons.setCode(Constant.DICT_CODE_BATCH_POST_LOCK);
     	cons.setKey(Constant.DICT_KEY_DEFAULT);
     	Dictionary dictionary = dictionaryService.queryOne(cons);
     	VolitateVars.POST_BATCH_LOCK = dictionary.getValue();
