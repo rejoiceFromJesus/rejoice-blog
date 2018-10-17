@@ -2,7 +2,6 @@ package com.rejoice.blog.crawer;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -25,7 +24,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.rejoice.blog.common.constant.Constant;
-import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.entity.Dictionary;
@@ -68,7 +66,8 @@ public class AllitebooksCrawer {
 	
 	public static int singlePageRetryCount = RETRY_COUNT;
 	public static int singleBookRetryCount = RETRY_COUNT;
-	public static int CRAWER_MAX_PAGE = 30;
+	public static int CRAWER_END_PAGE = 30;
+	public static int CRAWER_START_PAGE = 1;
 	
 
 	private static final String PAGE_URL = "http://www.allitebooks.com/page/";
@@ -140,12 +139,17 @@ public class AllitebooksCrawer {
 	}
 	
 	public void getPdfBooks(){
-		Dictionary maxPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_MAX_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
-		int maxPage = CRAWER_MAX_PAGE;
-		if(maxPageDict != null && StringUtils.isNotBlank(maxPageDict.getValue())) {
-			maxPage = Integer.parseInt(maxPageDict.getValue());
+		Dictionary endPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_END_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
+		Dictionary startPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_START_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
+		int endPage = CRAWER_END_PAGE;
+		int startPage = CRAWER_START_PAGE;
+		if(endPageDict != null && StringUtils.isNotBlank(endPageDict.getValue())) {
+			endPage = Integer.parseInt(endPageDict.getValue());
 		}
-		for (int i = 1; i < maxPage; i++) {
+		if(startPageDict != null && StringUtils.isNotBlank(startPageDict.getValue())) {
+			startPage = Integer.parseInt(startPageDict.getValue());
+		}
+		for (int i = startPage; i <= endPage; i++) {
 			String url = PAGE_URL + i;
 			boolean hasBooks = getSinglePage(url);
 			if(!hasBooks) {
@@ -172,7 +176,7 @@ public class AllitebooksCrawer {
 				return true;
 			}
 			singlePageRetryCount--;
-			getSinglePage(url);
+			//getSinglePage(url);
 		}
 		return true;
 	}
@@ -220,7 +224,7 @@ public class AllitebooksCrawer {
 				return;
 			}
 			singleBookRetryCount--;
-			getSingleBook(pdfPageUrl);
+			//getSingleBook(pdfPageUrl);
 		}
 		
 	}

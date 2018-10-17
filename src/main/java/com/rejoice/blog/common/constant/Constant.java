@@ -58,7 +58,8 @@ public abstract class Constant {
 	public static final String DICT_KEY_OSCHINA = "OSCHINA";
 	public static final String DICT_KEY_SYSTEM = "SYSTEM";
 	
-	public static final String CODE_CRAWER_BOOK_MAX_PAGE = "CRAWER_BOOK_MAX_PAGE";
+	public static final String CODE_CRAWER_BOOK_END_PAGE = "CRAWER_BOOK_END_PAGE";
+	public static final String CODE_CRAWER_BOOK_START_PAGE = "CRAWER_BOOK_START_PAGE";
 	public static final String DICT_KEY_ALLITEBOOKS = "ALLITEBOOKS";
 	
 	/**
