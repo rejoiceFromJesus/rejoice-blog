@@ -97,8 +97,10 @@ public class AllitebooksCrawer {
 				//1、upload file
 				String uploadId = this.uploadToCtCloud(crawerBook);
 				//2、upload status
-				crawerBook.setIsUpload(true);
-				crawerBookService.updateByIdSelective(crawerBook);
+				CrawerBook updateCrawerBook = new CrawerBook();
+				updateCrawerBook.setIsUpload(true);
+				updateCrawerBook.setId(crawerBook.getId());
+				crawerBookService.updateByIdSelective(updateCrawerBook);
 				//3、insert pdfBooks to be posted
 				PdfBook pdfBook = new PdfBook();
 				pdfBook.setFileName(crawerBook.getName());
