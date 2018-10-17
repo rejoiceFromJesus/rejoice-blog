@@ -70,7 +70,6 @@ public class JianshuService {
 				, HttpMethod.GET
 				, this.getHttpEntity(this.jianshuAccount.getCookies(), null)
 				,  UploadTokenOutput.class).getBody();
-		LOGGER.info("sending GET request to {} with cookie:{}, output:{}",this.jianshuAccount.getCookies(),JsonUtil.toJson(tokenOutput));
 		return tokenOutput;
 	}
 	
