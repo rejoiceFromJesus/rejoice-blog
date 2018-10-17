@@ -77,7 +77,7 @@ public class JianshuService {
 		
 		try {
 			//1、上传图片
-			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg().replaceAll("&", "and"));
+			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg());
 			Resource imgResource = resourceLoader.getResource(pdfBook.getImgUrl());
 			if(imgResource.getFile().exists()) {
 				HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
