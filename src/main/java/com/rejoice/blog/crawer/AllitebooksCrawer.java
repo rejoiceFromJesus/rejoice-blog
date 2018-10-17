@@ -193,7 +193,7 @@ public class AllitebooksCrawer {
 					String fileName = pdfBookUrl.substring(pdfBookUrl.lastIndexOf("/"));
 					CrawerBook crawerBook = new CrawerBook();
 					crawerBook.setIsUpload(false);
-					crawerBook.setName(fileName.substring(1).replaceAll("&", "and"));
+					crawerBook.setName(fileName.substring(1));
 					//download book
 					Resource resource = resourceLoader.getResource(pdfDir);
 					if(!resource.exists()) {
@@ -210,7 +210,7 @@ public class AllitebooksCrawer {
 					crawerBookService.download(pdfBookUrl,abslutePdfDir);
 					//save book
 					crawerBook.setLocalPath(pdfDir+fileName);
-					crawerBook.setImg(imgDir+fileName.replaceAll("&", "and")+".jpg");
+					crawerBook.setImg(imgDir+fileName+".jpg");
 					crawerBook.setUrl(pdfBookUrl);
 					crawerBookService.saveSelective(crawerBook);
 					//add link and screen shot
