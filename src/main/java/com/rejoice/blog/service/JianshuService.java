@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -78,10 +79,13 @@ public class JianshuService {
 		try {
 			//1、上传图片
 			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg());
-			HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
-					resourceLoader.getResource(pdfBook.getImgUrl()));
-			UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
-			pdfBook.setImgUrl(uploadFile.getUrl());
+			Resource imgResource = resourceLoader.getResource(pdfBook.getImgUrl());
+			if(imgResource.getFile().exists()) {
+				HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
+						resourceLoader.getResource(pdfBook.getImgUrl()));
+				UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
+				pdfBook.setImgUrl(uploadFile.getUrl());
+			}
 		} catch (Exception e) {
 			LOGGER.warn("upload file to jianshu failed,release lock to exit");
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
