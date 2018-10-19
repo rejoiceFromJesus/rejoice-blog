@@ -52,7 +52,6 @@ public class ChengTongBookCrawer extends BookCrawer{
 								}else {
 									LOGGER.warn("get downurl failed:{}", JsonUtil.toJson(data));
 								}
-								return;
 							}
 						}
 					}
