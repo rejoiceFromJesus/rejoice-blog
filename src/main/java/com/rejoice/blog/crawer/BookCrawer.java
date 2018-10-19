@@ -40,6 +40,12 @@ public abstract class BookCrawer {
 	public abstract void execute();
 	
 	protected void downloadBook(String downloadUrl,String url, String name) throws IOException {
+		CrawerBook cons = new CrawerBook();
+		cons.setUrl(url);
+		CrawerBook exist = crawerBookService.queryOne(cons);
+		if(exist != null) {
+			return;
+		}
 		CrawerBook crawerBook = new CrawerBook();
 		crawerBook.setIsUpload(false);
 		crawerBook.setName(name);
