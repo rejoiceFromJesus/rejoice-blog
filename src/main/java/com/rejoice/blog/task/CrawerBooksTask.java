@@ -36,7 +36,7 @@ public class CrawerBooksTask {
 				LOGGER.warn("crawer books failed:",e);
 			}
 		}
-		//uploadAndPostCrawer.uploadBooks();
-		//pdfBookService.batchPost();
+		uploadAndPostCrawer.uploadBooks();
+		pdfBookService.batchPost();
 	}
 }
