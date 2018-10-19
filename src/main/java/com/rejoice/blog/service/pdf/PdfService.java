@@ -115,6 +115,7 @@ public class PdfService {
 
 	public static String manipulatePdf(String src, String dest) throws Exception {
 		PdfReader pdfReader = new PdfReader(src);
+		pdfReader.setUnethicalReading(true);
 		String target = dest + src.substring(src.lastIndexOf("/"));
 		PdfDocument pdfDoc = new PdfDocument(pdfReader, new PdfWriter(target));
 		Document document = new Document(pdfDoc);

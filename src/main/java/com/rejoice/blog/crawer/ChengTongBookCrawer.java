@@ -37,7 +37,7 @@ public class ChengTongBookCrawer extends BookCrawer{
 							Document level2 = Jsoup.connect(href).get();
 							Elements resourceList = level2.select("#resource-list a");
 							for (Element resource : resourceList) {
-								if (resource.text().endsWith(".pdf")) {
+								if (resource.text().endsWith(".pdf") || resource.text().endsWith(".epub")) {
 									try {
 										String downloadPageUrl = resource.absUrl("href");
 										String[] uidFid = downloadPageUrl.split("/")[4].split("-");
