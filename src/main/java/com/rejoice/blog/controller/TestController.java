@@ -1,10 +1,15 @@
 package com.rejoice.blog.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -12,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +30,7 @@ import com.rejoice.blog.crawer.AllitebooksCrawer;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
+import com.rejoice.blog.task.CrawerBooksTask;
 import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
 
 @RestController
@@ -45,6 +52,9 @@ public class TestController {
 	
 	@Autowired
 	PdfBookService pdfBookService;
+	
+	@Autowired
+	CrawerBooksTask crawerBooksTask;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -113,11 +123,16 @@ public class TestController {
 	}
 	
 	//@GetMapping
-	public void testDownloadAllitebboks() {
-		//allitebooksCrawer.getPdfBooks();
-			allitebooksCrawer.uploadBooks();
-		pdfBookService.batchPost();
+	public void testCrawerBooksTask() throws IOException {
+			/*String url = "http://1475340.171.ctc.data.tv002.com:443/down/7cbddab30ec92d20139ed81f107299fa-6607071/OReilly.iOS.11.Programming.Fundamentals.with.Swift.2017.10.pdf?cts=dx-v-U1475340F228355257D113A68A27A18479&ctp=113A68A27A184&ctt=1539985070&limit=5&spd=3000000&ctk=28ea1a34e16073396f189a7f60ee70bc&chk=7cbddab30ec92d20139ed81f107299fa-6607071&mtd=1";
+			url = "http://file.allitebooks.com/20181018/Dart in Action.pdf";
 		
+		   HttpHeaders headers = new HttpHeaders();
+           headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+           HttpEntity<String> entity = new HttpEntity<>(headers);
+           ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+           Files.write(Paths.get("D:\\demo2.pdf"), response.getBody());*/
+		crawerBooksTask.execute();
 	}
 	
 	/*@GetMapping
@@ -150,4 +165,5 @@ public class TestController {
 		String substring = content.substring(content.lastIndexOf("ctt="), content.lastIndexOf("', '1024mb')"));
 		return substring;
 	}
+	
 }

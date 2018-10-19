@@ -12,11 +12,10 @@ package com.rejoice.blog;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.Charsets;
-import org.apache.commons.lang3.CharSet;
+import org.junit.Test;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StreamUtils;
 
@@ -38,5 +37,12 @@ public class StringTest {
 		Stream.of(tableNames)
 		.map((x)->"delete from "+x+" where company_id=1")
 		.forEach(System.out::println);
+	}
+	
+	@Test
+	public void testReplace() {
+		String str = "abc=${abc}&aa=0&a=${abc}&c=${c}";
+		str = str.replaceAll("\\$\\{c\\}", "c");
+		System.err.println(str);
 	}
 }

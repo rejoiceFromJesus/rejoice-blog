@@ -3,9 +3,13 @@ package com.rejoice.blog.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +23,10 @@ public class CrawerBookService extends BaseService<CrawerBook> {
 	private RestTemplate restTemplate;
 
 	public void download(String pdfBookUrl,String realPath) throws IOException {
-		ResponseEntity<byte[]> response = restTemplate.exchange(pdfBookUrl, HttpMethod.GET, null, byte[].class);
+		  HttpHeaders headers = new HttpHeaders();
+          headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+          HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<byte[]> response = restTemplate.exchange(pdfBookUrl, HttpMethod.GET, entity, byte[].class);
 		Files.write(Paths.get(realPath), response.getBody());
 	}
 	
