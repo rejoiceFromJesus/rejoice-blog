@@ -52,12 +52,7 @@ public abstract class BookCrawer {
 		crawerBook.setLocalPath(pdfDir+"/"+name);
 		crawerBook.setImg(imgDir+"/"+name+".jpg");
 		crawerBook.setUrl(url);
-		try {
-			crawerBookService.saveSelective(crawerBook);
-		} catch (Exception e) {
-			resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
-			return;
-		}
+		crawerBookService.saveSelective(crawerBook);
 		
 		//add link and screen shot
 		pdfService.addLink(crawerBook.getLocalPath());
