@@ -45,15 +45,6 @@ public abstract class BookCrawer {
 		crawerBook.setName(name);
 		//download book
 		Resource resource = resourceLoader.getResource(pdfDir);
-		if(!resource.exists()) {
-			resource.getFile().mkdirs();
-		}
-		/*File file = Paths.get(relativePath).toFile();
-		if(!file.exists()) {
-			file.mkdirs();
-		}
-		*/
-		
 		String abslutePdfDir = resource.getFile().getAbsolutePath();
 		abslutePdfDir = abslutePdfDir+"/"+name;
 		crawerBookService.download(downloadUrl,abslutePdfDir);
@@ -61,7 +52,13 @@ public abstract class BookCrawer {
 		crawerBook.setLocalPath(pdfDir+"/"+name);
 		crawerBook.setImg(imgDir+"/"+name+".jpg");
 		crawerBook.setUrl(url);
-		crawerBookService.saveSelective(crawerBook);
+		try {
+			crawerBookService.saveSelective(crawerBook);
+		} catch (Exception e) {
+			resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
+			return;
+		}
+		
 		//add link and screen shot
 		pdfService.addLink(crawerBook.getLocalPath());
 		pdfService.screenShot(crawerBook.getLocalPath());
