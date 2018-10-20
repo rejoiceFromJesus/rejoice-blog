@@ -50,6 +50,7 @@ public class PageController {
 	public ModelAndView findPage(@PathVariable("pageNum")  Integer pageNum,String keyword){
 		ModelAndView mv = new ModelAndView("index");
 		Article cons = new Article();
+		cons.setEnable(true);
 		StringBuilder p = new StringBuilder();
 		if(StringUtils.isNotBlank(keyword)) {
 			cons.setLikes("title");
@@ -65,7 +66,9 @@ public class PageController {
 		mv.addObject("count", pageInfo.getTotal());
 		mv.addObject("totalPage", pageInfo.getPages());
 		mv.addObject("p","?"+p.toString());
-		mv.addObject("readRankList", articleService.queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
+		Article rankCons = new Article();
+		rankCons.setEnable(true);
+		mv.addObject("readRankList", articleService.queryListByPageAndOrder(rankCons, 1, 10, "read_count desc").getList());
 		return mv;
 	}
 	
