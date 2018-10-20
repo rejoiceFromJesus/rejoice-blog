@@ -80,7 +80,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 		new Thread(() -> {
 			// 2、post articles
 			postBatchToJIanshu();
-			postBatchToOschina();
+			//postBatchToOschina();
 			postBatchToSystem(principal2);
 			// 3、release lock
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;

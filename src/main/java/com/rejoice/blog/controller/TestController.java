@@ -122,7 +122,7 @@ public class TestController {
 
 	}
 	
-	//@GetMapping
+	@GetMapping
 	public void testCrawerBooksTask() throws IOException {
 			/*String url = "http://1475340.171.ctc.data.tv002.com:443/down/7cbddab30ec92d20139ed81f107299fa-6607071/OReilly.iOS.11.Programming.Fundamentals.with.Swift.2017.10.pdf?cts=dx-v-U1475340F228355257D113A68A27A18479&ctp=113A68A27A184&ctt=1539985070&limit=5&spd=3000000&ctk=28ea1a34e16073396f189a7f60ee70bc&chk=7cbddab30ec92d20139ed81f107299fa-6607071&mtd=1";
 			url = "http://file.allitebooks.com/20181018/Dart in Action.pdf";
@@ -132,7 +132,13 @@ public class TestController {
            HttpEntity<String> entity = new HttpEntity<>(headers);
            ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
            Files.write(Paths.get("D:\\demo2.pdf"), response.getBody());*/
-		crawerBooksTask.execute();
+		//crawerBooksTask.execute();
+		try {
+			//pdfService.addLink("file:/app/rejoice-blog/download-pdf/被颠覆的文明 我们怎么会落到这一步.pdf");
+		} catch (Exception e) {
+			System.err.println("抛异常了");
+		}
+		
 	}
 	
 	/*@GetMapping
