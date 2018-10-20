@@ -44,7 +44,7 @@ public class Article extends BaseEntity {
 	private String author;
 	private String summary;
 	private String imgUrl;
-	private Boolean enable = true;
+	private Boolean enable;
 	
 	public Boolean getEnable() {
 		return enable;
