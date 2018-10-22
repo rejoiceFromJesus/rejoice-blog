@@ -93,6 +93,9 @@ public class UploadAndPostCrawer {
 				pdfBook.setImgUrl(crawerBook.getImg());
 				pdfBook.setImg(crawerBook.getName()+".jpg");
 				pdfBookService.saveSelective(pdfBook);
+				
+				//4、delete file
+				resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
 			} catch (Exception e) {
 				LOGGER.warn("upload file to ct cloud failed:",e);
 			}

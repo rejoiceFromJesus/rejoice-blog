@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +33,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	@Autowired
 	JianshuService jianshuService;
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 	
 	@Autowired
 	OschinaService oschinaService;
@@ -184,6 +189,11 @@ public class PdfBookService extends BaseService<PdfBook> {
 					newBook.setIsPostJianshu(true);
 					pdfBookService.updateByIdSelective(newBook);
 					Thread.sleep(2000);
+					//5、delete img
+					Resource resource = resourceLoader.getResource(uploadImagesDir+"/"+pdfBook.getImg());
+					if(resource.exists()) {
+						resource.getFile().delete();
+					}
 				} catch (Exception e) {
 					LOGGER.warn("POST articles to jianshu failed:", e);
 				}
