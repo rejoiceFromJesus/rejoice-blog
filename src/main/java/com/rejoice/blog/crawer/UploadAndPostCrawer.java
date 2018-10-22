@@ -1,6 +1,8 @@
 package com.rejoice.blog.crawer;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -93,9 +95,6 @@ public class UploadAndPostCrawer {
 				pdfBook.setImgUrl(crawerBook.getImg());
 				pdfBook.setImg(crawerBook.getName()+".jpg");
 				pdfBookService.saveSelective(pdfBook);
-				
-				//4、delete file
-				resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
 			} catch (Exception e) {
 				LOGGER.warn("upload file to ct cloud failed:",e);
 			}
@@ -122,6 +121,30 @@ public class UploadAndPostCrawer {
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
         String uploadId = restTemplate.postForObject(CT_UPLOAD_URL+this.chengTongParams, httpEntity, String.class);
         return uploadId;
+	}
+
+	
+	/**
+	 * delete all pdf files if all pdf_books posted to jianshu
+	 * @throws IOException 
+	 */
+	public void deletePdfInDisk() {
+		try {
+			PdfBook cons = new PdfBook();
+			cons.setIsPostJianshu(false);
+			Integer count = pdfBookService.queryCount(cons);
+			if(count <= 0) {
+				File pdfFolder = resourceLoader.getResource(pdfDir).getFile();
+				File[] listFiles = pdfFolder.listFiles();
+				for (File file : listFiles) {
+					file.delete();
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.warn("delete files failed:",e);
+		}
+		
+		//resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
 	}
 	
 }
