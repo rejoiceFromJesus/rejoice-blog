@@ -46,6 +46,7 @@ public abstract class BookCrawer {
 		if(exist != null) {
 			return;
 		}
+		name = name.replace("[seosee.info]", "");
 		CrawerBook crawerBook = new CrawerBook();
 		crawerBook.setIsUpload(false);
 		crawerBook.setName(name);

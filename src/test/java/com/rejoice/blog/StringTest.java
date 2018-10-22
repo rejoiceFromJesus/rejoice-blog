@@ -44,5 +44,7 @@ public class StringTest {
 		String str = "abc=${abc}&aa=0&a=${abc}&c=${c}";
 		str = str.replaceAll("\\$\\{c\\}", "c");
 		System.err.println(str);
+		str = "2018-08《写作这门手艺：普林斯顿大学写作课》[seosee.info].pdf";
+		System.err.println(str.replace("[seosee.info]", ""));
 	}
 }
