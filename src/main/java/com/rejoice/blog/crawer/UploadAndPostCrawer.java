@@ -123,23 +123,22 @@ public class UploadAndPostCrawer {
         return uploadId;
 	}
 
-	
 	/**
 	 * delete all pdf files if all pdf_books posted to jianshu
 	 * @throws IOException 
 	 */
 	public void deletePdfInDisk() {
 		try {
-			PdfBook cons = new PdfBook();
+		/*	PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
 			Integer count = pdfBookService.queryCount(cons);
-			if(count <= 0) {
+			if(count <= 0) {*/
 				File pdfFolder = resourceLoader.getResource(pdfDir).getFile();
 				File[] listFiles = pdfFolder.listFiles();
 				for (File file : listFiles) {
 					file.delete();
 				}
-			}
+			//}
 		} catch (Exception e) {
 			LOGGER.warn("delete files failed:",e);
 		}

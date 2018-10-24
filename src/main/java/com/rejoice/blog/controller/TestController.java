@@ -139,10 +139,7 @@ public class TestController {
 		} catch (Exception e) {
 			System.err.println("抛异常了");
 		}*/
-		
-		ResponseEntity<String> location = restTemplate.exchange("https://pan.baidu.com/s/1bV9b8EsEPuG-P40aG9FiTw", HttpMethod.GET, null, String.class);
-		JsonUtil.toJson(location);
-		System.err.println(location);
+		uploadAndPostCrawer.deletePdfInDisk();
 	}
 	
 	/*@GetMapping

@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.service.CrawerBookService;
 import com.rejoice.blog.service.DictionaryService;
+import com.rejoice.blog.service.epub.EpubService;
 import com.rejoice.blog.service.pdf.PdfService;
 
 public abstract class BookCrawer {
@@ -33,6 +34,9 @@ public abstract class BookCrawer {
 	
 	@Autowired
 	protected PdfService pdfService;
+	
+	@Autowired
+	private EpubService epubService;
 	
 	@Autowired
 	protected RestTemplate restTemplate;
@@ -65,8 +69,14 @@ public abstract class BookCrawer {
 		crawerBookService.saveSelective(crawerBook);
 		
 		//add link and screen shot
-		pdfService.addLink(crawerBook.getLocalPath());
-		pdfService.screenShot(crawerBook.getLocalPath());
+		String fileLocalPath = crawerBook.getLocalPath();
+		pdfService.addLink(fileLocalPath);
+		if(fileLocalPath.endsWith(".pdf")){
+			pdfService.screenShot(crawerBook.getLocalPath());
+		}else if(fileLocalPath.endsWith(".epub")) {
+			epubService.screenShot(crawerBook.getLocalPath());
+		}
+		
 	}
 
 }
