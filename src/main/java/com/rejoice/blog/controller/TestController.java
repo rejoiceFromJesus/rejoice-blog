@@ -139,7 +139,7 @@ public class TestController {
 		} catch (Exception e) {
 			System.err.println("抛异常了");
 		}*/
-		uploadAndPostCrawer.deletePdfInDisk();
+		//uploadAndPostCrawer.deletePdfInDisk();
 	}
 	
 	/*@GetMapping
