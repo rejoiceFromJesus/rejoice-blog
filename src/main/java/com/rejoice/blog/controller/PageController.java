@@ -59,7 +59,7 @@ public class PageController {
 			p.append("keyword="+keyword+"&");
 			
 		}
-		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(cons, pageNum, null, "post_time desc");
+		PageInfo<Article> pageInfo = articleService.queryListByPageAndOrder(cons, pageNum, 10, "post_time desc");
 	
 		mv.addObject("list",pageInfo.getList());
 		mv.addObject("curr",pageNum);

@@ -83,7 +83,7 @@ public class ArticleService extends BaseService<Article>{
 	public PageInfo<Article> queryListByPageAndOrder(Article t, Integer page, Integer rows, String order) {
 		// 加入分页
 		if(rows == null) {
-			rows = 30;
+			rows = 10;
 		}
 		PageHelper.startPage(page, rows);
 		// 声明一个example
