@@ -87,7 +87,7 @@ public class UploadAndPostCrawer {
 				//3、insert pdfBooks to be posted
 				PdfBook pdfBook = new PdfBook();
 				pdfBook.setFileName(crawerBook.getName());
-				pdfBook.setUrl("https://rejoice.ctfile.com/fs/1475340-"+uploadId);
+				pdfBook.setUrl("https://pipipan.ctfile.com/fs/1475340-"+uploadId);
 				pdfBook.setIsPostJianshu(false);
 				pdfBook.setIsPostOschina(false);
 				pdfBook.setIsPostSystem(false);
@@ -122,7 +122,6 @@ public class UploadAndPostCrawer {
         String uploadId = restTemplate.postForObject(CT_UPLOAD_URL+this.chengTongParams, httpEntity, String.class);
         return uploadId;
 	}
-
 	
 	/**
 	 * delete all pdf files if all pdf_books posted to jianshu
@@ -143,8 +142,6 @@ public class UploadAndPostCrawer {
 		} catch (Exception e) {
 			LOGGER.warn("delete files failed:",e);
 		}
-		
-		//resourceLoader.getResource(crawerBook.getLocalPath()).getFile().delete();
 	}
 	
 }

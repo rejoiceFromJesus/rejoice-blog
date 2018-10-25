@@ -1,15 +1,10 @@
 package com.rejoice.blog.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -25,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.crawer.AllitebooksCrawer;
+import com.rejoice.blog.crawer.UploadAndPostCrawer;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
@@ -55,6 +52,9 @@ public class TestController {
 	
 	@Autowired
 	CrawerBooksTask crawerBooksTask;
+	
+	@Autowired
+	UploadAndPostCrawer uploadAndPostCrawer;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -133,12 +133,13 @@ public class TestController {
            ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
            Files.write(Paths.get("D:\\demo2.pdf"), response.getBody());*/
 		//crawerBooksTask.execute();
+		/*uploadAndPostCrawer.uploadBooks();
 		try {
 			//pdfService.addLink("file:/app/rejoice-blog/download-pdf/被颠覆的文明 我们怎么会落到这一步.pdf");
 		} catch (Exception e) {
 			System.err.println("抛异常了");
-		}
-		
+		}*/
+		//uploadAndPostCrawer.deletePdfInDisk();
 	}
 	
 	/*@GetMapping

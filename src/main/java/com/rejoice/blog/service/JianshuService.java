@@ -86,6 +86,7 @@ public class JianshuService {
 				pdfBook.setImgUrl(uploadFile.getUrl());
 			}
 		} catch (Exception e) {
+			VolitateVars.POST_BATCH_LOCK=Constant.FALSE;
 			LOGGER.warn("upload file to jianshu failed",e);
 		}
 		//2、新建文章
