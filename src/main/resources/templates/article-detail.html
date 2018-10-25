@@ -33,7 +33,7 @@
 				<div  style="padding:20px;">
 					<article class="blog-post">
 					<span class="original">原创</span> 
-							<a class="detail-title" th:text="${article.title}" th:attrappend="href=${#httpServletRequest.requestURL}"></a>
+							<h1 class="detail-title" style="display:inline;" th:text="${article.title}" ></h1>
 							<span id="summary" style="display:none" th:text="${article.summary}"></span>
 							<div style="margin-top:20px;">
 							<i class="fa fa-clock-o" ></i>
@@ -46,16 +46,6 @@
 									</div>
 							<div style="margin-top:20px;" th:utext="${article.content}"></div>
 					</article>
-			<!-- share start -->
-			<!-- <div style="position: relative;height:54px;">
-					<div class="share"
-						style="top:10px;right:20px;display: block; width: 54px; height: 54px; position:absolute; z-index: 1;">
-						<a>
-							<img style="display: block; width: 46px; height: 46px; position: absolute;
-						 top: 0; left: 0; z-index: 2; cursor: pointer; text-indent: -9999px;
-						  border: 4px solid #FFF; box-shadow: 0 0 5px #DDD; border-radius: 36px;" title="更多" th:src="@{/img/share_core_square.jpg}" /></a>
-					</div>
-			</div> -->
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"32"},"slide":{"type":"slide","bdImg":"5","bdPos":"left","bdTop":"250"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"32"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>			<!-- share end -->
 			<!--高速版-->
 <div id="SOHUCS" th:attr="sid=${article.id}"></div>
@@ -66,123 +56,6 @@ appid: 'cytBCK4x5',
 conf: 'prod_5a63c4b821f3be65940b2622b60daf3f'
 });
 </script>
-			<!-- share end -->
-<!-- 
-					<aside class="comments" id="comments">
-						<hr />
-
-						<h2>
-							<i class="fa fa-comments"></i> <span th:text="${commentCount}"></span> Comments
-						</h2>
-
-						<article class="comment">
-							<header class="clearfix">
-								<img src="img/avatar.png" alt="A Smart Guy" class="avatar" />
-								<div class="meta">
-									<h3>
-										<a href="#">John Doe</a>
-									</h3>
-									<span class="date"> 24 August 2015 </span> <span
-										class="separator"> - </span> <a href="#create-comment"
-										class="reply-link">Reply</a>
-								</div>
-							</header>
-							<div class="body">Lorem ipsum dolor sit amet, consectetur
-								adipisicing elit. Facere sit perspiciatis debitis, vel ducimus
-								praesentium expedita, assumenda ipsum cum corrupti dolorum modi.
-								Rem ipsam similique sapiente obcaecati tenetur beatae
-								voluptatibus.</div>
-						</article>
-
-						<article class="comment reply">
-							<header class="clearfix">
-								<img src="img/avatar.png" alt="A Smart Guy" class="avatar" />
-								<div class="meta">
-									<h3>
-										<a href="#">John Doe</a>
-									</h3>
-									<span class="date"> 24 August 2015 </span> <span
-										class="separator"> - </span> <a href="#create-comment"
-										class="reply-link">Reply</a>
-								</div>
-							</header>
-							<div class="body">Lorem ipsum dolor sit amet, consectetur
-								adipisicing elit. Facere sit perspiciatis debitis, vel ducimus
-								praesentium expedita, assumenda ipsum cum corrupti dolorum modi.
-								Rem ipsam similique sapiente obcaecati tenetur beatae
-								voluptatibus.</div>
-						</article>
-
-						<article class="comment ">
-							<header class="clearfix">
-								<img src="img/avatar.png" alt="A Smart Guy" class="avatar" />
-								<div class="meta">
-									<h3>
-										<a href="#">John Doe</a>
-									</h3>
-									<span class="date"> 24 August 2015 </span> <span
-										class="separator"> - </span> <a href="#create-comment"
-										class="reply-link">Reply</a>
-								</div>
-							</header>
-							<div class="body">Lorem ipsum dolor sit amet, consectetur
-								adipisicing elit. Facere sit perspiciatis debitis, vel ducimus
-								praesentium expedita, assumenda ipsum cum corrupti dolorum modi.
-								Rem ipsam similique sapiente obcaecati tenetur beatae
-								voluptatibus.</div>
-						</article>
-
-						<article class="comment">
-							<header class="clearfix">
-								<img src="img/avatar.png" alt="A Smart Guy" class="avatar" />
-								<div class="meta">
-									<h3>
-										<a href="#">John Doe</a>
-									</h3>
-									<span class="date"> 24 August 2015 </span> <span
-										class="separator"> - </span> <a href="#create-comment"
-										class="reply-link">Reply</a>
-								</div>
-							</header>
-							<div class="body">Lorem ipsum dolor sit amet, consectetur
-								adipisicing elit. Facere sit perspiciatis debitis, vel ducimus
-								praesentium expedita, assumenda ipsum cum corrupti dolorum modi.
-								Rem ipsam similique sapiente obcaecati tenetur beatae
-								voluptatibus.</div>
-							<div id="social-share"></div>
-						</article>
-					</aside>
-
-					<aside class="create-comment" id="create-comment">
-						<hr />
-
-						<h2>
-							<i class="fa fa-pencil"></i> Add Comment
-						</h2>
-
-						<form action="#" method="get" accept-charset="utf-8">
-							<div class="row">
-								<div class="col-md-6">
-									<input type="text" name="name" id="comment-name"
-										placeholder="Your Name" class="form-control input-lg" />
-								</div>
-								<div class="col-md-6">
-									<input type="email" name="email" id="comment-email"
-										placeholder="Email" class="form-control input-lg" />
-								</div>
-							</div>
-
-							<input type="url" name="name" id="comment-url"
-								placeholder="Website" class="form-control input-lg" />
-
-							<textarea rows="10" name="message" id="comment-body"
-								placeholder="Your Message" class="form-control input-lg"></textarea>
-
-							<div class="buttons clearfix">
-								<button type="submit" class="btn btn-xlarge btn-clean-one">Submit</button>
-							</div>
-						</form>
-					</aside> -->
 				</div>
 				
 			</div>
@@ -207,13 +80,6 @@ conf: 'prod_5a63c4b821f3be65940b2622b60daf3f'
 	var article =[[${article}]];
 	</script>
 	<script  th:src="@{/js/user/detail.js}"  ></script>
-	<!-- share -->
-	<script type="text/javascript"
-		th:src="@{/small-plugin/share/qrcode.min.js}"></script>
-	<script type="text/javascript"
-		th:src="@{/small-plugin/share/smohan.popshare.js}"></script>
-	
-	<!-- custom -->
 </body>
 
 </html>
