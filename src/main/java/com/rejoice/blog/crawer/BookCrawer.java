@@ -2,6 +2,8 @@ package com.rejoice.blog.crawer;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -15,6 +17,8 @@ import com.rejoice.blog.service.epub.EpubService;
 import com.rejoice.blog.service.pdf.PdfService;
 
 public abstract class BookCrawer {
+	
+	public static final Logger LOGGER = LoggerFactory.getLogger(BookCrawer.class);
 	
 	@Autowired
 	DictionaryService dictionaryService;
@@ -45,9 +49,10 @@ public abstract class BookCrawer {
 	
 	protected void downloadBook(String downloadUrl,String url, String name) throws IOException {
 		CrawerBook cons = new CrawerBook();
-		cons.setUrl(url);
-		CrawerBook exist = crawerBookService.queryOne(cons);
-		if(exist != null) {
+		cons.setName(name);
+		Integer count = crawerBookService.queryCount(cons);
+		if(count > 0) {
+			LOGGER.info("already exists with name=[{}]", name);
 			return;
 		}
 		name = name.replace("[seosee.info]", "");
