@@ -49,16 +49,16 @@ public abstract class BookCrawer {
 	
 	protected void downloadBook(String downloadUrl,String url, String name) throws IOException {
 		CrawerBook cons = new CrawerBook();
+		name = name.replace("[seosee.info]", "");
+		name = name.replace(".pdf", "[www.rejoiceblog.com].pdf");
+		name = name.replace(".epub", "[www.rejoiceblog.com].epub");
+		name = name.replace(".mobi", "[www.rejoiceblog.com].mobi");
 		cons.setName(name);
 		Integer count = crawerBookService.queryCount(cons);
 		if(count > 0) {
 			LOGGER.info("already exists with name=[{}]", name);
 			return;
 		}
-		name = name.replace("[seosee.info]", "");
-		name = name.replace(".pdf", "[www.rejoiceblog.com].pdf");
-		name = name.replace(".epub", "[www.rejoiceblog.com].epub");
-		name = name.replace(".mobi", "[www.rejoiceblog.com].mobi");
 		CrawerBook crawerBook = new CrawerBook();
 		crawerBook.setIsUpload(false);
 		crawerBook.setName(name);
