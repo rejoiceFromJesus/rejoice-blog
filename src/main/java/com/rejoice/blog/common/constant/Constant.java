@@ -53,13 +53,16 @@ public abstract class Constant {
 	 * distionary key code
 	 */
 	public static final String DICT_CODE_BATCH_POST_LOCK = "BATCH_POST_LOCK";
+	public static final String DICT_CODE_CRAWER_BOOK_END_PAGE = "CRAWER_BOOK_END_PAGE";
+	public static final String DICT_CODE_CRAWER_BOOK_START_PAGE = "CRAWER_BOOK_START_PAGE";
+	public static final String DICT_CODE_CRAWER_BOOK = "CRAWER_BOOK";
+	
+	
 	public static final String DICT_KEY_DEFAULT = "DEFAULT";
 	public static final String DICT_KEY_JIANSHU = "JIANSHU";
 	public static final String DICT_KEY_OSCHINA = "OSCHINA";
 	public static final String DICT_KEY_SYSTEM = "SYSTEM";
-	
-	public static final String CODE_CRAWER_BOOK_END_PAGE = "CRAWER_BOOK_END_PAGE";
-	public static final String CODE_CRAWER_BOOK_START_PAGE = "CRAWER_BOOK_START_PAGE";
+	public static final String DICT_KEY_CRAWER_BOOK = "CRAWER_BOOK";
 	public static final String DICT_KEY_ALLITEBOOKS = "ALLITEBOOKS";
 	
 	/**

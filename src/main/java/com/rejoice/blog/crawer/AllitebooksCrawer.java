@@ -33,8 +33,8 @@ public class AllitebooksCrawer extends BookCrawer{
 	private static final Logger LOGGER = LoggerFactory.getLogger(AllitebooksCrawer.class);
 	
 	public void execute(){
-		Dictionary endPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_END_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
-		Dictionary startPageDict = dictionaryService.queryOneByCodeAndKey(Constant.CODE_CRAWER_BOOK_START_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
+		Dictionary endPageDict = dictionaryService.queryOneByCodeAndKey(Constant.DICT_CODE_CRAWER_BOOK_END_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
+		Dictionary startPageDict = dictionaryService.queryOneByCodeAndKey(Constant.DICT_CODE_CRAWER_BOOK_START_PAGE,Constant.DICT_KEY_ALLITEBOOKS);
 		int endPage = CRAWER_END_PAGE;
 		int startPage = CRAWER_START_PAGE;
 		if(endPageDict != null && StringUtils.isNotBlank(endPageDict.getValue())) {
