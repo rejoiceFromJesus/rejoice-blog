@@ -40,12 +40,9 @@ public class PdfImageService extends PdfService{
             //缩略图显示倍数，1表示不缩放，0.5表示缩小到50%
             float zoom = 1f;
             document = new Document();
-            document.setFile(filePath);
-             // maxPages = document.getPageTree().getNumberOfPages();
-            
+            document.setFile(file.getAbsolutePath());
             BufferedImage image = (BufferedImage)document.getPageImage(0, GraphicsRenderingHints.SCREEN, 
                         Page.BOUNDARY_CROPBOX, rotation, zoom);
-            
             Iterator iter = ImageIO.getImageWritersBySuffix("jpg");
             ImageWriter writer = (ImageWriter)iter.next();
             FileOutputStream out = new FileOutputStream(new File(absoluteImgDir+"/"+file.getName()+".jpg"));
