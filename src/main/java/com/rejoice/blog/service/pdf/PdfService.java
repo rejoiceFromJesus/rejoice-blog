@@ -45,7 +45,6 @@ import com.itextpdf.layout.property.VerticalAlignment;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
-@Service
 public class PdfService {
 
 	private Logger LOGGER = LoggerFactory.getLogger(PdfService.class);

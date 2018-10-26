@@ -17,7 +17,9 @@ import org.icepdf.core.util.GraphicsRenderingHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PdfImageService extends PdfService{
 	@Value("${blog.resource.dir}")
 	private String resourceDir;
