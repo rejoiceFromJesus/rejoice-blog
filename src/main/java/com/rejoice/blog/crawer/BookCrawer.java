@@ -14,7 +14,7 @@ import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.service.CrawerBookService;
 import com.rejoice.blog.service.DictionaryService;
 import com.rejoice.blog.service.epub.EpubService;
-import com.rejoice.blog.service.pdf.PdfService;
+import com.rejoice.blog.service.pdf.PdfImageService;
 
 public abstract class BookCrawer {
 	
@@ -37,7 +37,7 @@ public abstract class BookCrawer {
 	protected String imgDir;
 	
 	@Autowired
-	protected PdfService pdfService;
+	protected PdfImageService pdfImageService;
 	
 	@Autowired
 	private EpubService epubService;
@@ -75,9 +75,9 @@ public abstract class BookCrawer {
 		
 		//add link and screen shot
 		String fileLocalPath = crawerBook.getLocalPath();
-		pdfService.addLink(fileLocalPath);
+		pdfImageService.addLink(fileLocalPath);
 		if(fileLocalPath.endsWith(".pdf")){
-			pdfService.screenShot(crawerBook.getLocalPath());
+			pdfImageService.screenShot(crawerBook.getLocalPath());
 		}else if(fileLocalPath.endsWith(".epub")) {
 			epubService.screenShot(crawerBook.getLocalPath());
 		}

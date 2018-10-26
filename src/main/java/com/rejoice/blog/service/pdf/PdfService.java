@@ -3,20 +3,23 @@ package com.rejoice.blog.service.pdf;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
+import org.icepdf.core.pobjects.Page;
+import org.icepdf.core.util.GraphicsRenderingHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +80,7 @@ public class PdfService {
 			LOGGER.warn("add link failed:", e);
 		} 
 	}
-
+/*
 	public void screenShot(String filePath) throws IOException {
 		RandomAccessFile raf = null;
 		try {
@@ -103,7 +106,7 @@ public class PdfService {
 			);
 			BufferedImage tag = new BufferedImage(rect.width, rect.height, BufferedImage.TYPE_INT_RGB);
 			tag.getGraphics().drawImage(img, 0, 0, rect.width, rect.height, null);
-			/* FileOutputStream out = new FileOutputStream(target+file.getName()+".jpg"); */
+			 FileOutputStream out = new FileOutputStream(target+file.getName()+".jpg"); 
 			ImageIO.write(tag, "jpg", new File(absoluteImgDir + "/" + file.getName() + ".jpg"));
 			buf.clear();
 			channel.close();
@@ -111,8 +114,10 @@ public class PdfService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
+	
+	
 	public static String manipulatePdf(String src, String dest) throws Exception {
 		PdfReader pdfReader = new PdfReader(src);
 		pdfReader.setUnethicalReading(true);
