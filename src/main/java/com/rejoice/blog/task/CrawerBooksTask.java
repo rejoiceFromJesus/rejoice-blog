@@ -50,7 +50,6 @@ public class CrawerBooksTask {
 		}
 		uploadAndPostCrawer.uploadBooks();
 		pdfBookService.batchPost();
-		uploadAndPostCrawer.deletePdfInDisk();
 		
 	}
 }

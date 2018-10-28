@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.concurrent.VolitateVars;
+import com.rejoice.blog.crawer.UploadAndPostCrawer;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.Article;
 import com.rejoice.blog.entity.PdfBook;
@@ -50,6 +51,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	@Autowired
 	PdfBookService pdfBookService;
+	
+	@Autowired
+	UploadAndPostCrawer uploadAndPostCrawer;
 
 	public String getContent(PdfBook pdfBook) {
 		String content = "<p>下载地址：&nbsp;" + "<a href=\"" + pdfBook.getUrl() + "\" target=\"_blank\">"
@@ -89,6 +93,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 			postBatchToSystem(principal2);
 			// 3、release lock
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
+			// 4、delete books
+			uploadAndPostCrawer.deletePdfInDisk();
 		}).start();
 		return null;
 	}

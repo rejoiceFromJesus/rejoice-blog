@@ -128,6 +128,7 @@ public class UploadAndPostCrawer {
 	 * @throws IOException 
 	 */
 	public void deletePdfInDisk() {
+		LOGGER.info("delete pdf in disk============");
 		try {
 			PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
