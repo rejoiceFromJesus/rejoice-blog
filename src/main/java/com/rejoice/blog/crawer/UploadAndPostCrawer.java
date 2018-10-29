@@ -87,7 +87,7 @@ public class UploadAndPostCrawer {
 				//3、insert pdfBooks to be posted
 				PdfBook pdfBook = new PdfBook();
 				pdfBook.setFileName(crawerBook.getName());
-				pdfBook.setUrl("https://pipipan.ctfile.com/fs/1475340-"+uploadId);
+				pdfBook.setUrl("https://rejoice.pipipan.com/fs/1475340-"+uploadId);
 				pdfBook.setIsPostJianshu(false);
 				pdfBook.setIsPostOschina(false);
 				pdfBook.setIsPostSystem(false);
