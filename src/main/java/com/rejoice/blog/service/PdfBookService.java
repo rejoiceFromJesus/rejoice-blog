@@ -21,6 +21,7 @@ import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.crawer.UploadAndPostCrawer;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.Article;
+import com.rejoice.blog.entity.Dictionary;
 import com.rejoice.blog.entity.PdfBook;
 
 @Service
@@ -95,10 +96,22 @@ public class PdfBookService extends BaseService<PdfBook> {
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
 			// 4、delete books
 			uploadAndPostCrawer.deletePdfInDisk();
+			// 5、reset dict
+			this.resetDicts();
 		}).start();
 		return null;
 	}
 	
+	private void resetDicts() {
+		//1、crawer book
+		Dictionary dictCons = new Dictionary();
+		dictCons.setCode(Constant.DICT_CODE_CRAWER_BOOK);
+		dictCons.setKey(Constant.DICT_KEY_CRAWER_BOOK);
+		Dictionary newCrawerBookDict = new Dictionary();
+		newCrawerBookDict.setValue("true");
+		dictionaryService.updateByConditions(newCrawerBookDict, dictCons);
+	}
+
 	@Transactional(readOnly = true)
 	public void postBatchToOschina() {
 		// 1、query not posted books
