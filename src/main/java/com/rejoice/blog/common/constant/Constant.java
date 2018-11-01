@@ -64,6 +64,7 @@ public abstract class Constant {
 	public static final String DICT_KEY_SYSTEM = "SYSTEM";
 	public static final String DICT_KEY_CRAWER_BOOK = "CRAWER_BOOK";
 	public static final String DICT_KEY_ALLITEBOOKS = "ALLITEBOOKS";
+	public static final String DICT_KEY_EBOOK300 = "EBOOK300";
 	
 	/**
 	 * api metadata

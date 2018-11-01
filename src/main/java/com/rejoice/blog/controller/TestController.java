@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.crawer.AllitebooksCrawer;
+import com.rejoice.blog.crawer.Ebook300CBookCrawer;
 import com.rejoice.blog.crawer.UploadAndPostCrawer;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.service.PdfBookService;
@@ -55,6 +56,9 @@ public class TestController {
 	
 	@Autowired
 	UploadAndPostCrawer uploadAndPostCrawer;
+	
+	@Autowired
+	Ebook300CBookCrawer ebook300cBookCrawer;
 	
 	
 	//@GetMapping("/oschina/post")
@@ -140,6 +144,7 @@ public class TestController {
 			System.err.println("抛异常了");
 		}*/
 		//uploadAndPostCrawer.deletePdfInDisk();
+		//ebook300cBookCrawer.execute();
 	}
 	
 	/*@GetMapping

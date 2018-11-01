@@ -1,5 +1,8 @@
 package com.rejoice.blog.config;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -13,6 +16,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -22,6 +26,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.DefaultRoutePlanner;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
@@ -136,12 +141,13 @@ public class RestTemplateConfig {
 		RequestConfig config = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_MILLISECONDS)
 				.setSocketTimeout(DEFAULT_SOCKET_TIMEOUT_MILLISECONDS)
 				.setConnectionRequestTimeout(DEFAULT_CONNECTION_REQUEST_MILLISECONDS).build();
-
-		CloseableHttpClient defaultHttpClient = HttpClientBuilder.create().setConnectionManager(connectionManager)
+		// final HttpHost post =  new HttpHost("192.168.56.1", 8888);
+		 CloseableHttpClient defaultHttpClient = HttpClientBuilder.create().setConnectionManager(connectionManager)
 				.setRetryHandler(new DefaultHttpRequestRetryHandler(2, true))
 				.setKeepAliveStrategy(DefaultConnectionKeepAliveStrategy.INSTANCE).setDefaultRequestConfig(config)
 				.setUserAgent(
 						"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36")
+				//.setProxy(post)
 				.build();
 		return defaultHttpClient;
 	}

@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -27,6 +28,7 @@ import org.apache.commons.io.Charsets;
 import org.icepdf.core.pobjects.Document;
 import org.icepdf.core.pobjects.Page;
 import org.icepdf.core.util.GraphicsRenderingHints;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StreamUtils;
@@ -43,6 +45,12 @@ import org.yaml.snakeyaml.util.UriEncoder;
  *
  */
 public class StringTest {
+	
+	@Test
+	public void testDate() {
+		String str = "01 Nov 2018 ";
+		System.err.println(DateTime.now());
+	}
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		String copyToString = StreamUtils.copyToString(new FileInputStream(ResourceUtils.getFile("classpath:table-names.txt")), Charsets.UTF_8);

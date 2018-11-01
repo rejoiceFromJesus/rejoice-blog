@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 public enum WebSiteEnum implements BaseEnum{
     
 	ALLITEBBOKS("ALLITEBBOKS","http://www.allitebooks.com/"),
+	EBOOK3000("EBOOK3000","http://www.ebook3000.com"),
 	CTFILE("CTFILE","https://home.ctfile.com/");
 	private String value;
 	private String label;

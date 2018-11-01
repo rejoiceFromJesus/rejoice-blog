@@ -12,11 +12,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.rejoice.blog.common.exception.InternalServerException;
 
@@ -32,7 +36,15 @@ public class RejoiceUtil {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RejoiceUtil.class);
 	
-	
+	public static MultiValueMap<String, Object> objectToFormData(Object object) {
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		Map<String, Object> bodyMap = RejoiceUtil.objectFieldsToMap(object);
+		Set<Entry<String, Object>> entrySet = bodyMap.entrySet();
+		for (Entry<String, Object> entry : entrySet) {
+			map.add(entry.getKey(), entry.getValue());
+		}
+		return map;
+	}
 	public static Map<String,String> getParamsToMap(String params){
 		if(StringUtils.isBlank(params)) {
 			return null;
