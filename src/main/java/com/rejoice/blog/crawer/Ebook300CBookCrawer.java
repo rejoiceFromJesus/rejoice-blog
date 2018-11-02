@@ -71,6 +71,10 @@ public class Ebook300CBookCrawer extends BookCrawer {
 						System.err.println(rand);
 						strs = downloadPageUrl.split("/");
 						String bookName = strs[4].replaceAll(".html", "");
+						if(!StringUtils.endsWithAny(bookName, ".pdf",".epub")) {
+							LOGGER.info("crawer single book fails,unsuported file :"+bookName);
+							continue;
+						}
 						DownloadUrlInput input = new DownloadUrlInput();
 						input.setId(strs[3]);
 						input.setRand(rand);

@@ -102,7 +102,7 @@ public class JianshuService {
 		//3、更新文章
 		NotesUpdateInput notesUpdateInput = new NotesUpdateInput();
 		notesUpdateInput.setContent(pdfBookService.getContent(pdfBook));
-		notesUpdateInput.setTitle(pdfBook.getTitle());
+		notesUpdateInput.setTitle(pdfBook.getTitle().replace("[wwww.rejoice.blog.com]", ""));
 		notesUpdateInput.setId(notesAddOutput.getId());
 		NotesUpdateOutput notesUpdateOutput = restTemplate.exchange(
 				AUTHOR_NOTES_URL+notesAddOutput.getId()
