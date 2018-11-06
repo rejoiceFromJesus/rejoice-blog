@@ -69,7 +69,7 @@ public class Ebook300CBookCrawer extends BookCrawer {
 				String url = caregoryUrl.replaceAll("\\$\\{page\\}", i + "");
 				try {
 					Document document = Jsoup.connect(url).get();
-					Elements links = document.select("#mains_left .index_box .index_box_title a");
+					Elements links = document.select("#mains_left .list_box .list_box_title a");
 					for (Element link : links) {
 						try {
 							String pageUrl = link.absUrl("href");
