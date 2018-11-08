@@ -53,6 +53,7 @@ public abstract class BookCrawer {
 		name = name.replace(".pdf", "[www.rejoiceblog.com].pdf");
 		name = name.replace(".epub", "[www.rejoiceblog.com].epub");
 		name = name.replace(".mobi", "[www.rejoiceblog.com].mobi");
+		name = name.replaceAll("_", " ");
 		cons.setName(name);
 		Integer count = crawerBookService.queryCount(cons);
 		if(count > 0) {
