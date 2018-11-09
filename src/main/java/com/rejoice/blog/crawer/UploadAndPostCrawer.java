@@ -134,8 +134,16 @@ public class UploadAndPostCrawer {
 			cons.setIsPostJianshu(false);
 			Integer count = pdfBookService.queryCount(cons);
 			if(count <= 0) {
-				File pdfFolder = resourceLoader.getResource(pdfDir).getFile();
-				File[] listFiles = pdfFolder.listFiles();
+				//1、delete pdf
+				File folder = resourceLoader.getResource(pdfDir).getFile();
+				File[] listFiles = folder.listFiles();
+				for (File file : listFiles) {
+					file.delete();
+				}
+				
+				//5、delete img
+				folder = resourceLoader.getResource(imgDir).getFile();
+				listFiles = folder.listFiles();
 				for (File file : listFiles) {
 					file.delete();
 				}
