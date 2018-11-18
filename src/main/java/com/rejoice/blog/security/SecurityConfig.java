@@ -84,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         			"/article/count",
         			"/category/parent-id/*",
         			"/page/*/",
+        			"/jd_root.txt",
         			"/authenticate",
         			"/page/admin/admin-login.html",
         			"/","/js/**",
