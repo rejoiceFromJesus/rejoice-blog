@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.rejoice.blog.bean.http.vo.LayuiEditUploadImgVo;
+import com.rejoice.blog.bean.vo.LayuiEditUploadImgVo;
 import com.rejoice.blog.common.bean.Result;
 import com.rejoice.blog.service.UploadService;
 

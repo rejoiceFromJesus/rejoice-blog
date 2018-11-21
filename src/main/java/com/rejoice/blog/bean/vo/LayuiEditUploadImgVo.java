@@ -1,4 +1,4 @@
-package com.rejoice.blog.bean.http.vo;
+package com.rejoice.blog.bean.vo;
 
 public class LayuiEditUploadImgVo {
 	private String src;
