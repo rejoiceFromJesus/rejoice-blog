@@ -94,7 +94,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			postBatchToSystem(principal2);
 			// 3、release lock
 			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
-			// 4、delete books
+			// 4、delete pdf and imgs
 			uploadAndPostCrawer.deletePdfInDisk();
 			// 5、reset dict
 			this.resetDicts();
@@ -208,11 +208,6 @@ public class PdfBookService extends BaseService<PdfBook> {
 					newBook.setIsPostJianshu(true);
 					pdfBookService.updateByIdSelective(newBook);
 					Thread.sleep(2000);
-					//5、delete img
-					Resource resource = resourceLoader.getResource(uploadImagesDir+"/"+pdfBook.getImg());
-					if(resource.exists()) {
-						resource.getFile().delete();
-					}
 				} catch (Exception e) {
 					LOGGER.warn("POST articles to jianshu failed:", e);
 				}

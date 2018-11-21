@@ -51,7 +51,9 @@ public class StringTest {
 	
 	@Test
 	public void testDate() {
-		String str = "01 Nov 2018 ";
+		System.err.println(DateTime.now());
+		String abc = "Office_2019_All-in-One_For_Dummies_(Office_All-in-one_for_Dummies)[www.rejoiceblog.com].epub 免费下载";
+		System.err.println(abc.replaceAll("_", " "));
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {

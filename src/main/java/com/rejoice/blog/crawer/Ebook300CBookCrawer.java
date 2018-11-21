@@ -38,6 +38,16 @@ public class Ebook300CBookCrawer extends BookCrawer {
 	public static int CRAWER_END_PAGE = 30;
 	public static int CRAWER_START_PAGE = 1;
 	private static final String PAGE_URL = "http://www.ebook3000.com/index_${page}.htm";
+	private static final String[] CAREGORY_URLS = { "http://www.ebook3000.com/Database/list_5_${page}.html",
+			"http://www.ebook3000.com/Engineering-Technology/list_10_${page}.html",
+			"http://www.ebook3000.com/Games/list_95_${page}.html",
+			"http://www.ebook3000.com/Hardware/list_7_${page}.html",
+			"http://www.ebook3000.com/mobile-ebooks/list_108_${page}.html",
+			"http://www.ebook3000.com/Programming/list_11_${page}.html",
+			"http://www.ebook3000.com/Web_Development/list_13_${page}.html",
+			"http://www.ebook3000.com/Study/list_37_${page}.html",
+			"http://www.ebook3000.com/Security/list_96_${page}.html",
+			"http://www.ebook3000.com/Software/list_12_${page}.html" };
 
 	@Override
 	public void execute() {
@@ -53,52 +63,56 @@ public class Ebook300CBookCrawer extends BookCrawer {
 		if (startPageDict != null && StringUtils.isNotBlank(startPageDict.getValue())) {
 			startPage = Integer.parseInt(startPageDict.getValue());
 		}
-		for (int i = startPage; i <= endPage; i++) {
-			String url = PAGE_URL.replaceAll("\\$\\{page\\}", i + "");
-			try {
-				Document document = Jsoup.connect(url).get();
-				Elements links = document.select("#mains_left .index_box .index_box_title a");
-				for (Element link : links) {
-					try {
-						String pageUrl = link.absUrl("href");
-						String[] strs = pageUrl.split("_");
-						Document singlePageDocument = Jsoup.connect(pageUrl).get();
-						String downloadPageUrl = singlePageDocument.select(".article_info + .mains_left_box").get(0)
-								.select("a").get(0).absUrl("href");
-						System.err.println(downloadPageUrl);
-						Document downloadPage = Jsoup.connect(downloadPageUrl).get();
-						String rand = downloadPage.select("input[name=rand]").val();
-						System.err.println(rand);
-						strs = downloadPageUrl.split("/");
-						String bookName = strs[4].replaceAll(".html", "");
-						if(!StringUtils.endsWithAny(bookName, ".pdf",".epub")) {
-							LOGGER.info("crawer single book fails,unsuported file :"+bookName);
-							continue;
-						}
-						DownloadUrlInput input = new DownloadUrlInput();
-						input.setId(strs[3]);
-						input.setRand(rand);
-						String getDownloadUrl = DOWNLOAD_BOOK_URL.replaceAll("\\$\\{id\\}", input.getId())
-								.replaceAll("\\$\\{book\\}", bookName);
-						HttpHeaders headers = new HttpHeaders();
-						headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-						HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(
-								RejoiceUtil.objectToFormData(input), headers);
-						Thread.sleep(6000);
-						ResponseEntity<String> response = restTemplate.exchange(getDownloadUrl, HttpMethod.POST, entity,
-								String.class);
-						System.err.println(JsonUtil.buildObjectMapper().writeValueAsString(entity));
-						// Files.write(Paths.get("C:\\app\\rejoice-blog\\download-pdf\\"+bookName),
-						// response.getBody());
-						List<String> list = response.getHeaders().get("Location");
-						this.downloadBook(list.get(0), pageUrl, bookName);
-					} catch (Exception e) {
-						LOGGER.warn("download ebook300 failed:", e);
-					}
+		for (String caregoryUrl : CAREGORY_URLS) {
 
+			for (int i = startPage; i <= endPage; i++) {
+				String url = caregoryUrl.replaceAll("\\$\\{page\\}", i + "");
+				try {
+					Document document = Jsoup.connect(url).get();
+					Elements links = document.select("#mains_left .list_box .list_box_title a");
+					for (Element link : links) {
+						try {
+							String pageUrl = link.absUrl("href");
+							String[] strs = pageUrl.split("_");
+							Document singlePageDocument = Jsoup.connect(pageUrl).get();
+							String downloadPageUrl = singlePageDocument.select(".article_info + .mains_left_box").get(0)
+									.select("a").get(0).absUrl("href");
+							System.err.println(downloadPageUrl);
+							Document downloadPage = Jsoup.connect(downloadPageUrl).get();
+							String rand = downloadPage.select("input[name=rand]").val();
+							System.err.println(rand);
+							strs = downloadPageUrl.split("/");
+							String bookName = strs[4].replaceAll(".html", "");
+							if (!StringUtils.endsWithAny(bookName, ".pdf", ".epub")) {
+								LOGGER.info("crawer single book fails,unsuported file :" + bookName);
+								continue;
+							}
+							DownloadUrlInput input = new DownloadUrlInput();
+							input.setId(strs[3]);
+							input.setRand(rand);
+							String getDownloadUrl = DOWNLOAD_BOOK_URL.replaceAll("\\$\\{id\\}", input.getId())
+									.replaceAll("\\$\\{book\\}", bookName);
+							HttpHeaders headers = new HttpHeaders();
+							headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+							HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(
+									RejoiceUtil.objectToFormData(input), headers);
+							Thread.sleep(6000);
+							ResponseEntity<String> response = restTemplate.exchange(getDownloadUrl, HttpMethod.POST,
+									entity, String.class);
+							System.err.println(JsonUtil.buildObjectMapper().writeValueAsString(entity));
+							// Files.write(Paths.get("C:\\app\\rejoice-blog\\download-pdf\\"+bookName),
+							// response.getBody());
+							List<String> list = response.getHeaders().get("Location");
+							this.downloadBook(list.get(0), pageUrl, bookName);
+						} catch (Exception e) {
+							LOGGER.warn("download ebook300 failed:", e);
+						}
+
+					}
+				} catch (Exception e) {
+					LOGGER.warn("connect to ebook300 failed:", e);
 				}
-			} catch (Exception e) {
-				LOGGER.warn("connect to ebook300 failed:", e);
+
 			}
 		}
 	}
