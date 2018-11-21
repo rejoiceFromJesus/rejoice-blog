@@ -1,4 +1,4 @@
-package com.rejoice.blog.vo.http.oschina;
+package com.rejoice.blog.bean.http.oschina;
 
 import com.rejoice.blog.common.constant.Constant;
 

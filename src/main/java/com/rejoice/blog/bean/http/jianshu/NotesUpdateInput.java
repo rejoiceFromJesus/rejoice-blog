@@ -1,4 +1,4 @@
-package com.rejoice.blog.vo.http.jianshu;
+package com.rejoice.blog.bean.http.jianshu;
 
 public class NotesUpdateInput {
 	private String id;

@@ -29,7 +29,7 @@ import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.service.PdfBookService;
 import com.rejoice.blog.service.pdf.PdfService;
 import com.rejoice.blog.task.CrawerBooksTask;
-import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
+import com.rejoice.blog.bean.http.oschina.BlogSaveInput;
 
 @RestController
 @RequestMapping("/test")

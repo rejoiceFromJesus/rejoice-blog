@@ -20,11 +20,11 @@ import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
-import com.rejoice.blog.vo.http.oschina.AccessTokenInput;
-import com.rejoice.blog.vo.http.oschina.AccessTokenOutput;
-import com.rejoice.blog.vo.http.oschina.AuthorizedCodeInput;
-import com.rejoice.blog.vo.http.oschina.BlogSaveInput;
-import com.rejoice.blog.vo.http.oschina.OauthPostInput;
+import com.rejoice.blog.bean.http.oschina.AccessTokenInput;
+import com.rejoice.blog.bean.http.oschina.AccessTokenOutput;
+import com.rejoice.blog.bean.http.oschina.AuthorizedCodeInput;
+import com.rejoice.blog.bean.http.oschina.BlogSaveInput;
+import com.rejoice.blog.bean.http.oschina.OauthPostInput;
 
 @Service
 public class OschinaService {

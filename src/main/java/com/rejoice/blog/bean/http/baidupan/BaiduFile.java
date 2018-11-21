@@ -1,4 +1,4 @@
-package com.rejoice.blog.vo.http.baidupan;
+package com.rejoice.blog.bean.http.baidupan;
 
 public class BaiduFile {
 

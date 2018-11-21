@@ -23,7 +23,7 @@ import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.entity.Dictionary;
-import com.rejoice.blog.vo.http.ebook300.DownloadUrlInput;
+import com.rejoice.blog.bean.http.ebook300.DownloadUrlInput;
 
 @Component
 public class Ebook300CBookCrawer extends BookCrawer {

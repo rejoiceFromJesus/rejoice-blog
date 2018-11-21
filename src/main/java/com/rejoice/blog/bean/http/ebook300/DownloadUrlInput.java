@@ -1,4 +1,4 @@
-package com.rejoice.blog.vo.http.ebook300;
+package com.rejoice.blog.bean.http.ebook300;
 
 public class DownloadUrlInput {
 	

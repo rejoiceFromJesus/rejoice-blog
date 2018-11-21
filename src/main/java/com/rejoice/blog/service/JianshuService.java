@@ -22,24 +22,22 @@ import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
-import com.rejoice.blog.vo.http.jianshu.NotesAddInput;
-import com.rejoice.blog.vo.http.jianshu.NotesAddOutput;
-import com.rejoice.blog.vo.http.jianshu.NotesUpdateInput;
-import com.rejoice.blog.vo.http.jianshu.NotesUpdateOutput;
-import com.rejoice.blog.vo.http.jianshu.UploadOutput;
-import com.rejoice.blog.vo.http.jianshu.UploadTokenOutput;
+import com.rejoice.blog.bean.http.jianshu.NotesAddInput;
+import com.rejoice.blog.bean.http.jianshu.NotesAddOutput;
+import com.rejoice.blog.bean.http.jianshu.NotesUpdateInput;
+import com.rejoice.blog.bean.http.jianshu.NotesUpdateOutput;
+import com.rejoice.blog.bean.http.jianshu.UploadOutput;
+import com.rejoice.blog.bean.http.jianshu.UploadTokenOutput;
 
 @Service
 public class JianshuService {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(JianshuService.class);
+	private static Logger LOG = LoggerFactory.getLogger(JianshuService.class);
 
 	@Autowired
 	RestTemplate restTemplate;
 	
 	private ApiAccount jianshuAccount;
-	
-	
 	
 	@Autowired
 	PdfBookService pdfBookService;
@@ -47,48 +45,16 @@ public class JianshuService {
 	@Autowired
 	ResourceLoader resourceLoader;
 	
+	@Autowired
+	UploadService uploadService;
+	
 	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
-	private static final String UPLOAD_TOKEN_URL = "https://www.jianshu.com/upload_images/token.json?filename=";
 	private static final Long COLLECTION_ID = 576368L;
-	private static final String UPLOAD_URL = "https://upload.qiniup.com/";
-	
-	
-	private HttpEntity<MultiValueMap<String, Object>> getUploadEntity(UploadTokenOutput token, Object file) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-        map.add("token", token.getToken());
-        map.add("key", token.getKey());
-        map.add("file",file);
-        return new HttpEntity<MultiValueMap<String, Object>>(map, headers);
-	}
-	
-	private UploadTokenOutput getUploadToken(String fileName) {
-		String url = UPLOAD_TOKEN_URL+fileName;
-		UploadTokenOutput tokenOutput = restTemplate.exchange(url
-				, HttpMethod.GET
-				, this.getHttpEntity(this.jianshuAccount.getCookies(), null)
-				,  UploadTokenOutput.class).getBody();
-		return tokenOutput;
-	}
 	
 	public Object post(PdfBook pdfBook) throws Exception {
-		
-		try {
-			//1、上传图片
-			UploadTokenOutput uploadToken = this.getUploadToken(pdfBook.getImg().replaceAll("&", "and"));
-			Resource imgResource = resourceLoader.getResource(pdfBook.getImgUrl());
-			if(imgResource.getFile().exists()) {
-				HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken,
-						resourceLoader.getResource(pdfBook.getImgUrl()));
-				UploadOutput uploadFile = restTemplate.postForObject(UPLOAD_URL, uploadEntity, UploadOutput.class);
-				pdfBook.setImgUrl(uploadFile.getUrl());
-			}
-		} catch (Exception e) {
-			VolitateVars.POST_BATCH_LOCK=Constant.FALSE;
-			LOGGER.warn("upload file to jianshu failed",e);
-		}
+		//1、upload img
+		uploadService.uploadImg(pdfBook);
 		//2、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
 		notesAddInput.setNotebook_id(JsonUtil.toBean(this.jianshuAccount.getMetadata(),Map.class).get("noteBookId").toString());

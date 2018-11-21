@@ -20,9 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.common.util.RejoiceUtil;
-import com.rejoice.blog.vo.http.baidupan.BaiduFile;
-import com.rejoice.blog.vo.http.baidupan.DownloadPageOutput;
-import com.rejoice.blog.vo.http.baidupan.VerifyOutput;
+import com.rejoice.blog.bean.http.baidupan.BaiduFile;
+import com.rejoice.blog.bean.http.baidupan.DownloadPageOutput;
+import com.rejoice.blog.bean.http.baidupan.VerifyOutput;
 
 public class BaiduPanCrawer{
 

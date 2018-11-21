@@ -1,4 +1,4 @@
-package com.rejoice.blog.vo.http.oschina;
+package com.rejoice.blog.bean.http.oschina;
 
 public class BlogSaveInput {
 	private String title;
