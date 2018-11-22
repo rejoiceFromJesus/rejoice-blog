@@ -2,7 +2,7 @@ package com.rejoice.blog.bean.http.jianshu;
 
 public class NotesUpdateInput {
 	private String id;
-	private Long autosave_control = 1L;
+	private Long autosave_control = 14L;
 	private String title;
 	private String content;
 	public String getId() {

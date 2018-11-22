@@ -43,11 +43,15 @@ public class UploadService {
 	
 	@Autowired
 	ResourceLoader resourceLoader;
+	
+	@Autowired
+	JianshuService jianshuService;
 
 	public String uploadImg(MultipartFile file) {
 		try {
 			// 1、get account
 			this.jianshuAccount = apiAccountService.getJianshuAccount();
+			jianshuService.setJianshuAccount(jianshuAccount);
 			// 2、upload img
 			UploadTokenOutput uploadToken = this.getUploadToken(file.getOriginalFilename());
 			HttpEntity<MultiValueMap<String, Object>> uploadEntity = this.getUploadEntity(uploadToken, file.getBytes());

@@ -102,6 +102,7 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 					, JianshuService.COLLECTION_ID_IT);
 			ArticleExtend articleExtend = new ArticleExtend();
 			articleExtend.setJianshuId(notesAddOutput.getId());
+			articleExtend.setAutosave_control(1L);
 			t.setExtend(JsonUtil.toJson(articleExtend));
 		} catch (Exception e) {
 			LOG.warn("post to jianshu failed:",e);
@@ -111,18 +112,22 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	
 	@PutMapping("/save")
 	public void updateArticle(@RequestBody Article t, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
+		//1、post to  system
 		this.getService().fillFields(t,userDetails);
+		String extend = this.getService().queryByID(t.getId()).getExtend();
+		ArticleExtend articleExtend = JsonUtil.toBean(extend, ArticleExtend.class);
+		articleExtend.setAutosave_control(articleExtend.getAutosave_control()+1);
+		t.setExtend(JsonUtil.toJson(articleExtend));
 		this.getService().updateByIdSelective(t);
+		//2、post to jianshu
 		try {
-			String extend = this.getService().queryByID(t.getId()).getExtend();
 			jianshuService.updateArticle(t.getContent()
-					,t.getTitle()
-					,JsonUtil.toBean(extend, ArticleExtend.class).getJianshuId());
+					, t.getTitle()
+					, articleExtend.getJianshuId()
+					, articleExtend.getAutosave_control());
 		} catch (Exception e) {
 			LOG.warn("post update to jianshu failed:",e);
 		}
-	
-		
 	}
 
 }

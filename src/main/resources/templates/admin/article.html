@@ -222,9 +222,10 @@ function showArticleDialog(oldData){
 			
 			form.on('submit(article-save)', function(data){
 			      data.field.content = layedit.getContent(contentEditorIndex);
+			      layer.load(2);
 			      $.ajax({type:oldData?'put':'post',url:'/article/save',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
 				  layer.msg("保存博客成功");
-			      layer.close(index);
+				  layer.closeAll();
 			      reloadArticle();
 			 	 }); 
 			     return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
