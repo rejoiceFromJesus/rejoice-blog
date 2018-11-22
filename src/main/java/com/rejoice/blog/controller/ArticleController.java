@@ -14,6 +14,8 @@ import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +29,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rejoice.blog.bean.bo.ArticleExtend;
+import com.rejoice.blog.bean.http.jianshu.NotesAddOutput;
+import com.rejoice.blog.bean.http.jianshu.NotesUpdateInput;
 import com.rejoice.blog.common.bean.LayuiResult;
 import com.rejoice.blog.common.constant.Constant;
+import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.entity.Article;
 import com.rejoice.blog.entity.Comment;
 import com.rejoice.blog.service.ArticleService;
 import com.rejoice.blog.service.CategoryService;
 import com.rejoice.blog.service.CommentService;
+import com.rejoice.blog.service.JianshuService;
 
 /**
  *
@@ -48,12 +55,17 @@ import com.rejoice.blog.service.CommentService;
 @RestController
 @RequestMapping("/article")
 public class ArticleController extends BaseController<Article, ArticleService> {
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
+
 	@Autowired
 	CommentService commentService;
 	
 	@Autowired
 	CategoryService categoryService;
+	
+	@Autowired
+	JianshuService jianshuService;
 	
 	@GetMapping("/{id}.html")
 	public ModelAndView detail(@PathVariable("id") Long id){
@@ -76,25 +88,38 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 	}
 	
 	
+	
+	
 	@PostMapping("/save")
 	public void saveArticle(@RequestBody Article t) throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		this.getService().fillFields(t,principal);
+		try {
+			//post to jianshu
+			NotesAddOutput notesAddOutput = jianshuService.postArticle(t.getContent(), t.getTitle());
+			ArticleExtend articleExtend = new ArticleExtend();
+			articleExtend.setJianshuId(notesAddOutput.getId());
+			t.setExtend(JsonUtil.toJson(articleExtend));
+		} catch (Exception e) {
+			LOG.warn("post to jianshu failed:",e);
+		}
 		this.getService().saveSelective(t);
 	}
 	
 	@PutMapping("/save")
 	public void updateArticle(@RequestBody Article t, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
-		Document doc = Jsoup.parse(t.getContent());
-		t.setPostTime(DateTime.now().toString(Constant.DATE_FORMAT_PATTERN2));
-		//String noHTMLString = t.getContent().replaceAll("\\<.*?\\>", "");
-		t.setSummary(StringUtils.substring(doc.text(),0,100)+"...");
-		t.setAuthor(userDetails.getUsername());
-		Elements img = doc.select("img");
-		if(!img.isEmpty()){
-			t.setImgUrl(img.first().attr("src"));
-		}
+		this.getService().fillFields(t,userDetails);
 		this.getService().updateByIdSelective(t);
+		try {
+			String extend = this.getService().queryByID(t.getId()).getExtend();
+			jianshuService.updateArticle(t.getContent()
+					,t.getTitle()
+					,JsonUtil.toBean(extend, ArticleExtend.class).getJianshuId());
+		} catch (Exception e) {
+			LOG.warn("post update to jianshu failed:",e);
+		}
+	
+		
 	}
 
 }

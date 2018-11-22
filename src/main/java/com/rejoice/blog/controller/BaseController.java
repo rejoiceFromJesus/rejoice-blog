@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -47,7 +48,6 @@ import com.rejoice.blog.service.BaseService;
  */ 
 public class BaseController<T,S> { 
 
-	
 	@Autowired
 	BaseService<T> baseService;
 	

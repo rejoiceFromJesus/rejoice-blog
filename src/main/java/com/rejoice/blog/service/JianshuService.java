@@ -52,10 +52,15 @@ public class JianshuService {
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
 	private static final Long COLLECTION_ID = 576368L;
 	
-	public Object post(PdfBook pdfBook) throws Exception {
+	public void post(PdfBook pdfBook) throws Exception {
 		//1、upload img
 		uploadService.uploadImg(pdfBook);
-		//2、新建文章
+		//2、post article
+		postArticle(pdfBookService.getContent(pdfBook),pdfBook.getTitle());
+	}
+
+	public NotesAddOutput postArticle(String content,String title) {
+		//1、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
 		notesAddInput.setNotebook_id(JsonUtil.toBean(this.jianshuAccount.getMetadata(),Map.class).get("noteBookId").toString());
 		notesAddInput.setAt_bottom(false);
@@ -65,29 +70,33 @@ public class JianshuService {
 				, getHttpEntity(this.jianshuAccount.getCookies(), notesAddInput)
 				, NotesAddOutput.class);
 		
-		//3、更新文章
-		NotesUpdateInput notesUpdateInput = new NotesUpdateInput();
-		notesUpdateInput.setContent(pdfBookService.getContent(pdfBook));
-		notesUpdateInput.setTitle(pdfBook.getTitle().replace("[www.rejoiceblog.com]", ""));
-		notesUpdateInput.setId(notesAddOutput.getId());
-		NotesUpdateOutput notesUpdateOutput = restTemplate.exchange(
-				AUTHOR_NOTES_URL+notesAddOutput.getId()
-				, HttpMethod.PUT
-				, getHttpEntity(this.jianshuAccount.getCookies(), notesUpdateInput)
-				, NotesUpdateOutput.class).getBody();
-		JsonUtil.toJson(notesUpdateOutput);
-		//4、发布文章
-		restTemplate.postForObject(
-				AUTHOR_NOTES_URL+notesAddOutput.getId()+"/publicize"
-				, getHttpEntity(this.jianshuAccount.getCookies(), null), Object.class);
-		//5、收录到专题
+		updateArticle(content, title, notesAddOutput.getId());
+		//4、收录到专题
 		Map<String,Long> data = new HashMap<>();
 		data.put("collection_id", COLLECTION_ID);
 		restTemplate.postForObject(
 				NOTES_URL+notesAddOutput.getId()+"/submit"
 				, getHttpEntity(this.getJianshuAccount().getCookies(), data)
 				, Object.class);
-		return notesUpdateInput;
+		return notesAddOutput;
+	}
+
+	public void updateArticle(String content, String title, String id) {
+		//2、更新文章
+		NotesUpdateInput notesUpdateInput = new NotesUpdateInput();
+		notesUpdateInput.setContent(content);
+		notesUpdateInput.setTitle(title.replace("[www.rejoiceblog.com]", ""));
+		notesUpdateInput.setId(id);
+		NotesUpdateOutput notesUpdateOutput = restTemplate.exchange(
+				AUTHOR_NOTES_URL+id
+				, HttpMethod.PUT
+				, getHttpEntity(this.jianshuAccount.getCookies(), notesUpdateInput)
+				, NotesUpdateOutput.class).getBody();
+		JsonUtil.toJson(notesUpdateOutput);
+		//3、发布文章
+		restTemplate.postForObject(
+				AUTHOR_NOTES_URL+id+"/publicize"
+				, getHttpEntity(this.jianshuAccount.getCookies(), null), Object.class);
 	}
 	
 	private HttpEntity<Object> getHttpEntity(String cookies,Object body) {
@@ -110,4 +119,5 @@ public class JianshuService {
 	public void setJianshuAccount(ApiAccount jianshuAccount) {
 		this.jianshuAccount = jianshuAccount;
 	}
+
 }

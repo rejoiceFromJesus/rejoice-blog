@@ -45,7 +45,15 @@ public class Article extends BaseEntity {
 	private String summary;
 	private String imgUrl;
 	private Boolean enable;
+	private String extend;//json
 	
+	
+	public String getExtend() {
+		return extend;
+	}
+	public void setExtend(String extend) {
+		this.extend = extend;
+	}
 	public Boolean getEnable() {
 		return enable;
 	}

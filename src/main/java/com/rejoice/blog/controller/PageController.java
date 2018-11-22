@@ -77,9 +77,4 @@ public class PageController {
 	public ModelAndView toHome(){
 		return this.findPage(1,null);
 	}
-	
-	@GetMapping("/admin")
-	public String toAdminLogin(){
-		return "admin/admin-login";
-	}
 }
