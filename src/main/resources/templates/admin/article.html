@@ -62,8 +62,6 @@ layui.use('table', function(){
     ,loading:true
     ,height: 'full-200'
     ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-    ,skin: 'line' //行边框风格
-    ,even: true //开启隔行背景
     ,done: function(res, curr, count){
 		if(contentLoadCount == 0){
 			contentLoadCount++;
@@ -72,14 +70,14 @@ layui.use('table', function(){
 		}
     }
     ,cols: [[ //表头
-       {type:'numbers',width:"5%"}
-      ,{field: 'title', title: '标题', width:"10%"}
-      ,{field: 'summary', title: '摘要', width:"12%"}
-      ,{field: 'postTime', title: '发布时间', width:"13%"}
-      ,{field: 'readCount', title: '阅读', width:"10%"}
-      ,{field: 'commentCount', title: '评论', width:"10%"}
-      ,{field: 'author', title: '作者', width:"10%"}
-      ,{field: '', width: "15%" ,toolbar: '#toolbar'}
+       {type:'numbers'}
+      ,{field: 'title', title: '标题'}
+      ,{field: 'summary', title: '摘要'}
+      ,{field: 'postTime', title: '发布时间'}
+      ,{field: 'readCount', title: '阅读'}
+      ,{field: 'commentCount', title: '评论'}
+      ,{field: 'author', title: '作者'}
+      ,{field: '' ,toolbar: '#toolbar'}
     ]]
   });
   

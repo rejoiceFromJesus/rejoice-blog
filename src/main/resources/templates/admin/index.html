@@ -7,8 +7,20 @@
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" media="all">
 <link rel="stylesheet" href="/css/admin/admin.css">
 </head>
-<body class="layui-layout-body">
-	<div class="layui-layout layui-layout-admin">
+<body class="layui-layout-body" layadmin-themealias="default">
+
+  <ul class="rightmenu">
+        <!-- <li data-type="closethis">关闭当前</li> -->
+        <li data-type="closeothers">关闭其它</li>
+        <li data-type="closeall">关闭所有</li>
+        <li data-type="closeleft">关闭左侧</li>
+        <li data-type="closeright">关闭右侧</li>
+        <!-- <li data-type="refresh">刷新当前页</li> -->
+    <!--     <li data-type="cancel"><i class="layui-icon layui-icon-yinshenim"></i>取消</li> -->
+    </ul>
+
+<div id="LAY_app" >
+	<div class="layui-layout layui-layout-admin" >
 		<div class="layui-header">
 			<div class="layui-logo">rejoice博客后台</div>
 			<!-- 头部区域（可配合layui已有的水平导航） -->
@@ -104,11 +116,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="layui-footer" style="height:4%;">
-			<!-- 底部固定区域 -->
-			© layui.com - 底部固定区域
-		</div>
 	</div>
 	    <script th:src="@{/plugin/jquery.min.js}"></script>
 	<script src="/plugin/layui/layui.js"></script>
@@ -130,7 +137,7 @@ layui.use('element', function(){
     		    //新增一个Tab项
  		      element.tabAdd('tab', {
  		        title: title
- 		        ,content:"<div id='"+id+"-content'>"+data+"</div>"
+ 		        ,content:"<div class='layui-card '  style='padding:20px;'  id='"+id+"-content'>"+data+"</div>"
  		        //,content: '<iframe data-frameid='+id+'-frame'+' frameborder="0" name="content" scrolling="no" width="100%" src="/page/admin/category.html"></iframe>'
  		        ,id: id //实际使用一般是规定好的id，这里以时间戳模拟下
  		      })
@@ -178,19 +185,20 @@ function init(tabTitle){
 	layui.use('form', function(){
 		var form = layui.form;			
 		$content.find("select").each(function(index,item){
+			var $select = $(this);
+			$select.empty();
+			$select.append("<option>请选择</option>");
 			$.get($(this).attr("url")).done(function(data){
 				if(data.code==0){
 					data = data.data;
 					for(var i = 0; i < data.length; i++){
 						var option = "<option value="+data[i].value+">"+data[i].label+"</option>";
-						$(this).apppend($(option));
+						$select.append($(option));
 					}
-				
-					
+					form.render("select");
 				}
 			})
 		})
-		form.render("select");
 	});
 }
 

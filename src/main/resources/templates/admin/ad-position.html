@@ -1,6 +1,7 @@
+
 <div class="search" name="search-ad-position">
   <div class="layui-inline">
-    <input class="layui-input"  name="username" placeholder="用户名"  autocomplete="off">
+    <input class="layui-input"  name="position" placeholder="广告位"  autocomplete="off">
   </div>
   <button class="layui-btn" data-type="reload" onclick="reloadAdPosition(1)">搜索</button>
     <button class="layui-btn layui-btn-normal"  onclick="showAdPositionDialog()">新增</button>
@@ -16,7 +17,7 @@
  <div class="layui-form-item">
     <label class="layui-form-label">广告联盟</label>
     <div class="layui-input-block">
-      <select url="/data-item/enum/UnionPlatformEnum" required name="adUnion">
+      <select url="/data-item/enum/AdUnionEnum" required name="adUnion">
       </select>
     </div>
     </div>
@@ -56,6 +57,8 @@ layui.use('table', function(){
     ,url: '/ad-position/page?order=desc&sort=update_time' //数据接口
     ,page: true //开启分页
     ,loading:true
+    ,toolbar:true
+    ,title:"广告位"
     ,height: 'full-200'
     ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
     ,done: function(res, curr, count){
@@ -66,13 +69,16 @@ layui.use('table', function(){
 		}
     }
     ,cols: [[ //表头
-       {type:'numbers',width:"5%"}
-      ,{field: 'adUnionLabel', title: '广告联盟', width:"10%"}
-      ,{field: 'position', title: '广告位', width:"12%"}
-      ,{field: 'html', title: 'html', width:"13%"}
-      ,{field: 'createTime', title: '更新时间', width:"10%"}
-      ,{field: 'updateTime', title: '创建时间', width:"10%"}
-      ,{fixed:"right",field: '', width: "15%" ,toolbar: '#ad-position-toolbar'}
+       {type:'numbers'}
+      ,{field: 'adUnionLabel', title: '广告联盟'}
+      ,{field: 'position', title: '广告位'}
+      ,{field: '', title: 'html' ,templet: function(d){
+        return '<a  class="layui-btn  layui-btn-sm" style="background:none;color:#2d8cf0;" lay-event="assignResources">'
+			+'<i class="layui-icon">&#xe672;</i>点击查看</a>';
+      }}
+      ,{field: 'createTime', title: '更新时间'}
+      ,{field: 'updateTime', title: '创建时间'}
+      ,{fixed:"right",field: '' ,toolbar: '#ad-position-toolbar'}
     ]]
   });
   
@@ -86,7 +92,7 @@ layui.use('table', function(){
     if(layEvent === 'detail'){ //查看
       //do somehing
     } else if(layEvent === 'del'){ //删除
-      layer.confirm('您确定要删除 <span style="color:red;">'+data.platform+"："+data.username+'</span> 吗？', function(index){
+      layer.confirm('您确定要删除 <span style="color:red;">广告位：'+data.position+'</span> 吗？', function(index){
        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
        $.ajax({
     	   type:"delete",
@@ -112,7 +118,7 @@ function showAdPositionDialog(oldData){
 	  shade :0.3,
 	  type: 1,
 	  skin: 'layui-layer-molv', //加上边框
-	  area: ["30%","80%"], //宽高
+	  area: ["30%","60%"], //宽高
 	  content: $("#ad-position-dialog"),
 	  success:function(layero,index){
 		  layui.use(['form'], function(){
@@ -130,7 +136,6 @@ function showAdPositionDialog(oldData){
 	  
 		    }
 			form.on('submit(ad-position-save)', function(data){
-			      data.field.content = layedit.getContent(contentEditorIndex);
 			      $.ajax({type:oldData?'put':'post',url:'/ad-position',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
 				  layer.msg("保存广告位成功");
 			      layer.close(index);
@@ -147,8 +152,8 @@ function reloadAdPosition(pageNum){
 	var options = {
 			
 	where: {
-	  username: $("div[name=search-ad-position]").find("input[name='username']").val(),
-	  likes:"username"
+	  username: $("div[name=search-ad-position]").find("input[name='position']").val(),
+	  likes:"position"
  		   }
 	};
 	if(pageNum){
