@@ -37,6 +37,9 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StreamUtils;
 import org.yaml.snakeyaml.util.UriEncoder;
 
+import com.rejoice.blog.common.constant.AdUnionEnum;
+import com.rejoice.blog.common.constant.BaseEnum;
+
 /**
  *
  * StringTest
