@@ -58,6 +58,10 @@
 								<a url="/page/admin/dictionary.html" href="javascript:;" id='dictionary' class='open-tab'
 									data-type="tabAdd">字典管理</a>
 							</dd>
+							<dd>
+								<a url="/page/admin/ad-position.html" href="javascript:;" id='ad-position' class='open-tab'
+									data-type="tabAdd">广告位管理</a>
+							</dd>
 						</dl></li>
 					<li class="layui-nav-item layui-nav-itemed"><a
 						href="javascript:;">博客管理</a>
@@ -171,6 +175,12 @@ function init(tabTitle){
 			$(this).remove();
 		}
 	})
+	//init select
+	console.info($content);
+	$content.find("select").each(function(item){
+		console.info(item)
+	})
+	
 }
 function showCategoryTree(){
 	var $categoryInput = $(this);

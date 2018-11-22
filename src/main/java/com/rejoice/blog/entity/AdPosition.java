@@ -5,28 +5,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.rejoice.blog.common.constant.AdUnionEnum;
 import com.rejoice.blog.common.constant.PlatformEnum;
 
+/**
+ * 广告位
+ * @author jiongyi
+ *
+ */
 @Table
 public class AdPosition extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private PlatformEnum platform;
+	private AdUnionEnum adUnion;
 	private String html;
-	private String name;
+	private String position;
+	
+	public String getAdUnionLabel() {
+		return adUnion.label();
+	}
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public PlatformEnum getPlatform() {
-		return platform;
+	
+	public AdUnionEnum getAdUnion() {
+		return adUnion;
 	}
-	public void setPlatform(PlatformEnum platform) {
-		this.platform = platform;
+	public void setAdUnion(AdUnionEnum adUnion) {
+		this.adUnion = adUnion;
 	}
 	public String getHtml() {
 		return html;
@@ -34,11 +45,12 @@ public class AdPosition extends BaseEntity {
 	public void setHtml(String html) {
 		this.html = html;
 	}
-	public String getName() {
-		return name;
+	public String getPosition() {
+		return position;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setPosition(String position) {
+		this.position = position;
 	}
+	
 	
 }
