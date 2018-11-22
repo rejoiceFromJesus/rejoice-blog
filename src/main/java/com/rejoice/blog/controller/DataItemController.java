@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rejoice.blog.common.bean.Result;
 import com.rejoice.blog.common.constant.BaseEnum;
 
 @RequestMapping("/data-item")
@@ -24,7 +25,7 @@ public class DataItemController {
 	}
 
 	@GetMapping("/enum/{enumClassSimpleName}")
-	public List<Map<String,Object>> enumList(@PathVariable String enumClassSimpleName) throws Exception{
+	public Result<List<Map<String,Object>>> enumList(@PathVariable String enumClassSimpleName) throws Exception{
 		Class<Enum> enumClass = (Class<Enum>) Class.forName(ENUM_PACKAGE+enumClassSimpleName);
 		List<BaseEnum> enumList = EnumUtils.getEnumList( enumClass);
 		List<Map<String, Object>> dataList = enumList.stream().map(item -> {
@@ -33,6 +34,6 @@ public class DataItemController {
 			map.put("label", item.label());
 			return map;
 		}).collect(Collectors.toList());
-		return dataList;
+		return Result.success(dataList);
 	}
 }

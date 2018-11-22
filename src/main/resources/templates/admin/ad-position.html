@@ -11,14 +11,12 @@
   <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
 </script>
-<form id='ad-position-dialog' type='dialog'   style="display: none;padding:20px;"  class="layui-form" action="">
+<form id='ad-position-dialog'  style="display:none;padding:20px;"  class="layui-form" action="">
 	  <input type='hidden' name='id'  />
-
  <div class="layui-form-item">
     <label class="layui-form-label">广告联盟</label>
     <div class="layui-input-block">
       <select url="/data-item/enum/UnionPlatformEnum" required name="adUnion">
-        <option  value="">请选择</option>
       </select>
     </div>
     </div>
@@ -111,40 +109,26 @@ layui.use('table', function(){
 function showAdPositionDialog(oldData){
 	layer.open({
 	  title:oldData?'编辑广告位':'添加广告位',
+	  shade :0.3,
 	  type: 1,
-	  anim: 1,
 	  skin: 'layui-layer-molv', //加上边框
 	  area: ["30%","80%"], //宽高
 	  content: $("#ad-position-dialog"),
 	  success:function(layero,index){
-		  layui.use(['form','layedit'], function(){
+		  layui.use(['form'], function(){
 			var form = layui.form;
-			var layedit = layui.layedit;
 			$("#ad-position-dialog")[0].reset();
 			$("#ad-position-dialog").find("input[type='hidden']").val('');
 			$("#ad-position-dialog").find("textarea").val('');
 			if(oldData){
 				  
-					   $.get("/ad-position/"+oldData.id).done(function(data){
-						   for (var name in data) {
-								$("#ad-position-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
-			   			   }
-						   //构建一个默认的编辑器
-							 contentEditorIndex = layedit.build('ad-position-content',{
-								  height:"500px"
-							  });
-						   
-					  })
-					 
-				
-			  
-		    }else{
-		    	 //构建一个默认的编辑器
-				 contentEditorIndex = layedit.build('ad-position-content',{
-					  height:"500px"
-				  });
+			   $.get("/ad-position/"+oldData.id).done(function(data){
+				   for (var name in data) {
+						$("#ad-position-dialog").find('input[name="' + name + '"],select[name="' + name + '"],radio[name="' + name + '"],textarea[name="' + name + '"]').val(data[name]);
+	   			   }
+			  })
+	  
 		    }
-			
 			form.on('submit(ad-position-save)', function(data){
 			      data.field.content = layedit.getContent(contentEditorIndex);
 			      $.ajax({type:oldData?'put':'post',url:'/ad-position',contentType: 'application/json',data:JSON.stringify(data.field)}).done(function(data){
