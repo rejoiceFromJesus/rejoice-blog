@@ -50,19 +50,24 @@ public class JianshuService {
 	
 	private static final String NOTES_URL = "https://www.jianshu.com/notes/";
 	private static final String AUTHOR_NOTES_URL = "https://www.jianshu.com/author/notes/";
-	private static final Long COLLECTION_ID = 576368L;
+	public static final Long COLLECTION_ID_BOOK = 576368L;
+	public static final Long COLLECTION_ID_IT = 576845L;
+	public static final String NOTEBOOK_ID_IT ="19669537";
 	
 	public void post(PdfBook pdfBook) throws Exception {
 		//1、upload img
 		uploadService.uploadImg(pdfBook);
 		//2、post article
-		postArticle(pdfBookService.getContent(pdfBook),pdfBook.getTitle());
+		postArticle(pdfBookService.getContent(pdfBook)
+				,pdfBook.getTitle()
+				,JsonUtil.toBean(this.jianshuAccount.getMetadata(),Map.class).get("noteBookId").toString()
+				,COLLECTION_ID_BOOK);
 	}
 
-	public NotesAddOutput postArticle(String content,String title) {
+	public NotesAddOutput postArticle(String content,String title,String noteBookId,Long collectionId) {
 		//1、新建文章
 		NotesAddInput notesAddInput = new NotesAddInput();
-		notesAddInput.setNotebook_id(JsonUtil.toBean(this.jianshuAccount.getMetadata(),Map.class).get("noteBookId").toString());
+		notesAddInput.setNotebook_id(noteBookId);
 		notesAddInput.setAt_bottom(false);
 		notesAddInput.setTitle("新文章："+System.currentTimeMillis());
 		NotesAddOutput notesAddOutput = restTemplate.postForObject(
@@ -73,7 +78,7 @@ public class JianshuService {
 		updateArticle(content, title, notesAddOutput.getId());
 		//4、收录到专题
 		Map<String,Long> data = new HashMap<>();
-		data.put("collection_id", COLLECTION_ID);
+		data.put("collection_id", collectionId);
 		restTemplate.postForObject(
 				NOTES_URL+notesAddOutput.getId()+"/submit"
 				, getHttpEntity(this.getJianshuAccount().getCookies(), data)

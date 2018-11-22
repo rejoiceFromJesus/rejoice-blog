@@ -96,7 +96,10 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		this.getService().fillFields(t,principal);
 		try {
 			//post to jianshu
-			NotesAddOutput notesAddOutput = jianshuService.postArticle(t.getContent(), t.getTitle());
+			NotesAddOutput notesAddOutput = jianshuService.postArticle(t.getContent()
+					, t.getTitle()
+					, JianshuService.NOTEBOOK_ID_IT
+					, JianshuService.COLLECTION_ID_IT);
 			ArticleExtend articleExtend = new ArticleExtend();
 			articleExtend.setJianshuId(notesAddOutput.getId());
 			t.setExtend(JsonUtil.toJson(articleExtend));
