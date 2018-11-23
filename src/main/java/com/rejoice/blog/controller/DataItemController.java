@@ -27,11 +27,12 @@ public class DataItemController {
 	@GetMapping("/enum/{enumClassSimpleName}")
 	public Result<List<Map<String,Object>>> enumList(@PathVariable String enumClassSimpleName) throws Exception{
 		Class<Enum> enumClass = (Class<Enum>) Class.forName(ENUM_PACKAGE+enumClassSimpleName);
-		List<BaseEnum> enumList = EnumUtils.getEnumList( enumClass);
+		List<Enum> enumList = EnumUtils.getEnumList( enumClass);
 		List<Map<String, Object>> dataList = enumList.stream().map(item -> {
 			Map<String, Object> map = new HashMap<>();
-			map.put("value", item);
-			map.put("label", item.label());
+			BaseEnum itemEnum = (BaseEnum) item;
+			map.put("value", itemEnum);
+			map.put("label", itemEnum.label());
 			return map;
 		}).collect(Collectors.toList());
 		return Result.success(dataList);
