@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div class="left" th:fragment="left"
+		style="float: left; margin: 16px 10px; padding: 4px; width: 16%;">
+		<div class="border-shadow" style="background-size: cover;
+    color: #f1ca0c;
+    background-image: url(/img/me.jpg;);
+    height: 250px;
+    opacity: 0.7;">忘记背后，努力面前的，向着标杆直跑</div>
+    <span style="color:#f77c34;">联系我：948870341@qq.com</span>
+    <hr/>
+     <div th:remove="tag" th:each="ad:${ad2s}">
+			<div style="margin-left:-20px;" th:utext="${ad.html}">
+		   </div>
+		 </div>
+    </div>
+</body>
+</html>

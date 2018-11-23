@@ -9,7 +9,6 @@
  */
 package com.rejoice.blog.service;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,14 +16,16 @@ import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.RejoiceUtil;
+import com.rejoice.blog.entity.AdPosition;
 import com.rejoice.blog.entity.Article;
 
 import tk.mybatis.mapper.entity.Example;
@@ -44,6 +45,23 @@ import tk.mybatis.mapper.util.StringUtil;
 @Service
 public class ArticleService extends BaseService<Article>{
 	
+	@Autowired
+	AdPositionService adPositionService;
+
+	public void initAdsAndCards(ModelAndView mv) {
+		Article rankCons = new Article();
+		rankCons.setEnable(true);
+		mv.addObject("readRankList", this.queryListByPageAndOrder(rankCons, 1, 8, "read_count desc").getList());
+		//ad
+		//ad1
+		AdPosition adCons = new AdPosition();
+		adCons.setPosition("ad1");
+		List<AdPosition> ad1List = adPositionService.queryListByWhere(adCons);
+		mv.addObject("ad1s",ad1List);
+		adCons.setPosition("ad2");
+		List<AdPosition> ad2List = adPositionService.queryListByWhere(adCons);
+		mv.addObject("ad2s",ad2List);
+	}
 	
 	@Override
 	public PageInfo<Article> queryListByPageAndOrder(Article t, Integer page, Integer rows, String[] sorts,

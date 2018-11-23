@@ -479,6 +479,7 @@ The list with special bullet points, used both on blog widgets as well as in the
 =================*/
 .clean-list {
   list-style: none;
+  overflow: hidden;
 }
 
 .clean-list li {
@@ -647,7 +648,6 @@ Blog styles
 
 /* Blog aside widgets */
 .aside-widget {
-  margin-bottom: 40px;
   border: 1px solid #ddd;
 }
 
@@ -665,7 +665,7 @@ Blog styles
 
 .aside-widget .body {
   margin: 10px 0;
-  padding: 5px;
+  padding: 20px;
 }
 
 .aside-widget a {

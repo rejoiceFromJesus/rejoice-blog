@@ -34,7 +34,7 @@ input::-webkit-inner-spin-button {
 </style>
       <div th:include="fragments/bodyHeader" th:remove="tag">
       </div>
-    <div  th:include="fragments/me"></div>
+    <div  th:include="fragments/left"></div>
        <div class="widewrapper main" style="width:62%;float:left;">
         <div th:if="${keyword}" style="line-height: 0px;" style="padding:10px;">
 	        <div th:if="${#lists.size(list) > 0}">
@@ -49,7 +49,7 @@ input::-webkit-inner-spin-button {
 			<input type="hidden" id="count" th:value="${count}" />
 			<input type="hidden" id="curr"  th:value="${curr}"/>
              <div th:each="article : ${list}" class="col-md-8 blog-main">
-						<img th:src="${article.imgUrl}?${article.imgUrl}:'/img/1.jpg'"  />
+						<img th:src="${ !#strings.isEmpty(article.imgUrl)  and !#strings.startsWith(article.imgUrl,'file')}?${article.imgUrl}:'/img/1.jpg'"  />
 						<div class="article">
 							<a target="_blank" th:inline="text" class="title" th:href="'/article/'+${article.id}+'.html'">
 								[[${article.title}]]

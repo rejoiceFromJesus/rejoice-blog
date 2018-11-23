@@ -70,21 +70,25 @@
 	padding:0px;
 	float:right;
 	position: inherit !important;
+	background: #fff;
 }
 .blog-aside .body{
-		background: #f0f6fb;
 		margin:0px;
-		padding-left:10px;
 }
 .blog-aside header{
 	    background:#40a4ea;
+	        line-height: 30px;
+    color: #fff;
+    text-align: center;
 	  
 }
 .blog-aside header h3{
 	  color:white;
 }
 .clean-list a{
-	color:#377eb1;
+	white-space: nowrap;
+	color:#2e9eef;
+	font-size:14px;
 }
 .clean-list a:hover{
 	color:#14a5e8 !important;

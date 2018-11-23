@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<aside  th:fragment="wall-card" class="col-md-4 blog-aside"
-		style="width: 17%; float: left; margin: 20px 0px 0px 20px;">
+		style="width: 19%; float: left; margin: 20px 0px 0px 20px;">
 
 		<div class="aside-widget">
-			<header>
-				<h3>阅读排行</h3>
-			</header>
+			<header>阅读排行</header>
 			<div class="body" style="padding-top:0px;">
 				<ul class="clean-list" >
 				<div th:remove="tag"  th:each="article, status: ${readRankList}" >
-					<li style="margin:0px;margin-top:10px;" th:inline="text"><span    style=" padding: 2px 6px;
+					<li style="margin:0px;margin-top:4px;" th:inline="text"><span    style=" padding: 2px 6px;
     background: #19afe8;
     color: white;
     border-radius: 4px;

@@ -76,12 +76,10 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		comment.setArticleId(id);
 		modelAndView.addObject("commentCount", commentService.queryCount(comment));
 		modelAndView.addObject("comments",commentService.findArticleComments(id));
-		modelAndView.addObject("readRankList", this.getService().queryListByPageAndOrder(null, 1, 10, "read_count desc").getList());
+		this.getService().initAdsAndCards(modelAndView);
 		//update readCount
 		Article update = new Article();
 		update.setReadCount(article.getReadCount()+1);
-	/*	Category category = categoryService.queryByID(article.getCategoryId());
-		article.setCategoryName(category == null ? "" : category.getName() );*/
 		update.setId(id);
 		this.getService().updateByIdSelective(update);
 		return modelAndView;

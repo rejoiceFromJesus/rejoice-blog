@@ -1,5 +1,7 @@
 package com.rejoice.blog.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageInfo;
 import com.rejoice.blog.common.bean.LayuiResult;
 import com.rejoice.blog.common.util.JsonUtil;
+import com.rejoice.blog.entity.AdPosition;
 import com.rejoice.blog.entity.Article;
+import com.rejoice.blog.service.AdPositionService;
 import com.rejoice.blog.service.ArticleService;
 
 /**
@@ -34,6 +38,9 @@ public class PageController {
 
 	@Autowired
 	ArticleService articleService;
+	
+	@Autowired
+	AdPositionService adPositionService;
 	
 	@RequestMapping(value="/page/**/*.html")
 	public String toPage(HttpServletRequest request){
@@ -66,11 +73,11 @@ public class PageController {
 		mv.addObject("count", pageInfo.getTotal());
 		mv.addObject("totalPage", pageInfo.getPages());
 		mv.addObject("p","?"+p.toString());
-		Article rankCons = new Article();
-		rankCons.setEnable(true);
-		mv.addObject("readRankList", articleService.queryListByPageAndOrder(rankCons, 1, 10, "read_count desc").getList());
+		
+		articleService.initAdsAndCards(mv);
 		return mv;
 	}
+
 	
 	
 	@GetMapping("/")

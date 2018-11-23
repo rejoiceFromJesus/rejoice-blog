@@ -112,48 +112,15 @@
             </div>
         </div>
 	<div  style="margin-bottom:-28px;height:100px;overflow: hidden;" id="ad1">
+	 <div th:remove="tag" th:each="ad:${ad1s}">
+			<div th:utext="${ad.html}" id="ad1-template" style="display: inline-block;margin-top:-54px;">
+		   </div>
+		 </div>
 	</div>
-<!-- 	<div id="ad1-template" style="display: inline-block;margin-top:-50px;">
-	</div> -->
+	
     </header>
 </div>
 <script>
-$(function(){
-	
- 	$.get("/ad-position/all?position=ad1").done(function(data){
-		for(var i = 0; i < data.length; i--){
-		 	/* var offset = [127,1+i*900];
-		 	 layer.open({
-				type:1,
-				id:"id1-"+i,
-				offset: offset,
-				title:false,
-				fixed:true,
-				closeBtn:0,
-				btn:[],
-				shade: 0,
-	  			content:"<div style='overflow:hidden;display:inline-blick;'>"+data[i].html+"</div>"
-			}); 
-			$("#id1-"+i).css("padding","0px");
-			$("#id1-"+i).siblings(".layui-layer-btn").remove();
-			$("#id1-"+i).find(".layui-layer-btn").remove();  */
-		}
-		
-		 layer.open({
-				type:1,
-				id:"id1-"+0,
-				offset: [127,0],
-				title:false,
-				fixed:true,
-				closeBtn:0,
-				btn:[],
-				shade: 0,
-	  			content:"<div style='overflow:hidden;display:inline-blick;'>"+data[0].html+"</div>"
-			}); 
-		
-     
-	})
-})
 </script>
 </body>
 </html>
