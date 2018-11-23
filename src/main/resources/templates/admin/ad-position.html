@@ -34,6 +34,13 @@
      <div class="layui-input-block">
         <textarea name="html" placeholder="请输入html" class="layui-textarea"></textarea>
     </div>
+    </div>
+     
+   <div class="layui-form-item">
+    <label class="layui-form-label">样式</label>
+     <div class="layui-input-block">
+        <textarea name="styleSheet" placeholder="请输入样式" class="layui-textarea"></textarea>
+    </div>
   </div>
   
   
@@ -76,6 +83,7 @@ layui.use('table', function(){
         return '<a  class="layui-btn  layui-btn-sm" style="background:none;color:#2d8cf0;" lay-event="checkHtml">'
 			+'<i class="layui-icon">&#xe672;</i>点击查看</a>';
       }}
+      ,{field: 'style', title: '样式'}
       ,{field: 'createTime', title: '更新时间'}
       ,{field: 'updateTime', title: '创建时间'}
       ,{fixed:"right",field: '' ,toolbar: '#ad-position-toolbar'}

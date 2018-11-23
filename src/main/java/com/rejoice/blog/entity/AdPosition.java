@@ -22,7 +22,16 @@ public class AdPosition extends BaseEntity {
 	private AdUnionEnum adUnion;
 	private String html;
 	private String position;
+	private String styleSheet;
 	
+	
+	
+	public String getStyleSheet() {
+		return styleSheet;
+	}
+	public void setStyleSheet(String styleSheet) {
+		this.styleSheet = styleSheet;
+	}
 	public String getAdUnionLabel() {
 		return adUnion.label();
 	}
