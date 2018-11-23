@@ -92,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         			"/api/**",
         			"/css/**","/img/**",
         			"/upload-images/**",
+        			"/ad-position/all",
         			"/plugin/**/*");
         }
         

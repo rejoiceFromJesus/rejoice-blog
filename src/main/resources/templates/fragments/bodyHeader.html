@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
   <style type="text/css">  
         .navbar .nav > li .dropdown-menu {  
@@ -111,15 +111,49 @@
 
             </div>
         </div>
-	<div style="margin-bottom:-28px;height:100px;overflow: hidden;" id="ad1">
-	<div style="display: inline-block;margin-top:-50px;">
-	<script type="text/javascript">var jd_union_unid="1001209895",jd_ad_ids="1470:6",jd_union_pid="CP2x5tXzLBCngLXdAxoAIND0sOkFKgA=";var jd_width=629;var jd_height=144;var jd_union_euid="";var p="AhYAVh9cFQYVBmVEH0hfIlgRRgYlXVZaCCsfSlpMWGVEH0hfImU%2BbCJRWFVbNhklXUJJfDVeRXViemdZF2sVBhYCUxhYHQUaN1UaWhUBEw9cE18lMk1DCEZrXmwTNwpfBkgyEgNQGFITCxYGVRtbHDITN2Ur";</script><script type="text/javascript" charset="utf-8" src="//u-x.jd.com/static/js/auto.js"></script>
+	<div  style="margin-bottom:-28px;height:100px;overflow: hidden;" id="ad1">
 	</div>
-	<div style="display: inline-block;width:10px;">
-<script type="text/javascript">var jd_union_unid="1001209895",jd_ad_ids="506:6",jd_union_pid="CLiQmtbzLBCngLXdAxoAIPeLkukFKgA=";var jd_width=760;var jd_height=90;var jd_union_euid="";var p="AhYAVh9cFQYVBmVEH0hfIlgRRgYlXVZaCCsfSlpMWGVEH0hfImILWiVoaXdGNx0hHGF6Qi5wOhd%2BDHdZF2sVBhYCUxhYHQUaN1UaWhUBEw9cE18lMk1DCEZrXmwTNwpfBkgyEgNQGFITChACXB1TEDITN2Ur";</script><script type="text/javascript" charset="utf-8" src="//u-x.jd.com/static/js/auto.js"></script>
-	</div>
-	</div>
+<!-- 	<div id="ad1-template" style="display: inline-block;margin-top:-50px;">
+	</div> -->
     </header>
 </div>
+<script>
+$(function(){
+	
+ 	$.get("/ad-position/all?position=ad1").done(function(data){
+		for(var i = 0; i < data.length; i--){
+		 	/* var offset = [127,1+i*900];
+		 	 layer.open({
+				type:1,
+				id:"id1-"+i,
+				offset: offset,
+				title:false,
+				fixed:true,
+				closeBtn:0,
+				btn:[],
+				shade: 0,
+	  			content:"<div style='overflow:hidden;display:inline-blick;'>"+data[i].html+"</div>"
+			}); 
+			$("#id1-"+i).css("padding","0px");
+			$("#id1-"+i).siblings(".layui-layer-btn").remove();
+			$("#id1-"+i).find(".layui-layer-btn").remove();  */
+		}
+		
+		 layer.open({
+				type:1,
+				id:"id1-"+0,
+				offset: [127,0],
+				title:false,
+				fixed:true,
+				closeBtn:0,
+				btn:[],
+				shade: 0,
+	  			content:"<div style='overflow:hidden;display:inline-blick;'>"+data[0].html+"</div>"
+			}); 
+		
+     
+	})
+})
+</script>
 </body>
 </html>

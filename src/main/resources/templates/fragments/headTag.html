@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="headTag">
+	<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="icon" type="image/x-icon" th:href="@{/img/logo.jpg}" />
 	 <meta name="ctx" th:content="@{/}" />
     <link th:href="@{/plugin/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet" />
@@ -18,6 +21,7 @@
     <script th:src="@{/plugin/bootstrap/dist/js/bootstrap.min.js}"></script>
     <script th:src="@{/plugin/modernizr.js}"></script>
     <script th:src="@{/js/user/public/public.js}"></script>
+    <script th:src="@{/js/rejoice.js}"></script>
     
     <!-- google ad starts -->
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
