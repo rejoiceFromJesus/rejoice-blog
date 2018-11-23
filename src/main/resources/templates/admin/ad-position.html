@@ -73,7 +73,7 @@ layui.use('table', function(){
       ,{field: 'adUnionLabel', title: '广告联盟'}
       ,{field: 'position', title: '广告位'}
       ,{field: '', title: 'html' ,templet: function(d){
-        return '<a  class="layui-btn  layui-btn-sm" style="background:none;color:#2d8cf0;" lay-event="assignResources">'
+        return '<a  class="layui-btn  layui-btn-sm" style="background:none;color:#2d8cf0;" lay-event="checkHtml">'
 			+'<i class="layui-icon">&#xe672;</i>点击查看</a>';
       }}
       ,{field: 'createTime', title: '更新时间'}
@@ -105,6 +105,8 @@ layui.use('table', function(){
       });
     } else if(layEvent === 'edit'){ //编辑
     	showAdPositionDialog(data)
+    }else if(layEvent === 'checkHtml'){ //编辑
+		alert(data.html)
     }
   });
   
