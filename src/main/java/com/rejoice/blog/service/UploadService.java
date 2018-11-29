@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -20,6 +21,7 @@ import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rejoice.blog.bean.http.jianshu.UploadOutput;
 import com.rejoice.blog.bean.http.jianshu.UploadTokenOutput;
 
@@ -34,6 +36,10 @@ public class UploadService {
 	
 	private ApiAccount jianshuAccount;
 
+	/*public static void main(String[] args) throws JsonProcessingException {
+		HttpEntity<Object> httpEntity = new UploadService().getHttpEntity("232323", null);
+		LOG.info("get upload token, input:{},",JsonUtil.buildObjectMapper().writeValueAsString(httpEntity));
+	}*/
 	
 	@Autowired
 	RestTemplate restTemplate;
@@ -65,8 +71,11 @@ public class UploadService {
 
 	private UploadTokenOutput getUploadToken(String fileName) {
 		String url = UPLOAD_TOKEN_URL + fileName;
-		UploadTokenOutput tokenOutput = restTemplate.exchange(url, HttpMethod.GET,
-				this.getHttpEntity(this.jianshuAccount.getCookies(), null), UploadTokenOutput.class).getBody();
+		HttpEntity<Object> entity = this.getHttpEntity(this.jianshuAccount.getCookies(), null);
+		LOG.info("get upload token, input:{}",JsonUtil.toJson(entity));
+		ResponseEntity<UploadTokenOutput> response = restTemplate.exchange(url, HttpMethod.GET, entity, UploadTokenOutput.class);
+		LOG.info("get upload token, output:{}",JsonUtil.toJson(response));
+		UploadTokenOutput tokenOutput = response.getBody();
 		return tokenOutput;
 	}
 	
