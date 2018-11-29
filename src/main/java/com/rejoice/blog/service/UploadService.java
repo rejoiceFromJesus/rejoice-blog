@@ -35,12 +35,22 @@ public class UploadService {
 	private static final String UPLOAD_URL = "https://upload.qiniup.com/";
 	
 	private ApiAccount jianshuAccount;
+	
+	
 
 	/*public static void main(String[] args) throws JsonProcessingException {
 		HttpEntity<Object> httpEntity = new UploadService().getHttpEntity("232323", null);
 		LOG.info("get upload token, input:{},",JsonUtil.buildObjectMapper().writeValueAsString(httpEntity));
 	}*/
 	
+	public ApiAccount getJianshuAccount() {
+		return jianshuAccount;
+	}
+
+	public void setJianshuAccount(ApiAccount jianshuAccount) {
+		this.jianshuAccount = jianshuAccount;
+	}
+
 	@Autowired
 	RestTemplate restTemplate;
 	

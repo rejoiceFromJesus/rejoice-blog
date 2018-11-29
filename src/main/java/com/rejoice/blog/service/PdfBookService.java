@@ -40,6 +40,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 	ResourceLoader resourceLoader;
 	
 	@Autowired
+	UploadService uploadService;
+	
+	@Autowired
 	OschinaService oschinaService;
 	
 	public static volatile String POST_BATCH_LOCK = "false";
@@ -193,6 +196,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			List<PdfBook> list = this.queryListByWhere(cons);
 			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
 			jianshuService.setJianshuAccount(jianshuAccount);
+			uploadService.setJianshuAccount(jianshuAccount);
 			for (PdfBook pdfBook : list) {
 				//2、check lock always
 				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
