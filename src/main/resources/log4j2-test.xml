@@ -64,7 +64,7 @@
 
 	<loggers>
 		<logger name="cn.jrjzx.regulators.receive" level="INFO" />
-		<logger name="mapper" level="DEBUG" />
+		<!-- <logger name="mapper" level="DEBUG" /> -->
 		<root level="info">
 			<appender-ref ref="Console" />
 			<appender-ref ref="RollingFileInfo" />
