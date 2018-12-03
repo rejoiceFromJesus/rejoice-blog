@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.client.RestTemplate;
 
+import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.CrawerBook;
 import com.rejoice.blog.service.CrawerBookService;
 import com.rejoice.blog.service.DictionaryService;
@@ -49,7 +50,9 @@ public abstract class BookCrawer {
 	
 	protected void downloadBook(String downloadUrl,String url, String name) throws IOException {
 		CrawerBook cons = new CrawerBook();
-		name = name.replace("[seosee.info]", "");
+		for (String replaceString : VolitateVars.REPLACE_STRING_OF_FILE_NAME) {
+			name = name.replace(replaceString, "");
+		}
 		name = name.replace(".pdf", "[www.rejoiceblog.com].pdf");
 		name = name.replace(".epub", "[www.rejoiceblog.com].epub");
 		name = name.replace(".mobi", "[www.rejoiceblog.com].mobi");
