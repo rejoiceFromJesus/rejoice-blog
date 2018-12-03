@@ -124,7 +124,7 @@ public class UploadService {
 			}
 		} catch (Exception e) {
 			VolitateVars.POST_BATCH_LOCK=Constant.FALSE;
-			LOG.warn("upload file to jianshu failed",e);
+			throw new RuntimeException("upload image to jianshu failed",e);
 		}
 	}
 }

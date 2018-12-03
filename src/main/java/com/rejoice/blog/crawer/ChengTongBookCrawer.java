@@ -54,21 +54,17 @@ public class ChengTongBookCrawer extends BookCrawer{
 										if(data.get("code").equals(200)) {
 											this.downloadBook(data.get("downurl").toString(), downloadPageUrl, resource.text());
 										}else {
-											LOGGER.warn("get downurl failed:{}", JsonUtil.toJson(data));
 										}
 									} catch (Exception e) {
-										LOGGER.warn("crawer books failed :",e);
 									}
 									
 								}
 							}
 						} catch (Exception e) {
-							LOGGER.warn("crawer books failed :",e);
 						}
 						
 					}
 				} catch (Exception e) {
-					LOGGER.warn("crawer cheng tong books failed:{}", url, e);
 				}
 			}
 		

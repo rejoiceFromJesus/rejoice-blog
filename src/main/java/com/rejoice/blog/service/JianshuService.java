@@ -100,6 +100,7 @@ public class JianshuService {
 		restTemplate.postForObject(
 				AUTHOR_NOTES_URL+id+"/publicize"
 				, getHttpEntity(this.jianshuAccount.getCookies(), null), Object.class);
+		LOG.info("post article :{} to chengtong success", notesUpdateInput.getTitle());
 	}
 	
 	private HttpEntity<Object> getHttpEntity(String cookies,Object body) {

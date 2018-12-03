@@ -76,7 +76,7 @@ public class PdfService {
 			Files.delete(Paths.get(srcAbsolutePath));
 			Files.move(Paths.get(newPath), Paths.get(srcAbsolutePath));
 		} catch (Exception e) {
-			LOGGER.warn("add link failed:", e);
+			LOGGER.warn("add link failed");
 		} 
 	}
 /*

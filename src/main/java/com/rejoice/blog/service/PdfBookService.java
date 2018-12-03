@@ -213,7 +213,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 					pdfBookService.updateByIdSelective(newBook);
 					Thread.sleep(2000);
 				} catch (Exception e) {
-					LOGGER.warn("POST articles to jianshu failed:", e);
+					LOGGER.error("POST BOOK TO JIANSHU FAILED:",e);
 				}
 			}
 

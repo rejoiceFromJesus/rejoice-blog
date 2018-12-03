@@ -105,12 +105,10 @@ public class Ebook300CBookCrawer extends BookCrawer {
 							List<String> list = response.getHeaders().get("Location");
 							this.downloadBook(list.get(0), pageUrl, bookName);
 						} catch (Exception e) {
-							LOGGER.warn("download ebook300 failed:", e);
 						}
 
 					}
 				} catch (Exception e) {
-					LOGGER.warn("connect to ebook300 failed:", e);
 				}
 
 			}

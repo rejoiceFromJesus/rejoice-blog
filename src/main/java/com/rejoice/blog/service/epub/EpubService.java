@@ -51,7 +51,6 @@ public class EpubService {
 			imgout.write(p, 0, p.length);
 			imgout.close();
 		} catch (Exception e) {
-			LOGGER.warn("screen shot epub failed:",e);
 		}
 	}
 }

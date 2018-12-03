@@ -53,7 +53,7 @@ public class PdfImageService extends PdfService{
             writer.write(new IIOImage(image, null, null));
 		        
 		} catch (Exception e) {
-			LOGGER.warn("pdf screenshot failed:",e);;
+			LOGGER.warn("pdf screenshot failed");;
 		}
 	}
 }

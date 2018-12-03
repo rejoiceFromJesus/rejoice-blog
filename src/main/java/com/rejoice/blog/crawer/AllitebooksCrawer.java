@@ -88,7 +88,6 @@ public class AllitebooksCrawer extends BookCrawer{
 				
 			}
 		} catch (Exception e) {
-			LOGGER.warn("download file failed:",e);
 			if(singleBookRetryCount <= 0) {
 				singleBookRetryCount = RETRY_COUNT;
 				return;

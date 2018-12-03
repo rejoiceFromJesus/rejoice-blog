@@ -95,8 +95,9 @@ public class UploadAndPostCrawer {
 				pdfBook.setImgUrl(crawerBook.getImg());
 				pdfBook.setImg(crawerBook.getName()+".jpg");
 				pdfBookService.saveSelective(pdfBook);
+				LOGGER.info("upload file:{} to chengtong success",pdfBook.getFileName());
 			} catch (Exception e) {
-				LOGGER.warn("upload file to ct cloud failed:",e);
+				LOGGER.error("upload file to ct cloud failed:",e);
 			}
 		}
 	}
