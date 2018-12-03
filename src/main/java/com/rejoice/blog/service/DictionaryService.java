@@ -17,6 +17,10 @@ public class DictionaryService extends BaseService<Dictionary> {
 				&& Constant.DICT_KEY_DEFAULT.equals(t.getKey())
 				) {
 			VolitateVars.POST_BATCH_LOCK = t.getValue();
+		}else if(Constant.DICT_CODE_REPLACE_STRING.equals(t.getCode())
+				&& Constant.DICT_KEY_FILE_NAME.equals(t.getKey())
+				) {
+			VolitateVars.REPLACE_STRING_OF_FILE_NAME = t.getValue().split(",");
 		}
 	}
 

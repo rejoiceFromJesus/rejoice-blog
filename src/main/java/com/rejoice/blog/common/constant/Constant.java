@@ -56,6 +56,7 @@ public abstract class Constant {
 	public static final String DICT_CODE_CRAWER_BOOK_END_PAGE = "CRAWER_BOOK_END_PAGE";
 	public static final String DICT_CODE_CRAWER_BOOK_START_PAGE = "CRAWER_BOOK_START_PAGE";
 	public static final String DICT_CODE_CRAWER_BOOK = "CRAWER_BOOK";
+	public static final String DICT_CODE_REPLACE_STRING = "REPLACE_STRING";
 	
 	
 	public static final String DICT_KEY_DEFAULT = "DEFAULT";
@@ -65,6 +66,7 @@ public abstract class Constant {
 	public static final String DICT_KEY_CRAWER_BOOK = "CRAWER_BOOK";
 	public static final String DICT_KEY_ALLITEBOOKS = "ALLITEBOOKS";
 	public static final String DICT_KEY_EBOOK300 = "EBOOK300";
+	public static final String DICT_KEY_FILE_NAME = "FILE_NAME";
 	
 	/**
 	 * api metadata

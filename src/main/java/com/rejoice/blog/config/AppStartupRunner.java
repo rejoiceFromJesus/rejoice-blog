@@ -23,11 +23,22 @@ public class AppStartupRunner implements ApplicationRunner {
  
     @Override
     public void run(ApplicationArguments args) throws Exception {
-    	Dictionary cons = new Dictionary();
-    	cons.setCode(Constant.DICT_CODE_BATCH_POST_LOCK);
-    	cons.setKey(Constant.DICT_KEY_DEFAULT);
-    	Dictionary dictionary = dictionaryService.queryOne(cons);
+    	Dictionary dictionary = dictionaryService.queryOneByCodeAndKey(
+    			 Constant.DICT_CODE_BATCH_POST_LOCK
+    		   , Constant.DICT_KEY_DEFAULT);
     	VolitateVars.POST_BATCH_LOCK = dictionary.getValue();
     	LOG.info("init VolitateVars.POST_BATCH_LOCK == {}", VolitateVars.POST_BATCH_LOCK);
+    	//replace string
+    	dictionary = dictionaryService.queryOneByCodeAndKey(
+    			  Constant.DICT_CODE_REPLACE_STRING
+    			, Constant.DICT_KEY_FILE_NAME);
+    	String replaceString = null;
+    	if(dictionary != null && dictionary.getValue() != null) {
+    		replaceString = dictionary.getValue();
+    		VolitateVars.REPLACE_STRING_OF_FILE_NAME = replaceString.split(",");
+    	}else {
+    		VolitateVars.REPLACE_STRING_OF_FILE_NAME = null;
+    	}
+    	LOG.info("init VolitateVars.REPLACE_STRING_OF_FILE_NAME == {}", replaceString);
     }
 }
