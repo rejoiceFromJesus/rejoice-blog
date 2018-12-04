@@ -113,19 +113,27 @@ public class ArticleController extends BaseController<Article, ArticleService> {
 		//1、post to  system
 		this.getService().fillFields(t,userDetails);
 		String extend = this.getService().queryByID(t.getId()).getExtend();
-		ArticleExtend articleExtend = JsonUtil.toBean(extend, ArticleExtend.class);
-		articleExtend.setAutosave_control(articleExtend.getAutosave_control()+1);
-		t.setExtend(JsonUtil.toJson(articleExtend));
+		ArticleExtend articleExtend = null;
+		try {
+			 articleExtend = JsonUtil.toBean(extend, ArticleExtend.class);
+			 articleExtend.setAutosave_control(articleExtend.getAutosave_control()+1);
+			 t.setExtend(JsonUtil.toJson(articleExtend));
+		} catch (Exception e) {
+			
+		}
 		this.getService().updateByIdSelective(t);
 		//2、post to jianshu
-		try {
-			jianshuService.updateArticle(t.getContent()
-					, t.getTitle()
-					, articleExtend.getJianshuId()
-					, articleExtend.getAutosave_control());
-		} catch (Exception e) {
-			LOG.warn("post update to jianshu failed:",e);
+		if(articleExtend != null && StringUtils.isNotBlank(articleExtend.getJianshuId())) {
+			try {
+				jianshuService.updateArticle(t.getContent()
+						, t.getTitle()
+						, articleExtend.getJianshuId()
+						, articleExtend.getAutosave_control());
+			} catch (Exception e) {
+				LOG.warn("post update to jianshu failed:",e);
+			}
 		}
+		
 	}
 
 }
