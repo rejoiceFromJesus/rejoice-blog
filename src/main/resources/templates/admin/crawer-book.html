@@ -1,0 +1,26 @@
+<table id="crawer-book-table" lay-filter="crawer-book"></table>
+<script>
+var crawerBookTable;
+layui.use('table', function(){
+  var table = layui.table;
+//第一个实例
+  crawerBookTable = table.render({
+    elem: '#crawer-book-table'
+    ,url: '/crawer-book/page?isUpload=false&order=desc&sort=update_time' //数据接口
+    ,page: true //开启分页
+    ,loading:true
+    ,height: 'full-200'
+    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,cols: [[ //表头
+       {type:'numbers',title:'序号'}
+      ,{field: 'name', title: '名称' }
+      ,{field: 'createTime', title: '创建时间'}
+      ,{field: 'updateTime', title: '更新时间'}
+      ,{field: 'img', title: '图片'}
+     /*  ,{field: '', width: "15%" ,toolbar: '#crawer-book-toolbar'} */
+    ]]
+  });
+});
+
+
+</script>

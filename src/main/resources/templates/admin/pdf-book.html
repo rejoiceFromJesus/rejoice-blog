@@ -94,7 +94,7 @@ layui.use('table', function(){
 //第一个实例
   pdfBookTable = table.render({
     elem: '#pdf-book-table'
-    ,url: '/pdf-book/page?order=desc&sort=update_time' //数据接口
+    ,url: '/pdf-book/page?is_post_jianshu=false&order=desc&sort=update_time' //数据接口
     ,page: true //开启分页
     ,loading:true
     ,height: 'full-200'
