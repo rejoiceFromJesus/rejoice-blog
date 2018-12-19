@@ -36,6 +36,19 @@ input::-webkit-inner-spin-button {
       </div>
     <div  th:include="fragments/left"></div>
        <div class="widewrapper main" style="width:62%;float:left;">
+       <div class="layui-form">
+       <div class="layui-carousel" id="test10">
+  <div carousel-item="">
+    <div><img src="//res.layui.com/images/layui/demo/1.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/2.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/3.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/4.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/5.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/6.png"></div>
+    <div><img src="//res.layui.com/images/layui/demo/7.png"></div>
+  </div>
+         </div>
+</div>
         <div th:if="${keyword}" style="line-height: 0px;" style="padding:10px;">
 	        <div th:if="${#lists.size(list) > 0}">
 						搜索关键字：<span style="color:red;" th:text="${keyword}"></span>
