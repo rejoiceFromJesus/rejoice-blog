@@ -92,6 +92,9 @@ public class PdfBookService extends BaseService<PdfBook> {
 		//Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Object principal2 = new User("user", "23232323", Arrays.asList(new SimpleGrantedAuthority("rool_admin")));
 		new Thread(() -> {
+			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
+			jianshuService.setJianshuAccount(jianshuAccount);
+			uploadService.setJianshuAccount(jianshuAccount);
 			// 1、uploadImg
 			uploadImg();
 			// 2、post articles
@@ -203,9 +206,6 @@ public class PdfBookService extends BaseService<PdfBook> {
 			PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
 			List<PdfBook> list = this.queryListByPageAndOrder(cons, 1, 100, null, null).getList();
-			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
-			jianshuService.setJianshuAccount(jianshuAccount);
-			uploadService.setJianshuAccount(jianshuAccount);
 			for (PdfBook pdfBook : list) {
 				//2、check lock always
 				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_JIANSHU_BATCH_LOCK)) {
