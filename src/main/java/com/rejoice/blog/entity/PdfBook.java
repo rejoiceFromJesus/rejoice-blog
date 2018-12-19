@@ -19,9 +19,17 @@ public class PdfBook extends BaseEntity{
 	private Boolean isPostJianshu;
 	private Boolean isPostSystem;
 	private Boolean isPostOschina;
+	private Boolean isUploadImg;
 	
 	
 	
+	
+	public Boolean getIsUploadImg() {
+		return isUploadImg;
+	}
+	public void setIsUploadImg(Boolean isUploadImg) {
+		this.isUploadImg = isUploadImg;
+	}
 	public String getFileName() {
 		return fileName;
 	}

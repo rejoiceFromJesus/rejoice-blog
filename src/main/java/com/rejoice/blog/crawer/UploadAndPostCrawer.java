@@ -46,6 +46,9 @@ public class UploadAndPostCrawer {
 	@Value("${blog.resource.down-load.dir}")
 	protected String pdfDir;
 	
+	@Value("${blog.resource.temp.dir}")
+	protected String tempDir;
+	
 	protected ApiAccount chengTongAccount;
 	
 	protected String chengTongParams;
@@ -125,33 +128,32 @@ public class UploadAndPostCrawer {
 	}
 	
 	/**
-	 * delete all pdf files if all pdf_books posted to jianshu
+	 * clear dirs when all uploadImg success
 	 * @throws IOException 
 	 */
 	public void deletePdfInDisk() {
 		LOGGER.info("delete pdf in disk============");
 		try {
 			PdfBook cons = new PdfBook();
-			cons.setIsPostJianshu(false);
+			cons.setIsUploadImg(false);
 			Integer count = pdfBookService.queryCount(cons);
 			if(count <= 0) {
-				//1、delete pdf
-				File folder = resourceLoader.getResource(pdfDir).getFile();
-				File[] listFiles = folder.listFiles();
-				for (File file : listFiles) {
-					file.delete();
-				}
-				
-				//5、delete img
-				folder = resourceLoader.getResource(imgDir).getFile();
-				listFiles = folder.listFiles();
-				for (File file : listFiles) {
-					file.delete();
-				}
+				clearDirs(pdfDir, imgDir, tempDir);
 			}
 		} catch (Exception e) {
 			LOGGER.warn("delete files failed:",e);
 		}
+	}
+
+	public void clearDirs(String... dirs) throws IOException {
+		for (String dir : dirs) {
+			File folder = resourceLoader.getResource(dir).getFile();
+			File[] listFiles = folder.listFiles();
+			for (File file : listFiles) {
+				file.delete();
+			}
+		}
+		
 	}
 	
 }

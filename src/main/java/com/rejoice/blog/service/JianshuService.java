@@ -51,14 +51,16 @@ public class JianshuService {
 	public static final Long COLLECTION_ID_IT = 576845L;
 	public static final String NOTEBOOK_ID_IT ="19669537";
 	
-	@Transactional(readOnly=true)
-	public void post(PdfBook pdfBook) throws Exception {
+	public void uploadImg(PdfBook pdfBook) {
 		//1、upload img
 		uploadService.uploadImg(pdfBook);
 		PdfBook newBook = new PdfBook();
 		newBook.setId(pdfBook.getId());
 		newBook.setImgUrl(pdfBook.getImgUrl());
 		pdfBookService.updateByIdSelective(newBook);
+	}
+	
+	public void post(PdfBook pdfBook) throws Exception {
 		//2、post article
 		postArticle(pdfBookService.getContent(pdfBook)
 				,pdfBook.getTitle()

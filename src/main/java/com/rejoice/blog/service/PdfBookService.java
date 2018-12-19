@@ -92,6 +92,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 		//Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Object principal2 = new User("user", "23232323", Arrays.asList(new SimpleGrantedAuthority("rool_admin")));
 		new Thread(() -> {
+			// 1、uploadImg
+			uploadImg();
 			// 2、post articles
 			postBatchToJIanshu();
 			//postBatchToOschina();
@@ -107,6 +109,15 @@ public class PdfBookService extends BaseService<PdfBook> {
 		return null;
 	}
 	
+	private void uploadImg() {
+		PdfBook cons = new PdfBook();
+		cons.setIsUploadImg(false);
+		List<PdfBook> list = this.queryListByWhere(cons);
+		for (PdfBook pdfBook : list) {
+			jianshuService.uploadImg(pdfBook);
+		}
+	}
+
 	private void resetDicts() {
 		//1、crawer book
 		Dictionary dictCons = new Dictionary();
