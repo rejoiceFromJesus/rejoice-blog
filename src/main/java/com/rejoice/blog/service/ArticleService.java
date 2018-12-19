@@ -65,7 +65,7 @@ public class ArticleService extends BaseService<Article>{
 	
 	@Override
 	public PageInfo<Article> queryListByPageAndOrder(Article t, Integer page, Integer rows, String[] sorts,
-			String[] orders) throws Exception {
+			String[] orders){
 		// 加入分页
 				PageHelper.startPage(page, rows);
 				// 声明一个example

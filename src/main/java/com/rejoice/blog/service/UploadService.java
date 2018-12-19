@@ -123,7 +123,8 @@ public class UploadService {
 				pdfBook.setImgUrl(uploadFile.getUrl());
 			}
 		} catch (Exception e) {
-			VolitateVars.POST_BATCH_LOCK=Constant.FALSE;
+			VolitateVars.POST_JIANSHU_BATCH_LOCK=Constant.FALSE;
+			VolitateVars.POST_SYSTEM_BATCH_LOCK=Constant.FALSE;
 			throw new RuntimeException("upload image to jianshu failed",e);
 		}
 	}

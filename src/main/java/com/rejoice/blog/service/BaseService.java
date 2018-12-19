@@ -402,7 +402,7 @@ public abstract class BaseService<T> {
 	 */
 	@Transactional(readOnly = true)
 	public PageInfo<T> queryListByPageAndOrder(T t, Integer page, Integer rows,
-			String[] sorts, String[] orders) throws Exception {
+			String[] sorts, String[] orders){
 		// 加入分页
 		PageHelper.startPage(page, rows);
 		// 声明一个example

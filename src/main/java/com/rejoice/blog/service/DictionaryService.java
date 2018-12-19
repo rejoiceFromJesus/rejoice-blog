@@ -12,12 +12,7 @@ public class DictionaryService extends BaseService<Dictionary> {
 	@Override
 	public void updateByIdSelective(Dictionary t) {
 		super.updateByIdSelective(t);
-		//fresh batch_post_lock
-		if(Constant.DICT_CODE_BATCH_POST_LOCK.equals(t.getCode())
-				&& Constant.DICT_KEY_DEFAULT.equals(t.getKey())
-				) {
-			VolitateVars.POST_BATCH_LOCK = t.getValue();
-		}else if(Constant.DICT_CODE_REPLACE_STRING.equals(t.getCode())
+		if(Constant.DICT_CODE_REPLACE_STRING.equals(t.getCode())
 				&& Constant.DICT_KEY_FILE_NAME.equals(t.getKey())
 				) {
 			VolitateVars.REPLACE_STRING_OF_FILE_NAME = t.getValue().split(",");

@@ -2,6 +2,7 @@ package com.rejoice.blog.controller;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,9 @@ public class PdfBookController extends BaseController<PdfBook, PdfBookService> {
 	
 	@PostMapping("/batch-post")
 	public Result<Void> batchPost(){
-		if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+		if(!StringUtils.equalsAnyIgnoreCase(Constant.TRUE
+				, VolitateVars.POST_JIANSHU_BATCH_LOCK
+				, VolitateVars.POST_SYSTEM_BATCH_LOCK)) {
 			this.getService().batchPost();
 			return Result.success(null); 
 		}

@@ -23,13 +23,9 @@ public class AppStartupRunner implements ApplicationRunner {
  
     @Override
     public void run(ApplicationArguments args) throws Exception {
-    	Dictionary dictionary = dictionaryService.queryOneByCodeAndKey(
-    			 Constant.DICT_CODE_BATCH_POST_LOCK
-    		   , Constant.DICT_KEY_DEFAULT);
-    	VolitateVars.POST_BATCH_LOCK = dictionary.getValue();
-    	LOG.info("init VolitateVars.POST_BATCH_LOCK == {}", VolitateVars.POST_BATCH_LOCK);
+    	
     	//replace string
-    	dictionary = dictionaryService.queryOneByCodeAndKey(
+    	Dictionary dictionary = dictionaryService.queryOneByCodeAndKey(
     			  Constant.DICT_CODE_REPLACE_STRING
     			, Constant.DICT_KEY_FILE_NAME);
     	String replaceString = null;

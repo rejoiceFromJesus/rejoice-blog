@@ -87,7 +87,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 
 	public String batchPost() {
 		// 1、locking
-		VolitateVars.POST_BATCH_LOCK = Constant.TRUE;
+		VolitateVars.POST_JIANSHU_BATCH_LOCK = Constant.TRUE;
+		VolitateVars.POST_SYSTEM_BATCH_LOCK = Constant.TRUE;
 		//Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Object principal2 = new User("user", "23232323", Arrays.asList(new SimpleGrantedAuthority("rool_admin")));
 		new Thread(() -> {
@@ -96,7 +97,8 @@ public class PdfBookService extends BaseService<PdfBook> {
 			//postBatchToOschina();
 			postBatchToSystem(principal2);
 			// 3、release lock
-			VolitateVars.POST_BATCH_LOCK = Constant.FALSE;
+			VolitateVars.POST_JIANSHU_BATCH_LOCK = Constant.FALSE;
+			VolitateVars.POST_SYSTEM_BATCH_LOCK = Constant.FALSE;
 			// 4、delete pdf and imgs
 			uploadAndPostCrawer.deletePdfInDisk();
 			// 5、reset dict
@@ -133,10 +135,6 @@ public class PdfBookService extends BaseService<PdfBook> {
 			return;
 		}
 		for (PdfBook pdfBook : list) {
-			//2、check lock always
-			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
-				throw new RuntimeException("exit batch post articles cause lock release");
-			}
 			try {
 				// 3、post article
 				oschinaService.oauthPost(accessToken, pdfBook, oschinaAccount);
@@ -160,7 +158,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 		List<PdfBook> list = this.queryListByWhere(cons);
 		for (PdfBook pdfBook : list) {
 			//2、check lock always
-			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_SYSTEM_BATCH_LOCK)) {
 				throw new RuntimeException("exit batch post articles cause lock release");
 			}
 			try {
@@ -193,13 +191,13 @@ public class PdfBookService extends BaseService<PdfBook> {
 			// 1、query not posted books
 			PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
-			List<PdfBook> list = this.queryListByWhere(cons);
+			List<PdfBook> list = this.queryListByPageAndOrder(cons, 1, 100, null, null).getList();
 			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
 			jianshuService.setJianshuAccount(jianshuAccount);
 			uploadService.setJianshuAccount(jianshuAccount);
 			for (PdfBook pdfBook : list) {
 				//2、check lock always
-				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_BATCH_LOCK)) {
+				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_JIANSHU_BATCH_LOCK)) {
 					throw new RuntimeException("exit batch post articles cause lock release");
 				}
 				try {
@@ -214,6 +212,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 					Thread.sleep(2000);
 				} catch (Exception e) {
 					LOGGER.error("POST BOOK TO JIANSHU FAILED:",e);
+					break;
 				}
 			}
 
