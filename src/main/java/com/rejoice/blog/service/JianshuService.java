@@ -57,6 +57,7 @@ public class JianshuService {
 		PdfBook newBook = new PdfBook();
 		newBook.setId(pdfBook.getId());
 		newBook.setImgUrl(pdfBook.getImgUrl());
+		newBook.setIsUploadImg(true);
 		pdfBookService.updateByIdSelective(newBook);
 	}
 	
