@@ -95,7 +95,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			ApiAccount jianshuAccount = apiAccountService.getJianshuAccount();
 			jianshuService.setJianshuAccount(jianshuAccount);
 			uploadService.setJianshuAccount(jianshuAccount);
-			/*// 1、uploadImg
+			// 1、uploadImg
 			uploadImg();
 			// 2、post articles
 			postBatchToJIanshu();
@@ -105,7 +105,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			VolitateVars.POST_JIANSHU_BATCH_LOCK = Constant.FALSE;
 			VolitateVars.POST_SYSTEM_BATCH_LOCK = Constant.FALSE;
 			// 4、delete pdf and imgs
-*/			uploadAndPostCrawer.deleteResourcesInDisk();
+			uploadAndPostCrawer.deleteResourcesInDisk();
 			// 5、reset dict
 			this.resetDicts();
 		}).start();
