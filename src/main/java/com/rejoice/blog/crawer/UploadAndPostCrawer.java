@@ -131,14 +131,20 @@ public class UploadAndPostCrawer {
 	 * clear dirs when all uploadImg success
 	 * @throws IOException 
 	 */
-	public void deletePdfInDisk() {
+	public void deleteResourcesInDisk() {
 		LOGGER.info("delete pdf in disk============");
 		try {
 			PdfBook cons = new PdfBook();
 			cons.setIsUploadImg(false);
 			Integer count = pdfBookService.queryCount(cons);
 			if(count <= 0) {
-				clearDirs(pdfDir, imgDir, tempDir);
+				clearDirs(imgDir);
+			}
+			CrawerBook crawerBookCons = new CrawerBook();
+			crawerBookCons.setIsUpload(false);
+			count = crawerBookService.queryCount(crawerBookCons);
+			if(count <= 0) {
+				clearDirs(pdfDir, tempDir);
 			}
 		} catch (Exception e) {
 			LOGGER.warn("delete files failed:",e);

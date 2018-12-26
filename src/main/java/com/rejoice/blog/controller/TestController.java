@@ -12,7 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.rejoice.blog.common.util.JsonUtil;
+import com.rejoice.blog.bean.http.oschina.BlogSaveInput;
 import com.rejoice.blog.common.util.RejoiceUtil;
 import com.rejoice.blog.crawer.AllitebooksCrawer;
 import com.rejoice.blog.crawer.Ebook300CBookCrawer;
 import com.rejoice.blog.crawer.UploadAndPostCrawer;
+import com.rejoice.blog.entity.PdfBook;
 import com.rejoice.blog.service.OschinaService;
 import com.rejoice.blog.service.PdfBookService;
+import com.rejoice.blog.service.UploadService;
 import com.rejoice.blog.service.pdf.PdfService;
 import com.rejoice.blog.task.CrawerBooksTask;
-import com.rejoice.blog.bean.http.oschina.BlogSaveInput;
 
 @RestController
 @RequestMapping("/test")
@@ -59,6 +59,9 @@ public class TestController {
 	
 	@Autowired
 	Ebook300CBookCrawer ebook300cBookCrawer;
+	
+	@Autowired
+	UploadService uploadService;
 	
 	
 	//@GetMapping("/oschina/post")

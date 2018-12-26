@@ -105,7 +105,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			VolitateVars.POST_JIANSHU_BATCH_LOCK = Constant.FALSE;
 			VolitateVars.POST_SYSTEM_BATCH_LOCK = Constant.FALSE;
 			// 4、delete pdf and imgs
-			uploadAndPostCrawer.deletePdfInDisk();
+			uploadAndPostCrawer.deleteResourcesInDisk();
 			// 5、reset dict
 			this.resetDicts();
 		}).start();
