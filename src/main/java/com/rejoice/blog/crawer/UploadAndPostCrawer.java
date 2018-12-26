@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.sound.midi.SysexMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -132,18 +135,19 @@ public class UploadAndPostCrawer {
 	 * @throws IOException 
 	 */
 	public void deleteResourcesInDisk() {
-		LOGGER.info("delete pdf in disk============");
 		try {
 			PdfBook cons = new PdfBook();
 			cons.setIsUploadImg(false);
 			Integer count = pdfBookService.queryCount(cons);
 			if(count <= 0) {
+				LOGGER.info("delete img dir files:{}",imgDir);
 				clearDirs(imgDir);
 			}
 			CrawerBook crawerBookCons = new CrawerBook();
 			crawerBookCons.setIsUpload(false);
 			count = crawerBookService.queryCount(crawerBookCons);
 			if(count <= 0) {
+				LOGGER.info("delete pdf dir files:{}, temp dir files:{}",imgDir, tempDir);
 				clearDirs(pdfDir, tempDir);
 			}
 		} catch (Exception e) {
@@ -156,7 +160,8 @@ public class UploadAndPostCrawer {
 			File folder = resourceLoader.getResource(dir).getFile();
 			File[] listFiles = folder.listFiles();
 			for (File file : listFiles) {
-				file.delete();
+				LOGGER.info("delete file:{}",file);
+				FileSystemUtils.deleteRecursively(file);
 			}
 		}
 		
