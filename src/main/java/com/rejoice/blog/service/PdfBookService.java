@@ -169,7 +169,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 		// 1、query not posted books
 		PdfBook cons = new PdfBook();
 		cons.setIsPostSystem(false);
-		List<PdfBook> list = this.queryListByWhere(cons);
+		List<PdfBook> list = this.queryListByPageAndOrder(cons, 1, 50, null, null).getList();
 		for (PdfBook pdfBook : list) {
 			//2、check lock always
 			if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_SYSTEM_BATCH_LOCK)) {
@@ -205,7 +205,7 @@ public class PdfBookService extends BaseService<PdfBook> {
 			// 1、query not posted books
 			PdfBook cons = new PdfBook();
 			cons.setIsPostJianshu(false);
-			List<PdfBook> list = this.queryListByPageAndOrder(cons, 1, 100, null, null).getList();
+			List<PdfBook> list = this.queryListByPageAndOrder(cons, 1, 50, null, null).getList();
 			for (PdfBook pdfBook : list) {
 				//2、check lock always
 				if(Constant.FALSE.equalsIgnoreCase(VolitateVars.POST_JIANSHU_BATCH_LOCK)) {
