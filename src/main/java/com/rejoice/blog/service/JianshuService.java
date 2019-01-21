@@ -53,7 +53,7 @@ public class JianshuService {
 	
 	public void uploadImg(PdfBook pdfBook) {
 		//1、upload img
-		uploadService.uploadImg(pdfBook);
+		uploadService.uploadImgToQiniu(pdfBook);
 		PdfBook newBook = new PdfBook();
 		newBook.setId(pdfBook.getId());
 		newBook.setImgUrl(pdfBook.getImgUrl());

@@ -16,14 +16,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rejoice.blog.bean.http.jianshu.UploadOutput;
+import com.rejoice.blog.bean.http.jianshu.UploadTokenOutput;
 import com.rejoice.blog.common.constant.Constant;
 import com.rejoice.blog.common.util.JsonUtil;
 import com.rejoice.blog.concurrent.VolitateVars;
 import com.rejoice.blog.entity.ApiAccount;
 import com.rejoice.blog.entity.PdfBook;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.rejoice.blog.bean.http.jianshu.UploadOutput;
-import com.rejoice.blog.bean.http.jianshu.UploadTokenOutput;
 
 @Component
 public class UploadService {
@@ -36,6 +35,8 @@ public class UploadService {
 	
 	private ApiAccount jianshuAccount;
 	
+	@Autowired
+	QiniuService qiniuService;
 	
 
 	/*public static void main(String[] args) throws JsonProcessingException {
@@ -78,6 +79,15 @@ public class UploadService {
 			throw new RuntimeException("上传图片失败");
 		}
 	}
+	
+	public String uploadImgToQiniu(MultipartFile file) {
+		try {
+			return qiniuService.upload(file.getInputStream(), file.getOriginalFilename());
+		} catch (Exception e) {
+			LOG.warn("upload file to qiniu failed", e);
+			throw new RuntimeException("上传图片失败");
+		}
+	}
 
 	private UploadTokenOutput getUploadToken(String fileName) {
 		String url = UPLOAD_TOKEN_URL + fileName;
@@ -88,6 +98,7 @@ public class UploadService {
 		UploadTokenOutput tokenOutput = response.getBody();
 		return tokenOutput;
 	}
+	
 	
 	private HttpEntity<Object> getHttpEntity(String cookies,Object body) {
 		HttpHeaders headers = new HttpHeaders();
@@ -126,6 +137,21 @@ public class UploadService {
 			VolitateVars.POST_JIANSHU_BATCH_LOCK=Constant.FALSE;
 			VolitateVars.POST_SYSTEM_BATCH_LOCK=Constant.FALSE;
 			throw new RuntimeException("upload image to jianshu failed",e);
+		}
+	}
+	
+	
+	public void uploadImgToQiniu(PdfBook pdfBook) {
+		try {
+			Resource imgResource = resourceLoader.getResource(pdfBook.getImgUrl());
+			if(imgResource.getFile().exists()) {
+				String url = qiniuService.upload(imgResource.getInputStream(), pdfBook.getFileName());
+				pdfBook.setImgUrl(url);
+			}
+		} catch (Exception e) {
+			VolitateVars.POST_JIANSHU_BATCH_LOCK=Constant.FALSE;
+			VolitateVars.POST_SYSTEM_BATCH_LOCK=Constant.FALSE;
+			throw new RuntimeException("upload image to qiniu failed",e);
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class FileController {
 
 	@PostMapping("/upload")
 	public Result<LayuiEditUploadImgVo> uploadMultipleFiles(@RequestParam("file") MultipartFile[] files) {
-		String httpPath = uploadService.uploadImg(files[0]);
+		String httpPath = uploadService.uploadImgToQiniu(files[0]);
 		LayuiEditUploadImgVo vo = new LayuiEditUploadImgVo();
 		vo.setSrc(httpPath);
 		vo.setTitle(files[0].getOriginalFilename());
